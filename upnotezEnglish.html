@@ -182,6 +182,27 @@
         });
     };
 
+    // Add new event functionality
+    document.getElementById('add-button').onclick = function() {
+        const user = auth.currentUser;
+
+        if (user) {
+            const processesRef = database.ref('users/' + user.uid + '/Processes');
+
+            // Generate a new event ID
+            const newEventRef = processesRef.push(); // Create a new reference
+            const eventId = newEventRef.key; // Get the new event ID
+
+            newEventRef.set({ eventId: eventId }) // Set the new event with its ID
+                .then(() => {
+                    alert("New event created with ID: " + eventId);
+                })
+                .catch((error) => {
+                    console.error("Error adding new event: ", error);
+                });
+        }
+    };
+
     // Resize functionality
     const resizeHandle = document.getElementById('resize-handle');
     let isResizing = false;
