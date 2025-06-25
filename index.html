@@ -22,6 +22,8 @@
     <input type="email" id="confirm-email" placeholder="Confirm Email" required>
     <input type="password" id="password" placeholder="Password" required>
     <input type="password" id="confirm-password" placeholder="Confirm Password" required>
+    <input type="text" id="company-name" placeholder="Company Name" required>
+    <input type="text" id="city" placeholder="City" required>
     <button type="submit">Sign Up</button>
 </form>
 <div id="message"></div>
@@ -50,6 +52,8 @@
         const confirmEmail = document.getElementById('confirm-email').value;
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirm-password').value;
+        const companyName = document.getElementById('company-name').value;
+        const city = document.getElementById('city').value;
 
         // Check if emails match
         if (email !== confirmEmail) {
@@ -68,7 +72,9 @@
                 const user = userCredential.user;
                 // Store user data in the database
                 return database.ref('users/' + user.uid).set({
-                    email: user.email
+                    email: user.email,
+                    companyName: companyName,
+                    city: city
                 });
             })
             .then(() => {
