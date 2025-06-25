@@ -219,7 +219,6 @@
 
             newEventRef.set({ eventId: eventId })
                 .then(() => {
-                    alert("New event created with ID: " + eventId);
                     loadProcesses(); // Load processes after adding a new one
                 })
                 .catch((error) => {
@@ -259,9 +258,6 @@
                     deleteButton.onclick = () => {
                         // Delete the process from the database
                         processesRef.child(process.id).remove()
-                            .then(() => {
-                                alert("Event deleted: " + process.eventId);
-                            })
                             .catch((error) => {
                                 console.error("Error deleting event: ", error);
                             });
