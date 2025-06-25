@@ -256,11 +256,15 @@
                     deleteButton.className = 'delete-button';
                     deleteButton.textContent = '-'; // Button label
                     deleteButton.onclick = () => {
-                        // Delete the process from the database
-                        processesRef.child(process.id).remove()
-                            .catch((error) => {
-                                console.error("Error deleting event: ", error);
-                            });
+                        // Confirmation before deletion
+                        const confirmDelete = confirm("Are you sure you want to delete this event?");
+                        if (confirmDelete) {
+                            // Delete the process from the database
+                            processesRef.child(process.id).remove()
+                                .catch((error) => {
+                                    console.error("Error deleting event: ", error);
+                                });
+                        }
                     };
                     li.appendChild(deleteButton); // Add button to list item
 
