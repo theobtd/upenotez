@@ -164,8 +164,13 @@
             const newCity = document.getElementById('new-city').value;
             const newCompanyName = document.getElementById('new-company-name').value;
 
-            // Update email in Firebase Authentication
-            user.updateEmail(newEmail).then(() => {
+            // Re-authenticate the user before updating email
+            const credential = firebase.auth.EmailAuthProvider.credential(user.email, prompt('Please enter your password to confirm:'));
+
+            user.reauthenticateWithCredential(credential).then(() => {
+                // Update email in Firebase Authentication
+                return user.updateEmail(newEmail);
+            }).then(() => {
                 // Update user information in Firebase Realtime Database
                 return database.ref('users/' + user.uid).update({
                     email: newEmail,
