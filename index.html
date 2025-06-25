@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Signup</title>
+    <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-storage-compat.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input { display: block; margin: 10px 0; }
+        button { padding: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>Create Account</h1>
+<form id="signup-form">
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button type="submit">Sign Up</button>
+</form>
+<div id="message"></div>
+
+<script>
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyBNaUXaWjAbJIRebzl_ZpAxx32E_bfm9Sw",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        databaseURL: "https://upnotez-default-rtdb.firebaseio.com",
+        projectId: "upnotez",
+        storageBucket: "upnotez.firebasestorage.app",
+        messagingSenderId: "591185587641",
+        appId: "1:591185587641:web:c80bba260585ab41efda68"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const database = firebase.database();
+
+    document.getElementById('signup-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        auth.createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                // Store user data in the database
+                return database.ref('users/' + user.uid).set({
+                    email: user.email
+                });
+            })
+            .then(() => {
+                document.getElementById('message').innerText = 'Account created successfully!';
+            })
+            .catch((error) => {
+                document.getElementById('message').innerText = error.message;
+            });
+    });
+</script>
+
+</body>
+</html>
