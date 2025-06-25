@@ -13,52 +13,53 @@
         /* New box styles */
         #info-box {
             position: absolute;
-            left: 2%; 
-            top: 50%; 
-            transform: translateY(-50%); 
-            width: 15%; 
-            height: 80%; 
-            background-color: #f0f0f0; 
-            border: 1px solid black; 
-            padding: 10px; 
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
-            overflow: hidden; 
+            left: 2%; /* 2% away from the left edge */
+            top: 50%; /* Center vertically */
+            transform: translateY(-50%); /* Adjust for half its height */
+            width: 15%; /* Initial width */
+            height: 80%; /* 80% of the viewport height */
+            background-color: #f0f0f0; /* Light gray background */
+            border: 1px solid black; /* Thin black border */
+            padding: 10px; /* Padding inside the box */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional shadow */
+            overflow: hidden; /* Prevent overflow */
         }
 
         #profile-button {
             position: absolute;
-            left: 8px; 
-            top: 20px; 
-            cursor: pointer; 
-            width: 100px; 
-            height: 40px; 
-            font-size: 10px; 
-            padding: 0; 
+            left: 8px; /* 5px from the left border of the box */
+            top: 20px; /* 20px from the top border of the box */
+            cursor: pointer; /* Change cursor to pointer */
+            width: 100px; /* Fixed width */
+            height: 40px; /* Fixed height */
+            font-size: 10px; /* Adjust font size for visibility */
+            padding: 0; /* Remove padding */
         }
 
+        /* New "+" button styles */
         #add-button {
             position: absolute;
-            left: 128px; 
-            top: 20px; 
-            width: 40px; 
-            height: 40px; 
-            cursor: pointer; 
-            background-color: #4CAF50; 
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
-            text-align: center; 
-            line-height: 30px; 
-            font-size: 20px; 
+            left: 128px; /* 5px from the left border of the box */
+            top: 20px; /* 20px from the top border of the box */
+            width: 40px; /* Width of the button */
+            height: 40px; /* Height of the button */
+            cursor: pointer; /* Change cursor to pointer */
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text */
+            border: none; /* No border */
+            border-radius: 5px; /* Optional rounded corners */
+            text-align: center; /* Center text */
+            line-height: 30px; /* Center "+" vertically */
+            font-size: 20px; /* Increase font size for visibility */
         }
 
         #resize-handle {
-            width: 10px; 
-            height: 100%; 
+            width: 10px; /* Handle width */
+            height: 100%; /* Full height of the box */
             position: absolute;
-            right: -5px; 
+            right: -5px; /* Position it outside the box for easy dragging */
             top: 0;
-            cursor: ew-resize; 
+            cursor: ew-resize; /* Change cursor to indicate resizing */
         }
 
         #profile-modal {
@@ -93,7 +94,7 @@
             cursor: pointer;
         }
         #logout-button {
-            background-color: #4CAF50; 
+            background-color: #4CAF50; /* Green */
             color: white;
             border: none;
             padding: 10px;
@@ -106,33 +107,19 @@
             margin-top: 5px;
             padding: 5px;
         }
-
-        /* Styles for process list */
-        #process-list {
-            margin-top: 20px;
-            font-size: 16px;
-            text-align: left;
-            display: block; /* Ensure it is visible */
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            padding: 10px;
-            max-width: 300px;
-            margin: 20px auto; /* Center the list */
-        }
     </style>
 </head>
 <body>
 
 <h1>Hello!</h1>
 
-<!-- Info box with buttons -->
+<!-- New info box with resize handle -->
 <div id="info-box">
     <button id="profile-button">My Profile</button>
-    <button id="add-button">+</button>
+    <button id="add-button">+</button> <!-- New "+" button -->
     <div id="resize-handle"></div>
 </div>
 
-<!-- Modal for user profile -->
 <div id="profile-modal">
     <div id="modal-content">
         <span class="close" id="close-modal">&times;</span>
@@ -144,9 +131,6 @@
         <button id="logout-button">Log Out</button>
     </div>
 </div>
-
-<!-- Section to display processes -->
-<div id="process-list"></div>
 
 <script>
     // Your web app's Firebase configuration
@@ -165,37 +149,6 @@
     const auth = firebase.auth();
     const database = firebase.database();
 
-    // Function to display user processes
-    function displayUserProcesses(userId) {
-        const processesRef = database.ref('users/' + userId + '/Processes');
-        processesRef.once('value').then((snapshot) => {
-            const processList = document.getElementById('process-list');
-            processList.innerHTML = ''; // Clear existing list
-            if (snapshot.exists()) {
-                snapshot.forEach((childSnapshot) => {
-                    const processId = childSnapshot.key;
-                    const listItem = document.createElement('div');
-                    listItem.innerText = `Process ID: ${processId}`;
-                    processList.appendChild(listItem);
-                });
-            } else {
-                processList.innerHTML = '<div>No processes found.</div>'; // Handle no processes case
-            }
-        }).catch((error) => {
-            console.error("Error fetching processes: ", error);
-        });
-    }
-
-    // Fetch and display processes on page load
-    window.onload = function() {
-        const user = auth.currentUser;
-        if (user) {
-            displayUserProcesses(user.uid);
-        } else {
-            console.error("No user is currently signed in.");
-        }
-    };
-
     document.getElementById('profile-button').onclick = function() {
         const user = auth.currentUser;
 
@@ -203,22 +156,16 @@
             // Fetch user data from Firebase
             database.ref('users/' + user.uid).once('value').then((snapshot) => {
                 const userData = snapshot.val();
-                if (userData) {
-                    document.getElementById('user-email').innerText = userData.email;
-                    document.getElementById('user-city').innerText = userData.city;
-                    document.getElementById('user-company-name').innerText = userData.companyName;
-                    document.getElementById('user-language').innerText = userData.language;
+                document.getElementById('user-email').innerText = userData.email;
+                document.getElementById('user-city').innerText = userData.city;
+                document.getElementById('user-company-name').innerText = userData.companyName;
+                document.getElementById('user-language').innerText = userData.language;
 
-                    // Open the modal
-                    document.getElementById('profile-modal').style.display = "block";
-                } else {
-                    console.error("User data not found.");
-                }
+                // Open the modal
+                document.getElementById('profile-modal').style.display = "block";
             }).catch((error) => {
                 console.error("Error fetching user data: ", error);
             });
-        } else {
-            console.error("No user is currently signed in.");
         }
     };
 
@@ -246,12 +193,14 @@
 
         if (user) {
             const processesRef = database.ref('users/' + user.uid + '/Processes');
-            const newEventRef = processesRef.push(); // Create a new reference
 
-            newEventRef.set({ eventId: newEventRef.key }) // Set the new event with its ID
+            // Generate a new event ID
+            const newEventRef = processesRef.push(); // Create a new reference
+            const eventId = newEventRef.key; // Get the new event ID
+
+            newEventRef.set({ eventId: eventId }) // Set the new event with its ID
                 .then(() => {
-                    alert("New event created with ID: " + newEventRef.key);
-                    displayUserProcesses(user.uid); // Refresh the process list
+                    alert("New event created with ID: " + eventId);
                 })
                 .catch((error) => {
                     console.error("Error adding new event: ", error);
