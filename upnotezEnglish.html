@@ -250,7 +250,7 @@
                 processesArray.forEach(process => {
                     const li = document.createElement('li');
                     li.className = 'process-item';
-                    li.textContent = 'Event ID: ' + process.eventId;
+                    li.textContent = process.eventId; // Removed "Event ID: " prefix
 
                     const deleteButton = document.createElement('button');
                     deleteButton.className = 'delete-button';
