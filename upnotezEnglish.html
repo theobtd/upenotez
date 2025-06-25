@@ -256,6 +256,16 @@
                     const deleteButton = document.createElement('button');
                     deleteButton.className = 'delete-button';
                     deleteButton.textContent = '-'; // Button label
+                    deleteButton.onclick = () => {
+                        // Delete the process from the database
+                        processesRef.child(process.id).remove()
+                            .then(() => {
+                                alert("Event deleted: " + process.eventId);
+                            })
+                            .catch((error) => {
+                                console.error("Error deleting event: ", error);
+                            });
+                    };
                     li.appendChild(deleteButton); // Add button to list item
 
                     processesUl.appendChild(li);
