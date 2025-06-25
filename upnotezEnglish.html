@@ -158,16 +158,22 @@
 
     document.getElementById('confirm-changes').onclick = function() {
         const user = auth.currentUser;
-
+    
         if (user) {
+            // Check if the current email is verified before allowing changes
+            if (!user.emailVerified) {
+                alert("Your current email is not verified. Please verify it before changing to a new email.");
+                return;
+            }
+    
             const newEmail = document.getElementById('new-email').value;
             const newCity = document.getElementById('new-city').value;
             const newCompanyName = document.getElementById('new-company-name').value;
-
+    
             // Re-authenticate the user before updating email
             const password = prompt('Please enter your password to confirm:');
             const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
-
+    
             user.reauthenticateWithCredential(credential).then(() => {
                 // Update email in Firebase Authentication
                 return user.updateEmail(newEmail);
@@ -182,7 +188,7 @@
                 document.getElementById('user-email').innerText = newEmail;
                 document.getElementById('user-city').innerText = newCity;
                 document.getElementById('user-company-name').innerText = newCompanyName;
-
+    
                 // Hide the modify section
                 document.getElementById('modify-section').style.display = "none";
             }).catch((error) => {
