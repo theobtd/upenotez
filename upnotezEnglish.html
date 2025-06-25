@@ -9,59 +9,52 @@
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-database-compat.js"></script>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; margin: 0; }
-
-        /* New box styles */
         #info-box {
             position: absolute;
-            left: 2%; /* 2% away from the left edge */
-            top: 50%; /* Center vertically */
-            transform: translateY(-50%); /* Adjust for half its height */
-            width: 15%; /* Initial width */
-            height: 80%; /* 80% of the viewport height */
-            background-color: #f0f0f0; /* Light gray background */
-            border: 1px solid black; /* Thin black border */
-            padding: 10px; /* Padding inside the box */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional shadow */
-            overflow: hidden; /* Prevent overflow */
+            left: 2%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15%;
+            height: 80%;
+            background-color: #f0f0f0;
+            border: 1px solid black;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
         }
-
         #profile-button {
             position: absolute;
-            left: 8px; /* 5px from the left border of the box */
-            top: 20px; /* 20px from the top border of the box */
-            cursor: pointer; /* Change cursor to pointer */
-            width: 100px; /* Fixed width */
-            height: 40px; /* Fixed height */
-            font-size: 10px; /* Adjust font size for visibility */
-            padding: 0; /* Remove padding */
+            left: 8px;
+            top: 20px;
+            cursor: pointer;
+            width: 100px;
+            height: 40px;
+            font-size: 10px;
+            padding: 0;
         }
-
-        /* New "+" button styles */
         #add-button {
             position: absolute;
-            left: 128px; /* 5px from the left border of the box */
-            top: 20px; /* 20px from the top border of the box */
-            width: 40px; /* Width of the button */
-            height: 40px; /* Height of the button */
-            cursor: pointer; /* Change cursor to pointer */
-            background-color: #4CAF50; /* Green background */
-            color: white; /* White text */
-            border: none; /* No border */
-            border-radius: 5px; /* Optional rounded corners */
-            text-align: center; /* Center text */
-            line-height: 30px; /* Center "+" vertically */
-            font-size: 20px; /* Increase font size for visibility */
+            left: 128px;
+            top: 20px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 30px;
+            font-size: 20px;
         }
-
         #resize-handle {
-            width: 10px; /* Handle width */
-            height: 100%; /* Full height of the box */
+            width: 10px;
+            height: 100%;
             position: absolute;
-            right: -5px; /* Position it outside the box for easy dragging */
+            right: -5px;
             top: 0;
-            cursor: ew-resize; /* Change cursor to indicate resizing */
+            cursor: ew-resize;
         }
-
         #profile-modal {
             display: none;
             position: fixed;
@@ -87,14 +80,13 @@
             font-size: 28px;
             font-weight: bold;
         }
-        .close:hover,
-        .close:focus {
+        .close:hover, .close:focus {
             color: black;
             text-decoration: none;
             cursor: pointer;
         }
         #logout-button {
-            background-color: #4CAF50; /* Green */
+            background-color: #4CAF50;
             color: white;
             border: none;
             padding: 10px;
@@ -107,16 +99,21 @@
             margin-top: 5px;
             padding: 5px;
         }
+        #process-list {
+            margin-top: 10px;
+            list-style-type: none;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
 
 <h1>Hello!</h1>
 
-<!-- New info box with resize handle -->
 <div id="info-box">
     <button id="profile-button">My Profile</button>
-    <button id="add-button">+</button> <!-- New "+" button -->
+    <button id="add-button">+</button>
+    <ul id="process-list"></ul> <!-- List for processes -->
     <div id="resize-handle"></div>
 </div>
 
@@ -133,7 +130,6 @@
 </div>
 
 <script>
-    // Your web app's Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyBNaUXaWjAbJIRebzl_ZpAxx32E_bfm9Sw",
         authDomain: "upnotez.firebaseapp.com",
@@ -144,7 +140,6 @@
         appId: "1:591185587641:web:c80bba260585ab41efda68"
     };
 
-    // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const database = firebase.database();
@@ -153,7 +148,6 @@
         const user = auth.currentUser;
 
         if (user) {
-            // Fetch user data from Firebase
             database.ref('users/' + user.uid).once('value').then((snapshot) => {
                 const userData = snapshot.val();
                 document.getElementById('user-email').innerText = userData.email;
@@ -161,13 +155,29 @@
                 document.getElementById('user-company-name').innerText = userData.companyName;
                 document.getElementById('user-language').innerText = userData.language;
 
-                // Open the modal
+                // Fetch and display user processes
+                displayUserProcesses(user.uid);
+
                 document.getElementById('profile-modal').style.display = "block";
             }).catch((error) => {
                 console.error("Error fetching user data: ", error);
             });
         }
     };
+
+    function displayUserProcesses(userId) {
+        const processesRef = database.ref('users/' + userId + '/Processes');
+        processesRef.on('value', (snapshot) => {
+            const processList = document.getElementById('process-list');
+            processList.innerHTML = ''; // Clear existing list
+            snapshot.forEach((childSnapshot) => {
+                const processId = childSnapshot.key;
+                const listItem = document.createElement('li');
+                listItem.innerText = `Process ID: ${processId}`;
+                processList.appendChild(listItem);
+            });
+        });
+    }
 
     document.getElementById('close-modal').onclick = function() {
         document.getElementById('profile-modal').style.display = "none";
@@ -181,26 +191,22 @@
 
     document.getElementById('logout-button').onclick = function() {
         auth.signOut().then(() => {
-            window.location.href = 'index.html'; // Redirect to index.html after logging out
+            window.location.href = 'index.html';
         }).catch((error) => {
             console.error("Error signing out: ", error);
         });
     };
 
-    // Add new event functionality
     document.getElementById('add-button').onclick = function() {
         const user = auth.currentUser;
 
         if (user) {
             const processesRef = database.ref('users/' + user.uid + '/Processes');
+            const newEventRef = processesRef.push();
 
-            // Generate a new event ID
-            const newEventRef = processesRef.push(); // Create a new reference
-            const eventId = newEventRef.key; // Get the new event ID
-
-            newEventRef.set({ eventId: eventId }) // Set the new event with its ID
+            newEventRef.set({ eventId: newEventRef.key })
                 .then(() => {
-                    alert("New event created with ID: " + eventId);
+                    alert("New event created with ID: " + newEventRef.key);
                 })
                 .catch((error) => {
                     console.error("Error adding new event: ", error);
@@ -208,7 +214,6 @@
         }
     };
 
-    // Resize functionality
     const resizeHandle = document.getElementById('resize-handle');
     let isResizing = false;
 
@@ -219,7 +224,7 @@
     window.addEventListener('mousemove', (e) => {
         if (isResizing) {
             const newWidth = e.clientX - document.getElementById('info-box').getBoundingClientRect().left;
-            if (newWidth > 50) { // Minimum width
+            if (newWidth > 50) {
                 document.getElementById('info-box').style.width = newWidth + 'px';
             }
         }
