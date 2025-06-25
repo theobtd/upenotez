@@ -47,7 +47,7 @@
             cursor: ew-resize;
         }
 
-        #profile-modal, #confirm-modal {
+        #profile-modal, #confirm-modal, #event-modal {
             display: none;
             position: fixed;
             z-index: 1;
@@ -59,7 +59,7 @@
             background-color: rgba(0, 0, 0, 0.5);
         }
 
-        #modal-content, #confirm-content {
+        #modal-content, #confirm-content, #event-content {
             background-color: #fefefe;
             margin: 15% auto;
             padding: 20px;
@@ -167,6 +167,14 @@
     </div>
 </div>
 
+<div id="event-modal">
+    <div id="event-content">
+        <span class="close" id="event-close">&times;</span>
+        <h2>Event Name</h2>
+        <p id="event-name-display"></p>
+    </div>
+</div>
+
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyBNaUXaWjAbJIRebzl_ZpAxx32E_bfm9Sw",
@@ -207,12 +215,19 @@
         document.getElementById('profile-modal').style.display = "none";
     };
 
+    document.getElementById('event-close').onclick = function() {
+        document.getElementById('event-modal').style.display = "none";
+    };
+
     window.onclick = function(event) {
         if (event.target == document.getElementById('profile-modal')) {
             document.getElementById('profile-modal').style.display = "none";
         }
         if (event.target == document.getElementById('confirm-modal')) {
             document.getElementById('confirm-modal').style.display = "none";
+        }
+        if (event.target == document.getElementById('event-modal')) {
+            document.getElementById('event-modal').style.display = "none";
         }
     };
 
@@ -252,6 +267,10 @@
                     const li = document.createElement('li');
                     li.className = 'process-item';
                     li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
+                    li.onclick = () => {
+                        document.getElementById('event-name-display').innerText = process.name;
+                        document.getElementById('event-modal').style.display = "block";
+                    };
 
                     const deleteButton = document.createElement('button');
                     deleteButton.className = 'delete-button';
