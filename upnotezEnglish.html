@@ -160,17 +160,15 @@
         const user = auth.currentUser;
     
         if (user) {
+            // Check if the current email is verified
+            if (!user.emailVerified) {
+                alert("Your current email is not verified. Please verify it before changing to a new email.");
+                return;
+            }
+    
             const newEmail = document.getElementById('new-email').value;
             const newCity = document.getElementById('new-city').value;
             const newCompanyName = document.getElementById('new-company-name').value;
-    
-            // Confirm the new email address
-            const confirmNewEmail = prompt("Please confirm your new email address:");
-    
-            if (newEmail !== confirmNewEmail) {
-                alert("The email addresses do not match. Please try again.");
-                return;
-            }
     
             // Ask for the user's password
             const password = prompt('Please enter your password to confirm:');
