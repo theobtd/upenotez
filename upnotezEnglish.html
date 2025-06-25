@@ -113,28 +113,8 @@
         }
 
         .process-item {
-            position: relative;
-            padding-left: 20px; /* Space for vertical line */
+            list-style-type: disc; /* Default bullet points */
             margin: 10px 0; /* Space between events */
-        }
-
-        .process-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 10px; /* Adjust vertical position of the horizontal line */
-            width: 10px; /* Width of the horizontal line */
-            height: 2px; /* Height of the horizontal line */
-            background-color: black; /* Color of the line */
-        }
-
-        .process-item::after {
-            content: '';
-            position: absolute;
-            left: 5px; /* Position of the vertical line */
-            top: 0; /* Start from the top */
-            height: 100%;
-            border-left: 2px solid black; /* Vertical line */
         }
     </style>
 </head>
