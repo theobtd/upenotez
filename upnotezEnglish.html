@@ -32,6 +32,22 @@
             cursor: pointer; /* Change cursor to pointer */
         }
 
+        /* New "+" button styles */
+        #add-button {
+            position: absolute;
+            left: calc(8px + 100%); /* 2px to the right of the profile button */
+            top: 20px; /* Align with the profile button */
+            width: 30px; /* Width of the button */
+            height: 30px; /* Height of the button */
+            cursor: pointer; /* Change cursor to pointer */
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text */
+            border: none; /* No border */
+            border-radius: 5px; /* Optional rounded corners */
+            text-align: center; /* Center text */
+            line-height: 30px; /* Center "+" vertically */
+        }
+
         #resize-handle {
             width: 10px; /* Handle width */
             height: 100%; /* Full height of the box */
@@ -95,6 +111,7 @@
 <!-- New info box with resize handle -->
 <div id="info-box">
     <button id="profile-button">My Profile</button>
+    <button id="add-button">+</button> <!-- New "+" button -->
     <div id="resize-handle"></div>
 </div>
 
