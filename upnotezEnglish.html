@@ -98,16 +98,12 @@
         }
 
         #processes-list {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             background-color: transparent; /* Transparent background */
             border: none; /* No borders */
             padding: 10px;
             box-shadow: none; /* No shadow */
             height: 75%; /* 75% of the info box height */
-            width: 300px;
+            width: 100%; /* Full width */
             text-align: left;
             overflow-y: auto; /* Allow scrolling if needed */
         }
@@ -139,6 +135,9 @@
 <div id="info-box">
     <button id="profile-button">My Profile</button>
     <button id="add-button">+</button>
+    <div id="processes-list">
+        <ul id="processes-ul"></ul>
+    </div>
     <div id="resize-handle"></div>
 </div>
 
@@ -152,10 +151,6 @@
         <p><strong>Language:</strong> <span id="user-language"></span></p>
         <button id="logout-button">Log Out</button>
     </div>
-</div>
-
-<div id="processes-list">
-    <ul id="processes-ul"></ul>
 </div>
 
 <script>
