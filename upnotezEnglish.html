@@ -112,7 +112,7 @@
             margin-top: 20px;
             font-size: 16px;
             text-align: left;
-            display: block; /* Set to block for visibility */
+            display: block; /* Ensure it is visible */
             background-color: #f9f9f9;
             border: 1px solid #ccc;
             padding: 10px;
@@ -165,7 +165,7 @@
     const auth = firebase.auth();
     const database = firebase.database();
 
-    // Display user processes
+    // Function to display user processes
     function displayUserProcesses(userId) {
         const processesRef = database.ref('users/' + userId + '/Processes');
         processesRef.once('value').then((snapshot) => {
@@ -181,11 +181,20 @@
             } else {
                 processList.innerHTML = '<div>No processes found.</div>'; // Handle no processes case
             }
-            processList.style.display = 'block'; // Show the process list
         }).catch((error) => {
             console.error("Error fetching processes: ", error);
         });
     }
+
+    // Fetch and display processes on page load
+    window.onload = function() {
+        const user = auth.currentUser;
+        if (user) {
+            displayUserProcesses(user.uid);
+        } else {
+            console.error("No user is currently signed in.");
+        }
+    };
 
     document.getElementById('profile-button').onclick = function() {
         const user = auth.currentUser;
@@ -199,9 +208,6 @@
                     document.getElementById('user-city').innerText = userData.city;
                     document.getElementById('user-company-name').innerText = userData.companyName;
                     document.getElementById('user-language').innerText = userData.language;
-
-                    // Display user processes
-                    displayUserProcesses(user.uid);
 
                     // Open the modal
                     document.getElementById('profile-modal').style.display = "block";
