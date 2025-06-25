@@ -27,9 +27,9 @@
 
         #resize-handle {
             width: 10px; /* Handle width */
-            height: 100%; /* Full height */
+            height: 100%; /* Full height of the box */
             position: absolute;
-            right: 0; /* Align to the right edge */
+            right: -5px; /* Position it outside the box for easy dragging */
             top: 0;
             cursor: ew-resize; /* Change cursor to indicate resizing */
         }
@@ -170,7 +170,7 @@
 
     window.addEventListener('mousemove', (e) => {
         if (isResizing) {
-            const newWidth = e.clientX - infoBox.getBoundingClientRect().left;
+            const newWidth = e.clientX - document.getElementById('info-box').getBoundingClientRect().left;
             if (newWidth > 50) { // Minimum width
                 document.getElementById('info-box').style.width = newWidth + 'px';
             }
