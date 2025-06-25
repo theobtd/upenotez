@@ -160,37 +160,46 @@
         const user = auth.currentUser;
     
         if (user) {
-            // Check if the current email is verified before allowing changes
-            if (!user.emailVerified) {
-                alert("Your current email is not verified. Please verify it before changing to a new email.");
-                return;
-            }
-    
             const newEmail = document.getElementById('new-email').value;
             const newCity = document.getElementById('new-city').value;
             const newCompanyName = document.getElementById('new-company-name').value;
     
-            // Re-authenticate the user before updating email
+            // Confirm the new email address
+            const confirmNewEmail = prompt("Please confirm your new email address:");
+    
+            if (newEmail !== confirmNewEmail) {
+                alert("The email addresses do not match. Please try again.");
+                return;
+            }
+    
+            // Ask for the user's password
             const password = prompt('Please enter your password to confirm:');
             const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
     
             user.reauthenticateWithCredential(credential).then(() => {
-                // Update email in Firebase Authentication
-                return user.updateEmail(newEmail);
-            }).then(() => {
-                // Update user information in Firebase Realtime Database
-                return database.ref('users/' + user.uid).update({
-                    email: newEmail,
-                    city: newCity,
-                    companyName: newCompanyName
-                });
-            }).then(() => {
-                document.getElementById('user-email').innerText = newEmail;
-                document.getElementById('user-city').innerText = newCity;
-                document.getElementById('user-company-name').innerText = newCompanyName;
+                // Show confirmation message
+                const confirmChange = confirm("If you press 'Confirm', your email address will be changed and you will automatically be logged out. You will need to verify your new email address to log back into your account. Do you confirm?");
     
-                // Hide the modify section
-                document.getElementById('modify-section').style.display = "none";
+                if (confirmChange) {
+                    // Update email in Firebase Authentication
+                    return user.updateEmail(newEmail).then(() => {
+                        // Update user information in Firebase Realtime Database
+                        return database.ref('users/' + user.uid).update({
+                            email: newEmail,
+                            city: newCity,
+                            companyName: newCompanyName
+                        });
+                    }).then(() => {
+                        // Log out the user
+                        return auth.signOut();
+                    }).then(() => {
+                        // Send verification email to the new address
+                        return user.sendEmailVerification();
+                    }).then(() => {
+                        alert("Your email has been changed. Please check your new email for verification.");
+                        window.location.href = 'index.html'; // Redirect to sign-in page
+                    });
+                }
             }).catch((error) => {
                 console.error("Error updating user data: ", error);
                 alert(error.message); // Show error message to the user
