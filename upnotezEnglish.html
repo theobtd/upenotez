@@ -50,7 +50,7 @@
         #profile-modal, #confirm-modal {
             display: none;
             position: fixed;
-            z-index: 1;
+            z-index: 3; /* Higher z-index for confirmation modal */
             left: 0;
             top: 0;
             width: 100%;
@@ -143,7 +143,7 @@
             border: 1px solid #888;
             padding: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-            z-index: 2; /* On top of other content */
+            z-index: 2; /* Lower z-index than confirmation modal */
             width: 200px; /* Fixed width */
             height: 80vh; /* 80% of the viewport height */
             overflow-y: auto; /* Allow scrolling if content is long */
@@ -196,7 +196,7 @@
 </div>
 
 <div id="confirm-modal">
-    <div id="confirm-content" style="z-index: 3;">
+    <div id="confirm-content">
         <p id="confirm-message">Are you sure you want to proceed?</p>
         <input type="text" id="event-name" placeholder="Enter event name" />
         <button class="confirm-button" id="confirm-yes">Confirm</button>
