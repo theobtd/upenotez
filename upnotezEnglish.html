@@ -23,21 +23,11 @@
             overflow: hidden;
         }
         #profile-button {
-            position: absolute;
-            left: 8px;
-            top: 20px;
             cursor: pointer;
             width: 100px;
             height: 40px;
-            font-size: 10px;
-            padding: 0;
         }
         #add-button {
-            position: absolute;
-            left: 128px;
-            top: 20px;
-            width: 40px;
-            height: 40px;
             cursor: pointer;
             background-color: #4CAF50;
             color: white;
@@ -167,15 +157,21 @@
 
     function displayUserProcesses(userId) {
         const processesRef = database.ref('users/' + userId + '/Processes');
-        processesRef.on('value', (snapshot) => {
+        processesRef.once('value', (snapshot) => {
             const processList = document.getElementById('process-list');
             processList.innerHTML = ''; // Clear existing list
-            snapshot.forEach((childSnapshot) => {
-                const processId = childSnapshot.key;
-                const listItem = document.createElement('li');
-                listItem.innerText = `Process ID: ${processId}`;
-                processList.appendChild(listItem);
-            });
+            if (snapshot.exists()) {
+                snapshot.forEach((childSnapshot) => {
+                    const processId = childSnapshot.key;
+                    const listItem = document.createElement('li');
+                    listItem.innerText = `Process ID: ${processId}`;
+                    processList.appendChild(listItem);
+                });
+            } else {
+                processList.innerHTML = '<li>No processes found.</li>'; // Handle no processes case
+            }
+        }).catch((error) => {
+            console.error("Error fetching processes: ", error);
         });
     }
 
@@ -207,6 +203,7 @@
             newEventRef.set({ eventId: newEventRef.key })
                 .then(() => {
                     alert("New event created with ID: " + newEventRef.key);
+                    displayUserProcesses(user.uid); // Refresh the process list
                 })
                 .catch((error) => {
                     console.error("Error adding new event: ", error);
