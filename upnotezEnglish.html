@@ -111,6 +111,31 @@
             width: 300px;
             text-align: left;
         }
+
+        .process-item {
+            position: relative;
+            padding-left: 20px; /* Space for vertical line */
+            margin: 10px 0; /* Space between events */
+        }
+
+        .process-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px; /* Adjust vertical position of the horizontal line */
+            width: 10px; /* Width of the horizontal line */
+            height: 2px; /* Height of the horizontal line */
+            background-color: black; /* Color of the line */
+        }
+
+        .process-item::after {
+            content: '';
+            position: absolute;
+            left: 5px; /* Position of the vertical line */
+            top: 0; /* Start from the top */
+            height: 100%;
+            border-left: 2px solid black; /* Vertical line */
+        }
     </style>
 </head>
 <body>
@@ -136,7 +161,6 @@
 </div>
 
 <div id="processes-list">
-    <h3>Processes</h3>
     <ul id="processes-ul"></ul>
 </div>
 
@@ -222,6 +246,7 @@
                 for (const key in processes) {
                     if (processes.hasOwnProperty(key)) {
                         const li = document.createElement('li');
+                        li.className = 'process-item'; // Apply custom class
                         li.textContent = 'Event ID: ' + processes[key].eventId;
                         processesUl.appendChild(li);
                     }
@@ -230,7 +255,6 @@
         }
     }
 
-    // Call loadProcesses when the user is authenticated
     auth.onAuthStateChanged((user) => {
         if (user) {
             loadProcesses();
