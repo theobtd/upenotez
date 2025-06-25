@@ -150,6 +150,13 @@
             margin: 0;
         }
 
+        #event-close {
+            cursor: pointer;
+            color: #4CAF50;
+            float: right;
+            font-size: 18px;
+        }
+
         #add-field-button {
             margin-top: 20px;
             padding: 10px;
@@ -197,9 +204,10 @@
 
 <!-- Event Name Display Box -->
 <div id="event-display">
+    <span id="event-close">&times;</span>
     <h2>Event Name</h2>
     <p id="event-name-display"></p>
-    <button id="add-field-button">Add Field</button>
+    <button id="add-field-button">Add Field</button> <!-- Added Add Field button -->
 </div>
 
 <script>
