@@ -16,7 +16,7 @@
             top: 50%;
             transform: translateY(-50%);
             width: 15%;
-            height: 80%; /* Height of the info box */
+            height: 80%;
             background-color: #f0f0f0;
             border: 1px solid black;
             padding: 10px;
@@ -98,38 +98,38 @@
         }
 
         #processes-list {
-            background-color: transparent; /* Transparent background */
-            border: none; /* No borders */
+            background-color: transparent;
+            border: none;
             padding: 10px;
-            box-shadow: none; /* No shadow */
-            height: 75%; /* 75% of the info box height */
-            width: 100%; /* Full width */
+            box-shadow: none;
+            height: 75%;
+            width: 100%;
             text-align: left;
-            overflow-y: auto; /* Allow scrolling if needed */
+            overflow-y: auto;
         }
 
         .process-item {
             list-style-type: disc;
             margin: 10px 0;
             display: flex;
-            align-items: center; /* Align items vertically */
-            justify-content: space-between; /* Space between text and button */
+            align-items: center;
+            justify-content: space-between;
         }
 
         .delete-button {
-            background-color: red; /* Red background */
-            color: white; /* White text */
-            border: none; /* No border */
-            border-radius: 50%; /* Circular button */
-            width: 25px; /* Button width */
-            height: 25px; /* Button height */
-            cursor: pointer; /* Pointer cursor */
-            font-size: 16px; /* Font size for "-" */
-            display: none; /* Initially hidden */
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            display: none;
         }
 
         .process-item:hover .delete-button {
-            display: block; /* Show the delete button on hover */
+            display: block;
         }
     </style>
 </head>
@@ -182,8 +182,8 @@
     const auth = firebase.auth();
     const database = firebase.database();
 
-    let currentAction = null; // To store current action (add or delete)
-    let currentProcessId = null; // To store the ID of the process to delete
+    let currentAction = null;
+    let currentProcessId = null;
 
     document.getElementById('profile-button').onclick = function() {
         const user = auth.currentUser;
@@ -225,10 +225,10 @@
     };
 
     document.getElementById('add-button').onclick = function() {
-        currentAction = 'add'; // Set action to add
+        currentAction = 'add';
         document.getElementById('confirm-message').innerText = "Are you sure you want to create a new event?";
-        document.getElementById('event-name').value = ""; // Clear previous input
-        document.getElementById('confirm-modal').style.display = "block"; // Show custom confirmation modal
+        document.getElementById('event-name').value = "";
+        document.getElementById('confirm-modal').style.display = "block";
     };
 
     function loadProcesses() {
@@ -241,38 +241,34 @@
 
                 for (const key in processes) {
                     if (processes.hasOwnProperty(key)) {
-                        processesArray.push({ id: key, eventId: processes[key].eventId });
+                        processesArray.push({ id: key, eventId: processes[key].eventId, name: processes[key].name });
                     }
                 }
 
-                // Sort the processes array alphabetically by eventId
-                processesArray.sort((a, b) => a.eventId.localeCompare(b.eventId));
-
                 const processesUl = document.getElementById('processes-ul');
-                processesUl.innerHTML = ''; // Clear existing list
+                processesUl.innerHTML = '';
 
                 processesArray.forEach(process => {
                     const li = document.createElement('li');
                     li.className = 'process-item';
-                    li.textContent = process.eventId; // Removed "Event ID: " prefix
+                    li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
 
                     const deleteButton = document.createElement('button');
                     deleteButton.className = 'delete-button';
-                    deleteButton.textContent = '-'; // Button label
+                    deleteButton.textContent = '-';
                     deleteButton.onclick = () => {
-                        currentAction = 'delete'; // Set action to delete
-                        currentProcessId = process.id; // Store process ID for deletion
-                        const confirmDelete = confirm(`Are you sure you want to delete process ${process.eventId}?`);
+                        currentAction = 'delete';
+                        currentProcessId = process.id;
+                        const confirmDelete = confirm(`Are you sure you want to delete process ${process.name || process.eventId}?`);
                         if (confirmDelete) {
-                            // Delete the process from the database
                             processesRef.child(currentProcessId).remove()
-                                .then(() => loadProcesses()) // Reload processes after deletion
+                                .then(() => loadProcesses())
                                 .catch((error) => {
                                     console.error("Error deleting event: ", error);
                                 });
                         }
                     };
-                    li.appendChild(deleteButton); // Add button to list item
+                    li.appendChild(deleteButton);
 
                     processesUl.appendChild(li);
                 });
@@ -285,14 +281,14 @@
         const processesRef = database.ref('users/' + user.uid + '/Processes');
 
         if (currentAction === 'add') {
-            const eventName = document.getElementById('event-name').value; // Get event name from input
+            const eventName = document.getElementById('event-name').value;
             const newEventRef = processesRef.push();
             const eventId = newEventRef.key;
 
-            newEventRef.set({ eventId: eventId, name: eventName }) // Save name as a child
+            newEventRef.set({ eventId: eventId, name: eventName })
                 .then(() => {
-                    loadProcesses(); // Load processes after adding a new one
-                    document.getElementById('confirm-modal').style.display = "none"; // Close modal
+                    loadProcesses();
+                    document.getElementById('confirm-modal').style.display = "none";
                 })
                 .catch((error) => {
                     console.error("Error adding new event: ", error);
@@ -301,7 +297,7 @@
     };
 
     document.getElementById('confirm-no').onclick = function() {
-        document.getElementById('confirm-modal').style.display = "none"; // Close modal
+        document.getElementById('confirm-modal').style.display = "none";
     };
 
     auth.onAuthStateChanged((user) => {
