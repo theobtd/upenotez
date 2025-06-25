@@ -8,17 +8,18 @@
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-database-compat.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 20%; }
+        body { font-family: Arial, sans-serif; text-align: center; margin: 0; }
 
         /* New box styles */
         #info-box {
             position: absolute;
             left: 2%; /* 2% away from the left edge */
-            top: 10%; /* Optional: adjust as needed */
+            top: 50%; /* Center vertically */
+            transform: translateY(-50%); /* Adjust for half its height */
             width: 10%; /* 10% of the viewport width */
             height: 80%; /* 80% of the viewport height */
             background-color: #f0f0f0; /* Light gray background */
-            border: 1px solid #ccc; /* Light gray border */
+            border: 1px solid black; /* Thin black border */
             padding: 10px; /* Padding inside the box */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional shadow */
         }
