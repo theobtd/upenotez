@@ -25,6 +25,14 @@
             overflow: hidden; /* Prevent overflow */
         }
 
+        #profile-button {
+            position: absolute;
+            left: 5%; /* 5% away from the width of the box */
+            top: 80%; /* 80% from the top of the box */
+            transform: translateY(-100%); /* Adjust to position above */
+            cursor: pointer; /* Change cursor to pointer */
+        }
+
         #resize-handle {
             width: 10px; /* Handle width */
             height: 100%; /* Full height of the box */
@@ -83,13 +91,9 @@
 </head>
 <body>
 
-<h1>Hello!</h1>
-<button id="profile-button">My Profile</button>
-
 <!-- New info box with resize handle -->
 <div id="info-box">
-    <h3>Info Box</h3>
-    <p>This is a side info box.</p>
+    <button id="profile-button">My Profile</button>
     <div id="resize-handle"></div>
 </div>
 
