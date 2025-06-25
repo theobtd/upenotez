@@ -151,6 +151,7 @@
 
         #event-display h2 {
             margin: 0;
+            font-size: 18px; /* Adjust font size for better visibility */
         }
 
         #event-close {
@@ -172,8 +173,6 @@
     </style>
 </head>
 <body>
-
-<h1>Hello!</h1>
 
 <div id="info-box">
     <button id="profile-button">My Profile</button>
@@ -208,7 +207,7 @@
 <!-- Event Name Display Box -->
 <div id="event-display">
     <span id="event-close">&times;</span>
-    <h2>Event Name</h2>
+    <h2 id="event-name-title">Event Name</h2>
     <p id="event-name-display"></p>
     <button id="add-field-button">Add Field</button> <!-- Added Add Field button -->
 </div>
@@ -307,6 +306,7 @@
                     li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
                     li.onclick = () => {
                         document.getElementById('event-name-display').innerText = process.name;
+                        document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
                         document.getElementById('event-display').style.display = "block"; // Show the event name box
                     };
 
