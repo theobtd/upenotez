@@ -234,23 +234,32 @@
             const processesRef = database.ref('users/' + user.uid + '/Processes');
             processesRef.on('value', (snapshot) => {
                 const processes = snapshot.val();
-                const processesUl = document.getElementById('processes-ul');
-                processesUl.innerHTML = ''; // Clear existing list
+                const processesArray = [];
 
                 for (const key in processes) {
                     if (processes.hasOwnProperty(key)) {
-                        const li = document.createElement('li');
-                        li.className = 'process-item';
-                        li.textContent = 'Event ID: ' + processes[key].eventId;
-
-                        const deleteButton = document.createElement('button');
-                        deleteButton.className = 'delete-button';
-                        deleteButton.textContent = '-'; // Button label
-                        li.appendChild(deleteButton); // Add button to list item
-
-                        processesUl.appendChild(li);
+                        processesArray.push({ id: key, eventId: processes[key].eventId });
                     }
                 }
+
+                // Sort the processes array alphabetically by eventId
+                processesArray.sort((a, b) => a.eventId.localeCompare(b.eventId));
+
+                const processesUl = document.getElementById('processes-ul');
+                processesUl.innerHTML = ''; // Clear existing list
+
+                processesArray.forEach(process => {
+                    const li = document.createElement('li');
+                    li.className = 'process-item';
+                    li.textContent = 'Event ID: ' + process.eventId;
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.className = 'delete-button';
+                    deleteButton.textContent = '-'; // Button label
+                    li.appendChild(deleteButton); // Add button to list item
+
+                    processesUl.appendChild(li);
+                });
             });
         }
     }
