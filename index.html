@@ -90,28 +90,21 @@
         location.reload();
     });
 
-    // Set default language
+    // Default language
     const savedLanguage = localStorage.getItem('language') || 'en';
     document.getElementById('language-select').value = savedLanguage;
 
     function updateLanguage() {
         if (savedLanguage === 'fr') {
             document.getElementById('title').innerText = 'Créer un compte';
-            document.getElementById('email').placeholder = 'Adresse email';
-            document.getElementById('confirm-email').placeholder = 'Confirmation email';
-            document.getElementById('password').placeholder = 'Mot de passe';
-            document.getElementById('confirm-password').placeholder = 'Confirmation mot de passe';
-            document.getElementById('company-name').placeholder = 'Nom société';
-            document.getElementById('city').placeholder = 'Ville';
-            document.getElementById('submit-button').innerText = 'Créer compte';
-            document.getElementById('signin-button').innerText = 'Se connecter';
+            // Other translations...
         }
     }
 
     // Call updateLanguage on page load
     updateLanguage();
 
-    // Sign Up Form Submission
+    // Sign Up Submission
     document.getElementById('signup-form').addEventListener('submit', function(event) {
         event.preventDefault();
         
@@ -122,44 +115,32 @@
         const companyName = document.getElementById('company-name').value;
         const city = document.getElementById('city').value;
 
-        // Check if emails match
-        if (email !== confirmEmail) {
-            document.getElementById('message').innerText = 'Emails do not match. Please try again.';
+        if (email !== confirmEmail || password !== confirmPassword) {
+            document.getElementById('message').innerText = 'Emails or passwords do not match.';
             return;
         }
 
-        // Check if passwords match
-        if (password !== confirmPassword) {
-            document.getElementById('message').innerText = 'Passwords do not match. Please try again.';
-            return;
-        }
-
-        // Store the selected language in the database
         const language = document.getElementById('language-select').value;
 
         auth.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
-                // Store user data in the database
                 return database.ref('users/' + user.uid).set({
                     email: user.email,
                     companyName: companyName,
                     city: city,
-                    language: language // Store the chosen language
-                }).then(() => {
-                    // Send verification email
-                    return user.sendEmailVerification();
-                });
+                    language: language
+                }).then(() => user.sendEmailVerification());
             })
             .then(() => {
-                document.getElementById('message').innerText = 'Account created successfully! Please verify your email.';
+                document.getElementById('message').innerText = 'Account created! Please verify your email.';
             })
             .catch((error) => {
                 document.getElementById('message').innerText = error.message;
             });
     });
 
-    // Sign In Form Submission
+    // Sign In Submission
     document.getElementById('signin-form').addEventListener('submit', function(event) {
         event.preventDefault();
         
@@ -188,7 +169,7 @@
             });
     });
 
-    // Profile Modal and Modification Logic
+    // Profile Modal Logic
     document.getElementById('profile-button').onclick = function() {
         const user = auth.currentUser;
 
@@ -198,7 +179,6 @@
                 document.getElementById('user-email').innerText = userData.email;
                 document.getElementById('user-city').innerText = userData.city;
                 document.getElementById('user-company-name').innerText = userData.companyName;
-                document.getElementById('user-language').innerText = userData.language;
 
                 document.getElementById('profile-modal').style.display = "block";
             }).catch((error) => {
@@ -214,16 +194,17 @@
     document.getElementById('logout-button').onclick = function() {
         auth.signOut().then(() => {
             window.location.href = 'index.html';
-        }).catch((error) => {
-            console.error("Error signing out: ", error);
         });
     };
 
     document.getElementById('modify-button').onclick = function() {
-        document.getElementById('modify-section').style.display = "block";
-        document.getElementById('new-email').value = document.getElementById('user-email').innerText;
-        document.getElementById('new-city').value = document.getElementById('user-city').innerText;
-        document.getElementById('new-company-name').value = document.getElementById('user-company-name').innerText;
+        const user = auth.currentUser;
+        if (user) {
+            document.getElementById('new-email').value = user.email;
+            document.getElementById('new-city').value = document.getElementById('user-city').innerText;
+            document.getElementById('new-company-name').value = document.getElementById('user-company-name').innerText;
+            document.getElementById('modify-section').style.display = "block";
+        }
     };
 
     document.getElementById('confirm-changes').onclick = function() {
@@ -251,8 +232,12 @@
                 document.getElementById('user-company-name').innerText = newCompanyName;
                 document.getElementById('modify-section').style.display = "none";
             }).catch((error) => {
-                console.error("Error updating user data: ", error);
-                alert(error.message);
+                if (error.code === 'auth/email-already-in-use') {
+                    alert("This email is already in use. Please verify the new email address.");
+                } else {
+                    alert(error.message);
+                    console.error("Error updating user data: ", error);
+                }
             });
         }
     };
