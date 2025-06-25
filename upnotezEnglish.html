@@ -165,7 +165,8 @@
             const newCompanyName = document.getElementById('new-company-name').value;
 
             // Re-authenticate the user before updating email
-            const credential = firebase.auth.EmailAuthProvider.credential(user.email, prompt('Please enter your password to confirm:'));
+            const password = prompt('Please enter your password to confirm:');
+            const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
 
             user.reauthenticateWithCredential(credential).then(() => {
                 // Update email in Firebase Authentication
@@ -186,6 +187,7 @@
                 document.getElementById('modify-section').style.display = "none";
             }).catch((error) => {
                 console.error("Error updating user data: ", error);
+                alert(error.message); // Show error message to the user
             });
         }
     };
