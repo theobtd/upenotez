@@ -12,11 +12,17 @@
         body { font-family: Arial, sans-serif; margin: 20px; }
         input { display: block; margin: 10px 0; }
         button { padding: 10px; }
+        #language-select { position: absolute; top: 20px; right: 20px; }
     </style>
 </head>
 <body>
 
-<h1>Create Account</h1>
+<select id="language-select">
+    <option value="en">English</option>
+    <option value="fr">French</option>
+</select>
+
+<h1 id="title">Create Account</h1>
 <form id="signup-form">
     <input type="email" id="email" placeholder="Email" required>
     <input type="email" id="confirm-email" placeholder="Confirm Email" required>
@@ -24,7 +30,7 @@
     <input type="password" id="confirm-password" placeholder="Confirm Password" required>
     <input type="text" id="company-name" placeholder="Company Name" required>
     <input type="text" id="city" placeholder="City" required>
-    <button type="submit">Sign Up</button>
+    <button type="submit" id="submit-button">Sign Up</button>
 </form>
 <div id="message"></div>
 
@@ -44,6 +50,33 @@
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const database = firebase.database();
+
+    // Language change handler
+    document.getElementById('language-select').addEventListener('change', function() {
+        const language = this.value;
+        localStorage.setItem('language', language);
+        location.reload();
+    });
+
+    // Set default language
+    const savedLanguage = localStorage.getItem('language') || 'en';
+    document.getElementById('language-select').value = savedLanguage;
+
+    function updateLanguage() {
+        if (savedLanguage === 'fr') {
+            document.getElementById('title').innerText = 'Créer un compte';
+            document.getElementById('email').placeholder = 'Adresse email';
+            document.getElementById('confirm-email').placeholder = 'Confirmation email';
+            document.getElementById('password').placeholder = 'Mot de passe';
+            document.getElementById('confirm-password').placeholder = 'Confirmation mot de passe';
+            document.getElementById('company-name').placeholder = 'Nom société';
+            document.getElementById('city').placeholder = 'Ville';
+            document.getElementById('submit-button').innerText = 'Créer compte';
+        }
+    }
+
+    // Call updateLanguage on page load
+    updateLanguage();
 
     document.getElementById('signup-form').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -67,6 +100,9 @@
             return;
         }
 
+        // Store the selected language in the database
+        const language = document.getElementById('language-select').value;
+
         auth.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
@@ -74,7 +110,8 @@
                 return database.ref('users/' + user.uid).set({
                     email: user.email,
                     companyName: companyName,
-                    city: city
+                    city: city,
+                    language: language // Store the chosen language
                 });
             })
             .then(() => {
