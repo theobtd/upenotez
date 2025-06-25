@@ -164,11 +164,14 @@
             const newCity = document.getElementById('new-city').value;
             const newCompanyName = document.getElementById('new-company-name').value;
 
-            // Update user information in Firebase
-            database.ref('users/' + user.uid).update({
-                email: newEmail,
-                city: newCity,
-                companyName: newCompanyName
+            // Update email in Firebase Authentication
+            user.updateEmail(newEmail).then(() => {
+                // Update user information in Firebase Realtime Database
+                return database.ref('users/' + user.uid).update({
+                    email: newEmail,
+                    city: newCity,
+                    companyName: newCompanyName
+                });
             }).then(() => {
                 document.getElementById('user-email').innerText = newEmail;
                 document.getElementById('user-city').innerText = newCity;
