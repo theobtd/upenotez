@@ -113,8 +113,22 @@
         }
 
         .process-item {
-            list-style-type: disc; /* Default bullet points */
-            margin: 10px 0; /* Space between events */
+            list-style-type: disc;
+            margin: 10px 0;
+            display: flex;
+            align-items: center; /* Align items vertically */
+        }
+
+        .delete-button {
+            background-color: red; /* Red background */
+            color: white; /* White text */
+            border: none; /* No border */
+            border-radius: 50%; /* Circular button */
+            width: 25px; /* Button width */
+            height: 25px; /* Button height */
+            cursor: pointer; /* Pointer cursor */
+            margin-left: 10px; /* Space between text and button */
+            font-size: 16px; /* Font size for "-" */
         }
     </style>
 </head>
@@ -226,8 +240,14 @@
                 for (const key in processes) {
                     if (processes.hasOwnProperty(key)) {
                         const li = document.createElement('li');
-                        li.className = 'process-item'; // Apply custom class
+                        li.className = 'process-item';
                         li.textContent = 'Event ID: ' + processes[key].eventId;
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'delete-button';
+                        deleteButton.textContent = '-'; // Button label
+                        li.appendChild(deleteButton); // Add button to list item
+
                         processesUl.appendChild(li);
                     }
                 }
