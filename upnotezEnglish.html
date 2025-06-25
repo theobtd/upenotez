@@ -47,7 +47,7 @@
             cursor: ew-resize;
         }
 
-        #profile-modal, #confirm-modal, #event-modal {
+        #profile-modal, #confirm-modal {
             display: none;
             position: fixed;
             z-index: 1;
@@ -59,7 +59,7 @@
             background-color: rgba(0, 0, 0, 0.5);
         }
 
-        #modal-content, #confirm-content, #event-content {
+        #modal-content, #confirm-content {
             background-color: #fefefe;
             margin: 15% auto;
             padding: 20px;
@@ -131,6 +131,31 @@
         .process-item:hover .delete-button {
             display: block;
         }
+
+        /* Event Name Box */
+        #event-display {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #888;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            z-index: 2; /* On top of other content */
+        }
+
+        #event-display h2 {
+            margin: 0;
+        }
+
+        #event-close {
+            cursor: pointer;
+            color: #4CAF50;
+            float: right;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -167,12 +192,11 @@
     </div>
 </div>
 
-<div id="event-modal">
-    <div id="event-content">
-        <span class="close" id="event-close">&times;</span>
-        <h2>Event Name</h2>
-        <p id="event-name-display"></p>
-    </div>
+<!-- Event Name Display Box -->
+<div id="event-display">
+    <span id="event-close">&times;</span>
+    <h2>Event Name</h2>
+    <p id="event-name-display"></p>
 </div>
 
 <script>
@@ -216,7 +240,7 @@
     };
 
     document.getElementById('event-close').onclick = function() {
-        document.getElementById('event-modal').style.display = "none";
+        document.getElementById('event-display').style.display = "none";
     };
 
     window.onclick = function(event) {
@@ -226,8 +250,8 @@
         if (event.target == document.getElementById('confirm-modal')) {
             document.getElementById('confirm-modal').style.display = "none";
         }
-        if (event.target == document.getElementById('event-modal')) {
-            document.getElementById('event-modal').style.display = "none";
+        if (event.target == document.getElementById('event-display')) {
+            document.getElementById('event-display').style.display = "none";
         }
     };
 
@@ -269,7 +293,7 @@
                     li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
                     li.onclick = () => {
                         document.getElementById('event-name-display').innerText = process.name;
-                        document.getElementById('event-modal').style.display = "block";
+                        document.getElementById('event-display').style.display = "block"; // Show the event name box
                     };
 
                     const deleteButton = document.createElement('button');
