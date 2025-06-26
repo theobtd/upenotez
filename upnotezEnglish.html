@@ -359,9 +359,9 @@
             .then(() => {
                 // Store the new event ID in local storage
                 localStorage.setItem('newEventId', eventId);
-    
-                // Set currentProcessId to the new event ID before refreshing
-                currentProcessId = eventId;
+                localStorage.setItem('currentProcessId', eventId); // Store currentProcessId as well
+                loadProcesses();
+                document.getElementById('confirm-modal').style.display = "none";
     
                 // Refresh the page
                 location.reload(); // This will refresh the page
@@ -425,10 +425,10 @@
         if (user) {
             loadProcesses();
     
-            // Check for existing currentProcessId
+            // Check for currentProcessId in local storage
             const storedProcessId = localStorage.getItem('currentProcessId');
             if (storedProcessId) {
-                currentProcessId = storedProcessId;
+                currentProcessId = storedProcessId; // Set currentProcessId from local storage
                 const processesRef = database.ref('users/' + user.uid + '/Processes');
                 processesRef.child(currentProcessId).once('value').then((snapshot) => {
                     const process = snapshot.val();
@@ -438,10 +438,10 @@
                         document.getElementById('event-display').style.display = "block"; // Show the event name box
                     }
                 });
-                localStorage.removeItem('currentProcessId');
+                localStorage.removeItem('currentProcessId'); // Clear after using
             }
     
-            // Check for new event ID
+            // Check for new event ID (if applicable)
             const newEventId = localStorage.getItem('newEventId');
             if (newEventId) {
                 const processesRef = database.ref('users/' + user.uid + '/Processes');
@@ -453,7 +453,7 @@
                         document.getElementById('event-display').style.display = "block"; // Show the event name box
                     }
                 });
-                localStorage.removeItem('newEventId');
+                localStorage.removeItem('newEventId'); // Clear after using
             }
         }
     });
