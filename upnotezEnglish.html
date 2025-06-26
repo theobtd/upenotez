@@ -462,21 +462,35 @@
     function loadNotes(processId) {
         const user = auth.currentUser;
         const notesRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes`);
-        
+    
         notesRef.on('value', (snapshot) => {
             const notes = snapshot.val();
+            const notesArray = []; // Create an array to hold notes
+    
+            // Collect notes in an array
+            for (const key in notes) {
+                if (notes.hasOwnProperty(key)) {
+                    notesArray.push({
+                        id: key,
+                        title: notes[key].title,
+                        date: notes[key].date
+                    });
+                }
+            }
+    
+            // Sort notesArray by date
+            notesArray.sort((a, b) => new Date(a.date) - new Date(b.date));
+    
             const notesList = document.getElementById('notes-list');
             notesList.innerHTML = ''; // Clear existing notes
     
-            for (const key in notes) {
-                if (notes.hasOwnProperty(key)) {
-                    const note = notes[key];
-                    const noteBox = document.createElement('li');
-                    noteBox.className = 'note-box';
-                    noteBox.innerText = `${note.title}\nDate: ${note.date}`; // Display note title and date
-                    notesList.appendChild(noteBox);
-                }
-            }
+            // Display sorted notes
+            notesArray.forEach(note => {
+                const noteBox = document.createElement('li');
+                noteBox.className = 'note-box';
+                noteBox.innerText = `${note.title}\nDate: ${note.date}`; // Display note title and date
+                notesList.appendChild(noteBox);
+            });
         });
     }
 
