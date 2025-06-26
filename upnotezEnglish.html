@@ -343,14 +343,18 @@
             const newEventRef = processesRef.push();
             const eventId = newEventRef.key;
 
-            newEventRef.set({ eventId: eventId, name: eventName })
-                .then(() => {
-                    loadProcesses();
-                    document.getElementById('confirm-modal').style.display = "none";
-                })
-                .catch((error) => {
-                    console.error("Error adding new event: ", error);
-                });
+            newEventRef.set({ 
+                eventId: eventId, 
+                name: eventName,
+                company: "" // Add the Company field as an empty string
+            })
+            .then(() => {
+                loadProcesses();
+                document.getElementById('confirm-modal').style.display = "none";
+            })
+            .catch((error) => {
+                console.error("Error adding new event: ", error);
+            });
         }
     };
 
