@@ -350,14 +350,11 @@
             const eventName = document.getElementById('event-name').value;
             const newEventRef = processesRef.push();
             const eventId = newEventRef.key;
-
-            const field1Value = document.getElementById('field-1').value;
-            const field2Value = document.getElementById('field-2').value;
     
             newEventRef.set({ 
                 eventId: eventId, 
                 name: eventName,
-                company: "" // Add the Company field as an empty string
+                company: "", // Add the Company field as an empty string
                 field1: "", // New Field 1
                 field2: ""  // New Field 2
             })
