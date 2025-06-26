@@ -404,6 +404,9 @@
                 .then(() => {
                     console.log("Database updated successfully."); // Log success message
                     
+                    // Store currentProcessId in local storage
+                    localStorage.setItem('currentProcessId', currentProcessId);
+                    
                     // Refresh the page
                     location.reload(); // This will refresh the page
                 })
@@ -418,6 +421,27 @@
     auth.onAuthStateChanged((user) => {
         if (user) {
             loadProcesses();
+            
+            // Check if there is a currentProcessId stored in local storage
+            const storedProcessId = localStorage.getItem('currentProcessId');
+            if (storedProcessId) {
+                // Set currentProcessId and open the event display
+                currentProcessId = storedProcessId;
+    
+                // Find the process and update the display
+                const processesRef = database.ref('users/' + user.uid + '/Processes');
+                processesRef.child(currentProcessId).once('value').then((snapshot) => {
+                    const process = snapshot.val();
+                    if (process) {
+                        document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
+                        document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
+                        document.getElementById('event-display').style.display = "block"; // Show the event name box
+                    }
+                });
+    
+                // Clear the stored Process ID from local storage
+                localStorage.removeItem('currentProcessId');
+            }
         }
     });
 
