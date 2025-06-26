@@ -350,6 +350,9 @@
             const eventName = document.getElementById('event-name').value;
             const newEventRef = processesRef.push();
             const eventId = newEventRef.key;
+
+            const field1Value = document.getElementById('field-1').value;
+            const field2Value = document.getElementById('field-2').value;
     
             newEventRef.set({ 
                 eventId: eventId, 
