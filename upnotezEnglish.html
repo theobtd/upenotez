@@ -212,12 +212,6 @@
             width: 300px;
             text-align: left;
         }
-
-        .collapsed {
-            height: 40px; /* Adjust height for collapsed state */
-            overflow: hidden; /* Hide overflow when collapsed */
-            cursor: pointer; /* Change cursor to indicate it's clickable */
-        }
     </style>
 </head>
 <body>
@@ -257,10 +251,9 @@
 </div>
 
 <!-- Event Name Display Box -->
-<div id="event-display" class="collapsed">
+<div id="event-display">
     <span id="event-close">&times;</span>
     <h2 id="event-name-title">Event Name</h2>
-    
     <p><strong>Company:</strong> <span id="event-company-display"></span></p>
     <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" />
     
@@ -558,13 +551,7 @@
                         document.getElementById('event-field2-display').innerText = process.field2 || "N/A"; // Set Field 2
     
                         // Show the event name box
-                        // document.getElementById('event-display').style.display = "block"; 
-
-                        // Ensure it's in collapsed state initially
-                        const eventDisplay = document.getElementById('event-display');
-                        eventDisplay.classList.add('collapsed'); // Ensure it starts collapsed
-                        eventDisplay.style.height = '40px'; // Set height to collapsed state
-                        eventDisplay.style.display = "block"; // Show the event name box
+                        document.getElementById('event-display').style.display = "block"; 
                     }
                 }).catch((error) => {
                     console.error("Error fetching process data: ", error);
@@ -631,17 +618,6 @@
                 });
         } else {
             console.log("No user is logged in or no process selected.");
-        }
-    };
-
-    document.getElementById('event-display').onclick = function() {
-        const eventDisplay = document.getElementById('event-display');
-        if (eventDisplay.classList.contains('collapsed')) {
-            eventDisplay.classList.remove('collapsed');
-            eventDisplay.style.height = 'auto'; // Reset height to show full content
-        } else {
-            eventDisplay.classList.add('collapsed');
-            eventDisplay.style.height = '40px'; // Set height to collapsed state
         }
     };
 
