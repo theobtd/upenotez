@@ -484,6 +484,8 @@
                 
                         document.getElementById('event-display').style.display = "block"; // Show the event name box
                     }
+                }).catch((error) => {
+                    console.error("Error fetching process data: ", error);
                 });
                 localStorage.removeItem('currentProcessId'); // Clear after using
             }
