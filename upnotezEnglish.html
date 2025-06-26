@@ -558,7 +558,13 @@
                         document.getElementById('event-field2-display').innerText = process.field2 || "N/A"; // Set Field 2
     
                         // Show the event name box
-                        document.getElementById('event-display').style.display = "block"; 
+                        // document.getElementById('event-display').style.display = "block"; 
+
+                        // Ensure it's in collapsed state initially
+                        const eventDisplay = document.getElementById('event-display');
+                        eventDisplay.classList.add('collapsed'); // Ensure it starts collapsed
+                        eventDisplay.style.height = '40px'; // Set height to collapsed state
+                        eventDisplay.style.display = "block"; // Show the event name box
                     }
                 }).catch((error) => {
                     console.error("Error fetching process data: ", error);
