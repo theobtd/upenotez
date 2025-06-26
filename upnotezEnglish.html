@@ -424,6 +424,7 @@
                     li.className = 'process-item';
                     li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
                     li.onclick = () => {
+                        document.getElementById('event-display').style.display = "none"; // Ensure it's hidden initially
                         document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
                         document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name or show "N/A"
                         document.getElementById('event-field1-display').innerText = process.field1 || "N/A";
