@@ -22,7 +22,6 @@
             padding: 10px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             overflow: hidden;
-            z-index: 4; /* Higher z-index for note modal */
         }
 
         #profile-button, #add-button {
@@ -135,17 +134,18 @@
 
         /* Event Name Box */
         #event-display {
-            position: fixed; /* Keep it fixed to the viewport */
-            top: 50%; /* Center vertically */
-            right: 20px; /* Distance from the right edge */
-            transform: translateY(-50%); /* Center it vertically */
-            background-color: #fff; /* Background color for the event display */
-            border: 1px solid #888; /* Border for the event display */
-            padding: 20px; /* Padding inside the event display */
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #888;
+            padding: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
             z-index: 2; /* Lower z-index than confirmation modal */
             width: 200px; /* Fixed width */
-            height: 60vh; /* Fixed height */
+            height: 60vh; /* 80% of the viewport height */
             overflow-y: auto; /* Allow scrolling if content is long */
         }
 
@@ -212,69 +212,6 @@
             width: 300px;
             text-align: left;
         }
-
-        #event-container {
-            display: flex;
-            overflow-x: auto;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #f0f0f0; /* Background color for the larger container */
-            border: 2px solid #888; /* Border for the larger container */
-            padding: 20px; /* Padding around the event box */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-            border-radius: 10px; /* Optional: rounded corners */
-            visibility: visible; /* Ensure it's visible */
-            opacity: 1; /* Full opacity */
-            width: 800px; /* Fixed width */
-            height: 75vh; /* 80% of the viewport height */
-            z-index: 3; /* Higher z-index for note modal */
-        }
-
-        #notes-container {
-            display: flex; /* Use flexbox layout */
-            flex-wrap: nowrap; /* Prevent wrapping to new lines */
-        }
-
-        .note-container {
-            width: 200px; /* Width of note containers */
-            height: 60vh; /* Height of note containers */
-            background-color: #e0e0e0; /* Background color for note containers */
-            border: 1px solid #888; /* Border for note containers */
-            padding: 10px; /* Padding inside note containers */
-            margin: 10px; /* Margin between note containers */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            margin-right: 10px; /* Space between note containers */
-            border-radius: 5px; /* Optional: rounded corners */
-            display: inline-block; /* Allow them to sit side by side */
-        }
-
-        #process-container {
-            display: inline-block; /* Ensure it occupies its own space */
-            margin: 20px; /* Add margin around the container */
-            z-index: 10; /* Higher than event-container */
-        }
-
-        #process-message {
-            background-color: #e0e0e0; /* Light background */
-            padding: 10px; /* Padding for the message */
-            border-radius: 5px; /* Rounded corners */
-            text-align: left; /* Align text to the left */
-            z-index: 10; /* Higher than event-container */
-        }
-
-        #create-note-button {
-            position: fixed; /* Keep it fixed to the viewport */
-            top: 20px; /* Distance from the top */
-            left: 20px; /* Distance from the left */
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-        }
     </style>
 </head>
 <body>
@@ -282,30 +219,6 @@
 <button id="create-note-button" style="margin: 20px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 18px;">
     Create Note
 </button>
-
-
-<div id="process-container" style="margin: 20px; display: inline-block;">
-    <button id="process-name-button" style="padding: 10px; background-color: #f0ad4e; color: white; border: none; border-radius: 5px; font-size: 18px;">
-        Select Process
-    </button>
-</div>
-
-<!-- Event Display -->
-<div id="event-display" style="display: none; position: absolute; background-color: #f0f0f0; border: 1px solid #888; padding: 20px; z-index: 5;">
-    <h2 id="event-name-title">Event Name</h2>
-    <p><strong>Company:</strong> <span id="event-company-display"></span></p>
-    <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" />
-    
-    <p><strong>Field 1:</strong> <span id="event-field1-display"></span></p>
-    <input type="text" id="event-field1-input" style="display: none;" placeholder="Enter Field 1" />
-    
-    <p><strong>Field 2:</strong> <span id="event-field2-display"></span></p>
-    <input type="text" id="event-field2-input" style="display: none;" placeholder="Enter Field 2" />
-    
-    <button id="add-field-button">Modify Information</button>
-    <button id="confirm-update-button" style="display: none;">Confirm</button>
-</div>
-
 
 <div id="info-box">
     <button id="profile-button">My Profile</button>
@@ -338,14 +251,8 @@
 </div>
 
 <!-- Event Name Display Box -->
-<div id="event-container">
-    <div id="notes-container"> <!-- Existing container for notes -->
-        <!-- Note containers will be added here dynamically -->
-    </div>
-</div>
-
-<!-- Move the event-display outside the event-container -->
-<div id="event-display" style="display: none;"> <!-- Initially hidden -->
+<div id="event-display">
+    <span id="event-close">&times;</span>
     <h2 id="event-name-title">Event Name</h2>
     <p><strong>Company:</strong> <span id="event-company-display"></span></p>
     <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" />
@@ -357,7 +264,7 @@
     <input type="text" id="event-field2-input" style="display: none;" placeholder="Enter Field 2" />
     
     <button id="add-field-button">Modify Information</button>
-    <button id="confirm-update-button" style="display: none;">Confirm</button>
+    <button id="confirm-update-button" style="display: none;">Confirm</button> <!-- Confirm button for updating -->
 </div>
 
 <div id="note-modal" style="display: none;">
@@ -417,6 +324,10 @@
         document.getElementById('profile-modal').style.display = "none";
     };
 
+    document.getElementById('event-close').onclick = function() {
+        document.getElementById('event-display').style.display = "none";
+    };
+
     window.onclick = function(event) {
         if (event.target == document.getElementById('profile-modal')) {
             document.getElementById('profile-modal').style.display = "none";
@@ -444,102 +355,69 @@
         document.getElementById('confirm-modal').style.display = "block";
     };
     
-function loadProcesses() {
-    const user = auth.currentUser;
-    if (user) {
-        const processesRef = database.ref('users/' + user.uid + '/Processes');
-        processesRef.on('value', (snapshot) => {
-            const processes = snapshot.val();
-            const processesArray = [];
-
-            for (const key in processes) {
-                if (processes.hasOwnProperty(key)) {
-                    processesArray.push({
-                        id: key,
-                        eventId: processes[key].eventId,
-                        name: processes[key].name,
-                        company: processes[key].company || "",
-                        field1: processes[key].field1 || "",
-                        field2: processes[key].field2 || ""
-                    });
-                }
-            }
-
-            // Sort processesArray by name
-            processesArray.sort((a, b) => a.name.localeCompare(b.name));
-
-            const processesUl = document.getElementById('processes-ul');
-            processesUl.innerHTML = '';
-
-            processesArray.forEach(process => {
-                const li = document.createElement('li');
-                li.className = 'process-item';
-                li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
-                li.onclick = () => {
-                    document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
-                    document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name or show "N/A"
-                    document.getElementById('event-field1-display').innerText = process.field1 || "N/A";
-                    document.getElementById('event-field2-display').innerText = process.field2 || "N/A";
-                    currentProcessId = process.id; // Set currentProcessId here
-                    document.getElementById('event-display').style.display = "block"; // Show the event name box
-                    loadNotes(process.id); // Load notes for the selected process
-
-                    // Update the process name button
-                    document.getElementById('process-name-button').innerText = process.name; // Set the button text to the process name
-                };
-
-                const deleteButton = document.createElement('button');
-                deleteButton.className = 'delete-button';
-                deleteButton.textContent = '-';
-                deleteButton.onclick = (event) => {
-                    event.stopPropagation(); // Prevent the click from bubbling up to the li
-                    currentAction = 'delete';
-                    currentProcessId = process.id;
-                    const confirmDelete = confirm(`Are you sure you want to delete process ${process.name || process.eventId}?`);
-                    if (confirmDelete) {
-                        processesRef.child(currentProcessId).remove()
-                            .then(() => loadProcesses())
-                            .catch((error) => {
-                                console.error("Error deleting event: ", error);
-                            });
+    function loadProcesses() {
+        const user = auth.currentUser;
+        if (user) {
+            const processesRef = database.ref('users/' + user.uid + '/Processes');
+            processesRef.on('value', (snapshot) => {
+                const processes = snapshot.val();
+                const processesArray = [];
+    
+                for (const key in processes) {
+                    if (processes.hasOwnProperty(key)) {
+                        processesArray.push({
+                            id: key,
+                            eventId: processes[key].eventId,
+                            name: processes[key].name,
+                            company: processes[key].company || "",
+                            field1: processes[key].field1 || "",
+                            field2: processes[key].field2 || ""
+                        });
                     }
-                };
-                li.appendChild(deleteButton);
-
-                processesUl.appendChild(li);
+                }
+    
+                // Sort processesArray by name
+                processesArray.sort((a, b) => a.name.localeCompare(b.name));
+    
+                const processesUl = document.getElementById('processes-ul');
+                processesUl.innerHTML = '';
+    
+                processesArray.forEach(process => {
+                    const li = document.createElement('li');
+                    li.className = 'process-item';
+                    li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
+                    li.onclick = () => {
+                        document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
+                        document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name or show "N/A"
+                        document.getElementById('event-field1-display').innerText = process.field1 || "N/A";
+                        document.getElementById('event-field2-display').innerText = process.field2 || "N/A";
+                        currentProcessId = process.id; // Set currentProcessId here
+                        document.getElementById('event-display').style.display = "block"; // Show the event name box
+                    };
+    
+                    const deleteButton = document.createElement('button');
+                    deleteButton.className = 'delete-button';
+                    deleteButton.textContent = '-';
+                    deleteButton.onclick = (event) => {
+                        event.stopPropagation(); // Prevent the click from bubbling up to the li
+                        currentAction = 'delete';
+                        currentProcessId = process.id;
+                        const confirmDelete = confirm(`Are you sure you want to delete process ${process.name || process.eventId}?`);
+                        if (confirmDelete) {
+                            processesRef.child(currentProcessId).remove()
+                                .then(() => loadProcesses())
+                                .catch((error) => {
+                                    console.error("Error deleting event: ", error);
+                                });
+                        }
+                    };
+                    li.appendChild(deleteButton);
+    
+                    processesUl.appendChild(li);
+                });
             });
-        });
+        }
     }
-}
-
-function loadNotes(processId) {
-    const user = auth.currentUser;
-    if (user) {
-        const notesRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes`);
-        notesRef.on('value', (snapshot) => {
-            const notes = snapshot.val();
-            const notesContainer = document.getElementById('notes-container');
-            notesContainer.innerHTML = ''; // Clear existing notes
-
-            if (notes) {
-                for (const key in notes) {
-                    if (notes.hasOwnProperty(key)) {
-                        const note = notes[key];
-                        const noteContainer = document.createElement('div');
-                        noteContainer.className = 'note-container'; // Add class for styling
-
-                        noteContainer.innerHTML = `
-                            <h4>${note.title}</h4>
-                            <p>Date: ${note.date}</p>
-                        `;
-
-                        notesContainer.appendChild(noteContainer);
-                    }
-                }
-            }
-        });
-    }
-}
 
     document.getElementById('confirm-yes').onclick = function() {
         const user = auth.currentUser;
@@ -710,20 +588,6 @@ function loadNotes(processId) {
     
     document.getElementById('confirm-error-button').onclick = function() {
         document.getElementById('error-modal').style.display = "none"; // Close the modal
-    };
-
-    document.getElementById('process-name-button').onclick = function() {
-        const eventDisplay = document.getElementById('event-display');
-        
-        // Toggle visibility
-        if (eventDisplay.style.display === "none") {
-            eventDisplay.style.display = "block"; // Show the event display
-            // Position the event display below the button
-            eventDisplay.style.top = `${this.getBoundingClientRect().bottom + window.scrollY}px`; // Position below button
-            eventDisplay.style.left = `${this.getBoundingClientRect().left}px`; // Align with button
-        } else {
-            eventDisplay.style.display = "none"; // Hide the event display
-        }
     };
 
     document.getElementById('confirm-note-button').onclick = function() {
