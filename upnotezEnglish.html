@@ -556,9 +556,13 @@
         }
         document.getElementById('note-modal').style.display = "block"; // Show the note modal if a process is selected
     };
-
-    document.addEventListener('click', function() {
-        document.getElementById('message').innerText = ""; // Clear the message on any click
+    
+    // Clear the message on any click if it's displayed
+    document.addEventListener('click', function(event) {
+        const messageElement = document.getElementById('message');
+        if (messageElement.innerText) { // Check if there's a message
+            messageElement.innerText = ""; // Clear the message
+        }
     });
 
     document.getElementById('confirm-note-button').onclick = function() {
