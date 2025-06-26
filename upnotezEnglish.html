@@ -148,6 +148,17 @@
             height: 60vh; /* 80% of the viewport height */
             overflow-y: auto; /* Allow scrolling if content is long */
         }
+        .comment-box {
+            display: inline-block;
+            width: 200px;
+            height: 60vh;
+            border: 1px solid #888;
+            border-radius: 5px;
+            padding: 10px;
+            margin-right: 10px; /* Space between boxes */
+            background-color: #f0f0f0; /* Background color */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
 
         #event-display h2 {
             margin: 0;
@@ -222,6 +233,10 @@
     
     <p><strong>Field 2:</strong> <span id="event-field2-display"></span></p>
     <input type="text" id="event-field2-input" style="display: none;" placeholder="Enter Field 2" />
+
+    <div id="comments-container" style="overflow-x: auto; white-space: nowrap; margin-top: 10px;">
+        <!-- Comment boxes will be added here dynamically -->
+    </div>
     
     <button id="add-field-button">Modify Information</button>
     <button id="confirm-update-button" style="display: none;">Confirm</button> <!-- Confirm button for updating -->
