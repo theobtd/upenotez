@@ -362,6 +362,16 @@
         document.getElementById('confirm-modal').style.display = "none";
     };
 
+    document.getElementById('add-field-button').onclick = function() {
+        // Toggle button text
+        const addFieldButton = document.getElementById('add-field-button');
+        if (addFieldButton.innerText === "Modify Information") {
+            addFieldButton.innerText = "Confirm Changes";
+        } else {
+            addFieldButton.innerText = "Modify Information";
+        }
+    };
+
     auth.onAuthStateChanged((user) => {
         if (user) {
             loadProcesses();
