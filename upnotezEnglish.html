@@ -135,6 +135,8 @@
 
         /* Event Name Box */
         #event-display {
+            flex: 0 0 auto;
+            margin-right: 20px;
             display: none; /* Hidden by default */
             position: fixed;
             top: 50%;
@@ -215,7 +217,8 @@
         }
 
         #event-container {
-            display: block; /* Hidden by default */
+            display: flex;
+            overflow-x: auto;
             position: fixed;
             top: 50%;
             left: 50%;
@@ -232,6 +235,11 @@
             z-index: 3; /* Higher z-index for note modal */
         }
 
+        #notes-container {
+            display: flex; /* Use flexbox layout */
+            flex-wrap: nowrap; /* Prevent wrapping to new lines */
+        }
+
         .note-container {
             width: 200px; /* Width of note containers */
             height: 60vh; /* Height of note containers */
@@ -240,6 +248,7 @@
             padding: 10px; /* Padding inside note containers */
             margin: 10px; /* Margin between note containers */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            margin-right: 10px; /* Space between note containers */
             border-radius: 5px; /* Optional: rounded corners */
             display: inline-block; /* Allow them to sit side by side */
         }
