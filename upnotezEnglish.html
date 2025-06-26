@@ -135,20 +135,17 @@
 
         /* Event Name Box */
         #event-display {
-            flex: 0 0 auto;
-            margin-right: 20px;
-            display: none; /* Hidden by default */
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            border: 1px solid #888;
-            padding: 20px;
+            position: fixed; /* Keep it fixed to the viewport */
+            top: 50%; /* Center vertically */
+            right: 20px; /* Distance from the right edge */
+            transform: translateY(-50%); /* Center it vertically */
+            background-color: #fff; /* Background color for the event display */
+            border: 1px solid #888; /* Border for the event display */
+            padding: 20px; /* Padding inside the event display */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
             z-index: 2; /* Lower z-index than confirmation modal */
             width: 200px; /* Fixed width */
-            height: 60vh; /* 80% of the viewport height */
+            height: 60vh; /* Fixed height */
             overflow-y: auto; /* Allow scrolling if content is long */
         }
 
@@ -292,24 +289,25 @@
 
 <!-- Event Name Display Box -->
 <div id="event-container">
-    <div id="event-display">
-        <h2 id="event-name-title">Event Name</h2>
-        <p><strong>Company:</strong> <span id="event-company-display"></span></p>
-        <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" />
-        
-        <p><strong>Field 1:</strong> <span id="event-field1-display"></span></p>
-        <input type="text" id="event-field1-input" style="display: none;" placeholder="Enter Field 1" />
-        
-        <p><strong>Field 2:</strong> <span id="event-field2-display"></span></p>
-        <input type="text" id="event-field2-input" style="display: none;" placeholder="Enter Field 2" />
-        
-        <button id="add-field-button">Modify Information</button>
-        <button id="confirm-update-button" style="display: none;">Confirm</button>
-    </div>
-
-    <div id="notes-container"> <!-- New container for notes -->
+    <div id="notes-container"> <!-- Existing container for notes -->
         <!-- Note containers will be added here dynamically -->
     </div>
+</div>
+
+<!-- Move the event-display outside the event-container -->
+<div id="event-display" style="display: none;"> <!-- Initially hidden -->
+    <h2 id="event-name-title">Event Name</h2>
+    <p><strong>Company:</strong> <span id="event-company-display"></span></p>
+    <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" />
+    
+    <p><strong>Field 1:</strong> <span id="event-field1-display"></span></p>
+    <input type="text" id="event-field1-input" style="display: none;" placeholder="Enter Field 1" />
+    
+    <p><strong>Field 2:</strong> <span id="event-field2-display"></span></p>
+    <input type="text" id="event-field2-input" style="display: none;" placeholder="Enter Field 2" />
+    
+    <button id="add-field-button">Modify Information</button>
+    <button id="confirm-update-button" style="display: none;">Confirm</button>
 </div>
 
 <div id="note-modal" style="display: none;">
