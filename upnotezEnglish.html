@@ -209,8 +209,7 @@
     <span id="event-close">&times;</span>
     <h2 id="event-name-title">Event Name</h2>
     <p><strong>Company:</strong> <span id="event-company-display"></span></p> <!-- Company display -->
-    // <button id="add-field-button">Not Being Used</button>
-    <button id="modify-company-button">Modify Company</button>
+    <button id="add-field-button">Modify Information</button>
 </div>
 
 <script>
@@ -255,23 +254,6 @@
 
     document.getElementById('event-close').onclick = function() {
         document.getElementById('event-display').style.display = "none";
-    };
-
-    document.getElementById('modify-company-button').onclick = function() {
-        const newCompanyName = prompt("Enter new company name:", document.getElementById('event-company-display').innerText);
-        if (newCompanyName) {
-            const user = auth.currentUser;
-            if (user && currentProcessId) {
-                const processesRef = database.ref('users/' + user.uid + '/Processes/' + currentProcessId);
-                processesRef.update({ company: newCompanyName })
-                    .then(() => {
-                        document.getElementById('event-company-display').innerText = newCompanyName; // Update displayed company name
-                    })
-                    .catch((error) => {
-                        console.error("Error updating company name: ", error);
-                    });
-            }
-        }
     };
 
     window.onclick = function(event) {
