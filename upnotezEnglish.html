@@ -348,32 +348,16 @@
     
         if (currentAction === 'add') {
             const eventName = document.getElementById('event-name').value;
-    
-            // Initialize all new fields
-            const eventTitle = ""; // Empty string for Title
-            const primaryEmail = ""; // Empty string for Primary Email
-            const secondaryEmail = ""; // Empty string for Secondary Email
-            const primaryPhone = ""; // Empty string for Primary Phone
-            const secondaryPhone = ""; // Empty string for Secondary Phone
-            const location = ""; // Empty string for Location
-            const comment = ""; // Empty string for General Comment
-    
             const newEventRef = processesRef.push();
             const eventId = newEventRef.key;
     
             newEventRef.set({ 
                 eventId: eventId, 
                 name: eventName,
-                title: eventTitle,
-                primaryEmail: primaryEmail,
-                secondaryEmail: secondaryEmail,
-                primaryPhone: primaryPhone,
-                secondaryPhone: secondaryPhone,
-                location: location,
-                comment: comment,
                 company: "" // Add the Company field as an empty string
             })
             .then(() => {
+                // Store the new event ID in local storage
                 localStorage.setItem('newEventId', eventId);
                 localStorage.setItem('currentProcessId', eventId); // Store currentProcessId as well
                 loadProcesses();
