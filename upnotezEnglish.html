@@ -638,7 +638,10 @@
             }
             // Set initial display state for event-display
             const eventDisplay = document.getElementById('event-display');
+            const toggleButton = document.getElementById('toggle-event-display');
+            
             eventDisplay.style.display = "none"; // Ensure it's hidden initially
+            toggleButton.innerText = 'View Details'; // Set button text
         }
     });
 
@@ -656,10 +659,10 @@
 
     document.getElementById('toggle-event-display').onclick = function() {
         const eventDisplay = document.getElementById('event-display');
-        eventDisplay.classList.toggle('collapsed');
+        const isCollapsed = eventDisplay.classList.toggle('collapsed');
     
         // Show or hide the event display based on the toggle state
-        if (eventDisplay.classList.contains('collapsed')) {
+        if (isCollapsed) {
             eventDisplay.style.display = "none"; // Hide the element
             this.innerText = 'View Details'; // Change button text
         } else {
