@@ -705,6 +705,8 @@ function loadNotes(processId) {
         // Toggle visibility
         if (processMessage.style.display === "none") {
             processMessage.style.display = "block"; // Show the message
+            processMessage.style.top = `${this.getBoundingClientRect().bottom + window.scrollY}px`; // Position below button
+            processMessage.style.left = `${this.getBoundingClientRect().left}px`; // Align with button
         } else {
             processMessage.style.display = "none"; // Hide the message
         }
