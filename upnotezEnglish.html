@@ -209,6 +209,9 @@
     <span id="event-close">&times;</span>
     <h2 id="event-name-title">Event Name</h2>
     <p><strong>Company:</strong> <span id="event-company-display"></span></p>
+    <p><strong>Field 1:</strong> <span id="event-field1-display"></span></p> <!-- New Field 1 display -->
+    <p><strong>Field 2:</strong> <span id="event-field2-display"></span></p> <!-- New Field 2 display -->
+    <input type="text" id="event-company-input" style="display: none;" 
     <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" /> <!-- Hidden input field -->
     <button id="add-field-button">Modify Information</button>
     <button id="confirm-company-button" style="display: none;">Confirm</button> <!-- Confirm button for updating -->
@@ -437,6 +440,9 @@
                     if (process) {
                         document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
                         document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
+                        document.getElementById('event-field1-display').innerText = process.field1 || "N/A"; // Set Field 1
+                        document.getElementById('event-field2-display').innerText = process.field2 || "N/A"; // Set Field 2
+                        currentProcessId = process.id; // Set currentProcessId here
                         document.getElementById('event-display').style.display = "block"; // Show the event name box
                     }
                 });
