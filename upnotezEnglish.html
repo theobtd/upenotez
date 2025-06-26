@@ -254,6 +254,13 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional: shadow for depth */
             flex-shrink: 0; /* Prevent boxes from shrinking */
         }
+
+        #notes-container {
+            display: flex; /* Use flex to align the contents */
+            justify-content: flex-end; /* Align the contents to the right */
+            margin-right: 20px; /* Space from the right edge of the screen */
+            width: calc(100% - 20px); /* Full width minus margin */
+        }
     </style>
 </head>
 <body>
@@ -326,8 +333,10 @@
     </div>
 </div>
 
-<ul id="notes-list"></ul>
-
+<div id="notes-container">
+    <ul id="notes-list"></ul>
+</div>
+    
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyBNaUXaWjAbJIRebzl_ZpAxx32E_bfm9Sw",
