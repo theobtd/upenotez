@@ -208,10 +208,8 @@
 <div id="event-display">
     <span id="event-close">&times;</span>
     <h2 id="event-name-title">Event Name</h2>
-    <p><strong>Company:</strong> 
-        <input type="text" id="event-company-input" placeholder="Enter company name" /> <!-- Always visible input field -->
-    </p>
-    <button id="add-field-button">Modify Information</button> <!-- Modify button -->
+    <p><strong>Company:</strong> <span id="event-company-display"></span></p> <!-- Company display -->
+    <button id="add-field-button">Modify Information</button>
 </div>
 
 <script>
@@ -284,7 +282,7 @@
         document.getElementById('event-name').value = "";
         document.getElementById('confirm-modal').style.display = "block";
     };
-    
+
     function loadProcesses() {
         const user = auth.currentUser;
         if (user) {
@@ -292,21 +290,16 @@
             processesRef.on('value', (snapshot) => {
                 const processes = snapshot.val();
                 const processesArray = [];
-    
+
                 for (const key in processes) {
                     if (processes.hasOwnProperty(key)) {
-                        processesArray.push({
-                            id: key,
-                            eventId: processes[key].eventId,
-                            name: processes[key].name,
-                            company: processes[key].company || "" // Ensure company is included
-                        });
+                        processesArray.push({ id: key, eventId: processes[key].eventId, name: processes[key].name });
                     }
                 }
-    
+
                 const processesUl = document.getElementById('processes-ul');
                 processesUl.innerHTML = '';
-    
+
                 processesArray.forEach(process => {
                     const li = document.createElement('li');
                     li.className = 'process-item';
@@ -314,10 +307,9 @@
                     li.onclick = () => {
                         document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
                         document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name or show "N/A"
-                        currentProcessId = process.id; // Set currentProcessId here
                         document.getElementById('event-display').style.display = "block"; // Show the event name box
                     };
-    
+
                     const deleteButton = document.createElement('button');
                     deleteButton.className = 'delete-button';
                     deleteButton.textContent = '-';
@@ -335,7 +327,7 @@
                         }
                     };
                     li.appendChild(deleteButton);
-    
+
                     processesUl.appendChild(li);
                 });
             });
@@ -368,25 +360,6 @@
 
     document.getElementById('confirm-no').onclick = function() {
         document.getElementById('confirm-modal').style.display = "none";
-    };
-
-    document.getElementById('add-field-button').onclick = function() {
-        const user = auth.currentUser;
-        const companyInput = document.getElementById('event-company-input').value;
-        const processesRef = database.ref('users/' + user.uid + '/Processes');
-    
-        if (currentProcessId) {
-            processesRef.child(currentProcessId).update({ company: companyInput })
-                .then(() => {
-                    console.log("Company updated to:", companyInput); // Log success message
-                    // No need to update the display since the text box is always visible
-                })
-                .catch((error) => {
-                    console.error("Error updating company: ", error);
-                });
-        } else {
-            console.error("No current process ID set.");
-        }
     };
 
     auth.onAuthStateChanged((user) => {
