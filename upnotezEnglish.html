@@ -402,9 +402,6 @@
         const companyInput = document.getElementById('event-company-input').value;
         const processesRef = database.ref('users/' + user.uid + '/Processes');
     
-        console.log("Current Process ID:", currentProcessId); // Log currentProcessId
-        console.log("Company Input Value:", companyInput); // Log the value to be updated
-    
         if (currentProcessId) {
             processesRef.child(currentProcessId).update({ company: companyInput })
                 .then(() => {
