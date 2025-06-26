@@ -208,8 +208,10 @@
 <div id="event-display">
     <span id="event-close">&times;</span>
     <h2 id="event-name-title">Event Name</h2>
-    <p><strong>Company:</strong> <span id="event-company-display"></span></p> <!-- Company display -->
+    <p><strong>Company:</strong> <span id="event-company-display"></span></p>
+    <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" /> <!-- Hidden input field -->
     <button id="add-field-button">Modify Information</button>
+    <button id="confirm-company-button" style="display: none;">Confirm</button> <!-- Confirm button for updating -->
 </div>
 
 <script>
@@ -360,6 +362,45 @@
 
     document.getElementById('confirm-no').onclick = function() {
         document.getElementById('confirm-modal').style.display = "none";
+    };
+
+    document.getElementById('add-field-button').onclick = function() {
+        const companyDisplay = document.getElementById('event-company-display');
+        const companyInput = document.getElementById('event-company-input');
+        const confirmButton = document.getElementById('confirm-company-button');
+    
+        if (companyInput.style.display === "none") {
+            // Show input field and confirm button
+            companyInput.style.display = "block"; 
+            confirmButton.style.display = "block"; 
+            companyInput.value = companyDisplay.innerText; // Set input value to current company
+            companyDisplay.style.display = "none"; // Hide the display
+            this.innerText = "Cancel"; // Change button text to "Cancel"
+        } else {
+            // Hide input field and confirm button
+            companyInput.style.display = "none"; 
+            confirmButton.style.display = "none"; 
+            companyDisplay.style.display = "inline"; // Show display again
+            this.innerText = "Modify Information"; // Reset button text
+        }
+    };
+
+    document.getElementById('confirm-company-button').onclick = function() {
+        const user = auth.currentUser;
+        const companyInput = document.getElementById('event-company-input').value;
+        const processesRef = database.ref('users/' + user.uid + '/Processes');
+    
+        // Assuming you have access to the current process ID
+        processesRef.child(currentProcessId).update({ company: companyInput })
+            .then(() => {
+                document.getElementById('event-company-display').innerText = companyInput; // Update display with new company
+                document.getElementById('event-company-input').style.display = "none"; // Hide input field
+                document.getElementById('confirm-company-button').style.display = "none"; // Hide confirm button
+                document.getElementById('add-field-button').innerText = "Modify Information"; // Reset button text
+            })
+            .catch((error) => {
+                console.error("Error updating company: ", error);
+            });
     };
 
     auth.onAuthStateChanged((user) => {
