@@ -231,6 +231,22 @@
             transform: translate(-50%, -50%); /* Offset by half its width and height to center it */
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Optional: shadow for depth */
         }
+
+        #notes-list {
+            list-style-type: none; /* Remove default list styling */
+            padding: 0; /* Remove default padding */
+        }
+        
+        .note-box {
+            width: 200px; /* Width of each note box */
+            height: 50vh; /* Height of each note box */
+            background-color: rgba(255, 255, 255, 0.8); /* Light background for visibility */
+            border: 1px solid #888; /* Optional: border for visibility */
+            margin: 10px; /* Space between notes */
+            display: inline-block; /* Align boxes horizontally */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional: shadow for depth */
+            vertical-align: top; /* Align boxes to the top */
+        }
     </style>
 </head>
 <body>
@@ -304,6 +320,8 @@
 </div>
 
 <div id="centered-container"></div>
+    <ul id="notes-list"></ul>
+</div>
 
 <script>
     const firebaseConfig = {
@@ -409,6 +427,10 @@
                         document.getElementById('event-field1-display').innerText = process.field1 || "N/A";
                         document.getElementById('event-field2-display').innerText = process.field2 || "N/A";
                         currentProcessId = process.id; // Set currentProcessId here
+
+                        // Load notes for the selected process
+                        loadNotes(currentProcessId);
+                        
                         document.getElementById('event-display').style.display = "block"; // Show the event name box
                     };
     
@@ -434,6 +456,27 @@
                 });
             });
         }
+    }
+
+    function loadNotes(processId) {
+        const user = auth.currentUser;
+        const notesRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes`);
+        
+        notesRef.on('value', (snapshot) => {
+            const notes = snapshot.val();
+            const notesList = document.getElementById('notes-list');
+            notesList.innerHTML = ''; // Clear existing notes
+    
+            for (const key in notes) {
+                if (notes.hasOwnProperty(key)) {
+                    const note = notes[key];
+                    const noteBox = document.createElement('li');
+                    noteBox.className = 'note-box';
+                    noteBox.innerText = `${note.title}\nDate: ${note.date}`; // Display note title and date
+                    notesList.appendChild(noteBox);
+                }
+            }
+        });
     }
 
     document.getElementById('confirm-yes').onclick = function() {
