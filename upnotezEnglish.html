@@ -266,9 +266,25 @@
     Create Note
 </button>
 
-<button id="process-name-button" style="margin: 20px; padding: 10px; background-color: #f0ad4e; color: white; border: none; border-radius: 5px; font-size: 18px;">
-    Process Name
-</button>
+<div id="process-container">
+    <button id="process-name-button" style="margin: 20px; padding: 10px; background-color: #f0ad4e; color: white; border: none; border-radius: 5px; font-size: 18px;">
+        Process Name
+    </button>
+    <div id="event-display" style="display: none;"> <!-- Initially hidden -->
+        <h2 id="event-name-title">Event Name</h2>
+        <p><strong>Company:</strong> <span id="event-company-display"></span></p>
+        <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" />
+        
+        <p><strong>Field 1:</strong> <span id="event-field1-display"></span></p>
+        <input type="text" id="event-field1-input" style="display: none;" placeholder="Enter Field 1" />
+        
+        <p><strong>Field 2:</strong> <span id="event-field2-display"></span></p>
+        <input type="text" id="event-field2-input" style="display: none;" placeholder="Enter Field 2" />
+        
+        <button id="add-field-button">Modify Information</button>
+        <button id="confirm-update-button" style="display: none;">Confirm</button>
+    </div>
+</div>
 
 <div id="info-box">
     <button id="profile-button">My Profile</button>
@@ -708,6 +724,17 @@ function loadNotes(processId) {
 
     document.getElementById('close-note-modal').onclick = function() {
         document.getElementById('note-modal').style.display = "none";
+    };
+
+    document.getElementById('process-name-button').onclick = function() {
+        const eventDisplay = document.getElementById('event-display');
+        
+        // Toggle visibility
+        if (eventDisplay.style.display === "none") {
+            eventDisplay.style.display = "block"; // Show the event display
+        } else {
+            eventDisplay.style.display = "none"; // Hide the event display
+        }
     };
 
     const resizeHandle = document.getElementById('resize-handle');
