@@ -231,6 +231,18 @@
             height: 75vh; /* 80% of the viewport height */
             z-index: 3; /* Higher z-index for note modal */
         }
+
+        .note-container {
+            width: 200px; /* Width of note containers */
+            height: 60vh; /* Height of note containers */
+            background-color: #e0e0e0; /* Background color for note containers */
+            border: 1px solid #888; /* Border for note containers */
+            padding: 10px; /* Padding inside note containers */
+            margin: 10px; /* Margin between note containers */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            border-radius: 5px; /* Optional: rounded corners */
+            display: inline-block; /* Allow them to sit side by side */
+        }
     </style>
 </head>
 <body>
@@ -270,7 +282,7 @@
 </div>
 
 <!-- Event Name Display Box -->
-<div id="event-container"> <!-- New container -->
+<div id="event-container">
     <div id="event-display">
         <h2 id="event-name-title">Event Name</h2>
         <p><strong>Company:</strong> <span id="event-company-display"></span></p>
@@ -284,6 +296,10 @@
         
         <button id="add-field-button">Modify Information</button>
         <button id="confirm-update-button" style="display: none;">Confirm</button>
+    </div>
+
+    <div id="notes-container"> <!-- New container for notes -->
+        <!-- Note containers will be added here dynamically -->
     </div>
 </div>
 
@@ -371,69 +387,99 @@
         document.getElementById('confirm-modal').style.display = "block";
     };
     
-    function loadProcesses() {
-        const user = auth.currentUser;
-        if (user) {
-            const processesRef = database.ref('users/' + user.uid + '/Processes');
-            processesRef.on('value', (snapshot) => {
-                const processes = snapshot.val();
-                const processesArray = [];
-    
-                for (const key in processes) {
-                    if (processes.hasOwnProperty(key)) {
-                        processesArray.push({
-                            id: key,
-                            eventId: processes[key].eventId,
-                            name: processes[key].name,
-                            company: processes[key].company || "",
-                            field1: processes[key].field1 || "",
-                            field2: processes[key].field2 || ""
-                        });
+function loadProcesses() {
+    const user = auth.currentUser;
+    if (user) {
+        const processesRef = database.ref('users/' + user.uid + '/Processes');
+        processesRef.on('value', (snapshot) => {
+            const processes = snapshot.val();
+            const processesArray = [];
+
+            for (const key in processes) {
+                if (processes.hasOwnProperty(key)) {
+                    processesArray.push({
+                        id: key,
+                        eventId: processes[key].eventId,
+                        name: processes[key].name,
+                        company: processes[key].company || "",
+                        field1: processes[key].field1 || "",
+                        field2: processes[key].field2 || ""
+                    });
+                }
+            }
+
+            // Sort processesArray by name
+            processesArray.sort((a, b) => a.name.localeCompare(b.name));
+
+            const processesUl = document.getElementById('processes-ul');
+            processesUl.innerHTML = '';
+
+            processesArray.forEach(process => {
+                const li = document.createElement('li');
+                li.className = 'process-item';
+                li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
+                li.onclick = () => {
+                    document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
+                    document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name or show "N/A"
+                    document.getElementById('event-field1-display').innerText = process.field1 || "N/A";
+                    document.getElementById('event-field2-display').innerText = process.field2 || "N/A";
+                    currentProcessId = process.id; // Set currentProcessId here
+                    document.getElementById('event-display').style.display = "block"; // Show the event name box
+                    loadNotes(process.id); // Load notes for the selected process
+                };
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'delete-button';
+                deleteButton.textContent = '-';
+                deleteButton.onclick = (event) => {
+                    event.stopPropagation(); // Prevent the click from bubbling up to the li
+                    currentAction = 'delete';
+                    currentProcessId = process.id;
+                    const confirmDelete = confirm(`Are you sure you want to delete process ${process.name || process.eventId}?`);
+                    if (confirmDelete) {
+                        processesRef.child(currentProcessId).remove()
+                            .then(() => loadProcesses())
+                            .catch((error) => {
+                                console.error("Error deleting event: ", error);
+                            });
+                    }
+                };
+                li.appendChild(deleteButton);
+
+                processesUl.appendChild(li);
+            });
+        });
+    }
+}
+
+function loadNotes(processId) {
+    const user = auth.currentUser;
+    if (user) {
+        const notesRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes`);
+        notesRef.on('value', (snapshot) => {
+            const notes = snapshot.val();
+            const notesContainer = document.getElementById('notes-container');
+            notesContainer.innerHTML = ''; // Clear existing notes
+
+            if (notes) {
+                for (const key in notes) {
+                    if (notes.hasOwnProperty(key)) {
+                        const note = notes[key];
+                        const noteContainer = document.createElement('div');
+                        noteContainer.className = 'note-container'; // Add class for styling
+
+                        noteContainer.innerHTML = `
+                            <h4>${note.title}</h4>
+                            <p>Date: ${note.date}</p>
+                        `;
+
+                        notesContainer.appendChild(noteContainer);
                     }
                 }
-    
-                // Sort processesArray by name
-                processesArray.sort((a, b) => a.name.localeCompare(b.name));
-    
-                const processesUl = document.getElementById('processes-ul');
-                processesUl.innerHTML = '';
-    
-                processesArray.forEach(process => {
-                    const li = document.createElement('li');
-                    li.className = 'process-item';
-                    li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
-                    li.onclick = () => {
-                        document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
-                        document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name or show "N/A"
-                        document.getElementById('event-field1-display').innerText = process.field1 || "N/A";
-                        document.getElementById('event-field2-display').innerText = process.field2 || "N/A";
-                        currentProcessId = process.id; // Set currentProcessId here
-                        document.getElementById('event-display').style.display = "block"; // Show the event name box
-                    };
-    
-                    const deleteButton = document.createElement('button');
-                    deleteButton.className = 'delete-button';
-                    deleteButton.textContent = '-';
-                    deleteButton.onclick = (event) => {
-                        event.stopPropagation(); // Prevent the click from bubbling up to the li
-                        currentAction = 'delete';
-                        currentProcessId = process.id;
-                        const confirmDelete = confirm(`Are you sure you want to delete process ${process.name || process.eventId}?`);
-                        if (confirmDelete) {
-                            processesRef.child(currentProcessId).remove()
-                                .then(() => loadProcesses())
-                                .catch((error) => {
-                                    console.error("Error deleting event: ", error);
-                                });
-                        }
-                    };
-                    li.appendChild(deleteButton);
-    
-                    processesUl.appendChild(li);
-                });
-            });
-        }
+            }
+        });
     }
+}
 
     document.getElementById('confirm-yes').onclick = function() {
         const user = auth.currentUser;
