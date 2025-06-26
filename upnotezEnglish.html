@@ -516,6 +516,35 @@
         }
     });
 
+    document.getElementById('create-note-button').onclick = function() {
+        const user = auth.currentUser;
+    
+        if (user) {
+            const notesRef = database.ref('users/' + user.uid + '/Notes');
+            const newNoteRef = notesRef.push(); // Create a new note reference
+            const noteId = newNoteRef.key;
+    
+            // Example note data
+            const noteData = {
+                id: noteId,
+                title: "New Note", // Default title
+                content: "This is a new note." // Default content
+            };
+    
+            // Set the new note in the database
+            newNoteRef.set(noteData)
+                .then(() => {
+                    console.log("New note created successfully:", noteData);
+                    // You can add a success message or update the UI if needed
+                })
+                .catch((error) => {
+                    console.error("Error creating note:", error);
+                });
+        } else {
+            console.log("No user is logged in.");
+        }
+    };
+
     const resizeHandle = document.getElementById('resize-handle');
     let isResizing = false;
 
