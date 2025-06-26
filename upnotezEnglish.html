@@ -145,19 +145,8 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
             z-index: 2; /* Lower z-index than confirmation modal */
             width: 200px; /* Fixed width */
-            height: 60vh; /* 80% of the viewport height */
+            height: 80vh; /* 80% of the viewport height */
             overflow-y: auto; /* Allow scrolling if content is long */
-        }
-        .comment-box {
-            display: inline-block;
-            width: 200px;
-            height: 60vh;
-            border: 1px solid #888;
-            border-radius: 5px;
-            padding: 10px;
-            margin-right: 10px; /* Space between boxes */
-            background-color: #f0f0f0; /* Background color */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         #event-display h2 {
@@ -188,8 +177,6 @@
 <button id="create-note-button" style="margin: 20px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 18px;">
     Create Note
 </button>
-
-<div id="message" style="color: red; margin: 10px;"></div>
 
 <div id="info-box">
     <button id="profile-button">My Profile</button>
@@ -233,10 +220,6 @@
     
     <p><strong>Field 2:</strong> <span id="event-field2-display"></span></p>
     <input type="text" id="event-field2-input" style="display: none;" placeholder="Enter Field 2" />
-
-    <div id="comments-container" style="overflow-x: auto; white-space: nowrap; margin-top: 10px;">
-        <!-- Comment boxes will be added here dynamically -->
-    </div>
     
     <button id="add-field-button">Modify Information</button>
     <button id="confirm-update-button" style="display: none;">Confirm</button> <!-- Confirm button for updating -->
@@ -507,27 +490,6 @@
     
                         // Show the event name box
                         document.getElementById('event-display').style.display = "block"; 
-
-                        // Clear existing comments
-                        const commentsContainer = document.getElementById('comments-container');
-                        commentsContainer.innerHTML = '';
-
-                        // Fetch comments if they exist
-                        const notesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes`);
-                        notesRef.once('value').then((snapshot) => {
-                            const notes = snapshot.val();
-                            if (notes) {
-                                for (const noteId in notes) {
-                                    const note = notes[noteId];
-                                    const commentBox = document.createElement('div');
-                                    commentBox.className = 'comment-box';
-                                    commentBox.innerText = note.content; // Display the comment content
-                                    commentsContainer.appendChild(commentBox);
-                                }
-                            }
-                        });
-
-                        document.getElementById('event-display').style.display = "block";
                     }
                 }).catch((error) => {
                     console.error("Error fetching process data: ", error);
@@ -557,27 +519,30 @@
     document.getElementById('create-note-button').onclick = function() {
         const user = auth.currentUser;
     
-        if (!currentProcessId) {
-            document.getElementById('message').innerText = "Please select a process first.";
-            return;
+        if (user) {
+            const notesRef = database.ref('users/' + user.uid + '/Notes');
+            const newNoteRef = notesRef.push(); // Create a new note reference
+            const noteId = newNoteRef.key;
+    
+            // Example note data
+            const noteData = {
+                id: noteId,
+                title: "New Note", // Default title
+                content: "This is a new note." // Default content
+            };
+    
+            // Set the new note in the database
+            newNoteRef.set(noteData)
+                .then(() => {
+                    console.log("New note created successfully:", noteData);
+                    // You can add a success message or update the UI if needed
+                })
+                .catch((error) => {
+                    console.error("Error creating note:", error);
+                });
+        } else {
+            console.log("No user is logged in.");
         }
-    
-        const notesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes`);
-    
-        // Create a new note
-        const newNoteRef = notesRef.push();
-        newNoteRef.set({
-            content: "New Note", // Placeholder content, you can modify this later
-            createdAt: new Date().toISOString() // Timestamp for when the note was created
-        })
-        .then(() => {
-            console.log("Note created successfully.");
-            document.getElementById('message').innerText = "Note created successfully!";
-        })
-        .catch((error) => {
-            console.error("Error creating note: ", error);
-            document.getElementById('message').innerText = "Error creating note.";
-        });
     };
 
     const resizeHandle = document.getElementById('resize-handle');
