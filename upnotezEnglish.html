@@ -170,6 +170,27 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        #note-modal {
+            display: none;
+            position: fixed;
+            z-index: 4; /* Higher z-index for note modal */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        #modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -223,6 +244,16 @@
     
     <button id="add-field-button">Modify Information</button>
     <button id="confirm-update-button" style="display: none;">Confirm</button> <!-- Confirm button for updating -->
+</div>
+
+<div id="note-modal" style="display: none;">
+    <div id="modal-content">
+        <span class="close" id="close-note-modal">&times;</span>
+        <h2>Create a New Note</h2>
+        <input type="text" id="note-title" placeholder="Enter note title" required />
+        <input type="date" id="note-date" required />
+        <button class="confirm-button" id="confirm-note-button">Create Note</button>
+    </div>
 </div>
 
 <script>
@@ -517,32 +548,42 @@
     });
 
     document.getElementById('create-note-button').onclick = function() {
+        document.getElementById('note-modal').style.display = "block"; // Show the note modal
+    };
+
+    document.getElementById('confirm-note-button').onclick = function() {
         const user = auth.currentUser;
+        const noteTitle = document.getElementById('note-title').value;
+        const noteDate = document.getElementById('note-date').value;
     
-        if (user) {
-            const notesRef = database.ref('users/' + user.uid + '/Notes');
+        if (user && currentProcessId) {
+            const notesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes`);
             const newNoteRef = notesRef.push(); // Create a new note reference
-            const noteId = newNoteRef.key;
-    
-            // Example note data
             const noteData = {
-                id: noteId,
-                title: "New Note", // Default title
-                content: "This is a new note." // Default content
+                title: noteTitle,
+                date: noteDate,
+                createdAt: new Date().toISOString() // Timestamp for when the note was created
             };
     
             // Set the new note in the database
             newNoteRef.set(noteData)
                 .then(() => {
                     console.log("New note created successfully:", noteData);
-                    // You can add a success message or update the UI if needed
+                    document.getElementById('note-modal').style.display = "none"; // Hide the modal
+                    document.getElementById('note-title').value = ""; // Clear input
+                    document.getElementById('note-date').value = ""; // Clear input
+                    // Optionally update the UI to reflect the new note
                 })
                 .catch((error) => {
                     console.error("Error creating note:", error);
                 });
         } else {
-            console.log("No user is logged in.");
+            console.log("No user is logged in or no process selected.");
         }
+    };
+
+    document.getElementById('close-note-modal').onclick = function() {
+        document.getElementById('note-modal').style.display = "none";
     };
 
     const resizeHandle = document.getElementById('resize-handle');
