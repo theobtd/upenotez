@@ -208,7 +208,8 @@
 <div id="event-display">
     <span id="event-close">&times;</span>
     <h2 id="event-name-title">Event Name</h2>
-    <p><strong>Company:</strong> <span id="event-company-display"></span></p> <!-- Company display -->
+    <p><strong>Company:</strong> <span id="event-company-display"></span> 
+    <input type="text" id="company-input" style="display:none;" placeholder="Enter company name"></p>
     <button id="add-field-button">Modify Information</button>
 </div>
 
@@ -362,13 +363,20 @@
         document.getElementById('confirm-modal').style.display = "none";
     };
 
-    document.getElementById('add-field-button').onclick = function() {
-        // Toggle button text
-        const addFieldButton = document.getElementById('add-field-button');
+    const addFieldButton = document.getElementById('add-field-button');
+    const companyInput = document.getElementById('company-input');
+    
+    addFieldButton.onclick = function() {
         if (addFieldButton.innerText === "Modify Information") {
             addFieldButton.innerText = "Confirm Changes";
+            companyInput.style.display = "block"; // Show the input field
+            document.getElementById('event-company-display').style.display = "none"; // Hide the span
         } else {
             addFieldButton.innerText = "Modify Information";
+            const newCompanyName = companyInput.value; // Get the input value
+            document.getElementById('event-company-display').innerText = newCompanyName; // Update the displayed company name
+            companyInput.style.display = "none"; // Hide the input field
+            // Add logic to update the database here if needed
         }
     };
 
