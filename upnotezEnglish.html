@@ -236,11 +236,11 @@
             list-style-type: none; /* Remove default list styling */
             padding: 0; /* Remove default padding */
             display: flex; /* Use flexbox for alignment */
-            flex-wrap: wrap; /* Allow wrapping of note boxes */
-            justify-content: center; /* Center the note boxes horizontally */
-            align-items: center; /* Center the note boxes vertically */
-            height: 100%; /* Ensure it takes full height of the container */
-            overflow-x: auto; /* Allow scrolling if needed */
+            justify-content: flex-start; /* Align items to the start (left) */
+            align-items: center; /* Center items vertically if needed */
+            overflow-x: auto; /* Allow horizontal scrolling */
+            height: 60vh; /* Set a fixed height for the notes list */
+            border: 1px solid #888; /* Optional: border for visibility */
         }
         
         .note-box {
@@ -249,10 +249,6 @@
             background-color: rgba(255, 255, 255, 0.8); /* Light background for visibility */
             border: 1px solid #888; /* Optional: border for visibility */
             margin: 10px; /* Space between notes */
-            display: flex; /* Align boxes horizontally */
-            flex-direction: column; /* Align items vertically */
-            justify-content: center; /* Center items vertically */
-            align-items: center; /* Center items horizontally */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional: shadow for depth */
         }
     </style>
@@ -327,9 +323,7 @@
     </div>
 </div>
 
-<div id="centered-container"></div>
-    <ul id="notes-list"></ul>
-</div>
+<ul id="notes-list"></ul>
 
 <script>
     const firebaseConfig = {
