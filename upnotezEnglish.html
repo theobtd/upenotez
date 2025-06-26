@@ -199,8 +199,6 @@
     Create Note
 </button>
 
-<div id="message" style="color: red; margin: 10px;"></div>
-
 <div id="info-box">
     <button id="profile-button">My Profile</button>
     <button id="add-button">+</button>
@@ -550,20 +548,8 @@
     });
 
     document.getElementById('create-note-button').onclick = function() {
-        if (!currentProcessId) {
-            document.getElementById('message').innerText = "Please select a process first."; // Show message
-            return; // Stop further execution
-        }
-        document.getElementById('note-modal').style.display = "block"; // Show the note modal if a process is selected
+        document.getElementById('note-modal').style.display = "block"; // Show the note modal
     };
-    
-    // Clear the message on any click if it's displayed
-    document.addEventListener('click', function(event) {
-        const messageElement = document.getElementById('message');
-        if (messageElement.innerText) { // Check if there's a message
-            messageElement.innerText = ""; // Clear the message
-        }
-    });
 
     document.getElementById('confirm-note-button').onclick = function() {
         const user = auth.currentUser;
