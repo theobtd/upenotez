@@ -395,24 +395,17 @@
         const user = auth.currentUser;
         const companyInput = document.getElementById('event-company-input').value;
         const processesRef = database.ref('users/' + user.uid + '/Processes');
-
+    
         console.log("Current Process ID:", currentProcessId); // Log currentProcessId
         console.log("Company Input Value:", companyInput); // Log the value to be updated
     
         if (currentProcessId) {
             processesRef.child(currentProcessId).update({ company: companyInput })
-                .then(() => {  
+                .then(() => {
                     console.log("Database updated successfully."); // Log success message
-
-                    // Load processes again to refresh display
-                    loadProcesses();
                     
-                    // Optionally, set the input and confirm button to hidden
-                    document.getElementById('event-company-input').style.display = "none"; 
-                    document.getElementById('confirm-company-button').style.display = "none"; 
-                    
-                    // Reset button text
-                    document.getElementById('add-field-button').innerText = "Modify Information"; 
+                    // Refresh the page
+                    location.reload(); // This will refresh the page
                 })
                 .catch((error) => {
                     console.error("Error updating company: ", error);
