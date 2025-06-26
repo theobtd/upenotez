@@ -284,7 +284,7 @@
         document.getElementById('event-name').value = "";
         document.getElementById('confirm-modal').style.display = "block";
     };
-
+    
     function loadProcesses() {
         const user = auth.currentUser;
         if (user) {
@@ -292,16 +292,21 @@
             processesRef.on('value', (snapshot) => {
                 const processes = snapshot.val();
                 const processesArray = [];
-
+    
                 for (const key in processes) {
                     if (processes.hasOwnProperty(key)) {
-                        processesArray.push({ id: key, eventId: processes[key].eventId, name: processes[key].name });
+                        processesArray.push({
+                            id: key,
+                            eventId: processes[key].eventId,
+                            name: processes[key].name,
+                            company: processes[key].company || "" // Ensure company is included
+                        });
                     }
                 }
-
+    
                 const processesUl = document.getElementById('processes-ul');
                 processesUl.innerHTML = '';
-
+    
                 processesArray.forEach(process => {
                     const li = document.createElement('li');
                     li.className = 'process-item';
@@ -312,7 +317,7 @@
                         currentProcessId = process.id; // Set currentProcessId here
                         document.getElementById('event-display').style.display = "block"; // Show the event name box
                     };
-
+    
                     const deleteButton = document.createElement('button');
                     deleteButton.className = 'delete-button';
                     deleteButton.textContent = '-';
@@ -330,7 +335,7 @@
                         }
                     };
                     li.appendChild(deleteButton);
-
+    
                     processesUl.appendChild(li);
                 });
             });
