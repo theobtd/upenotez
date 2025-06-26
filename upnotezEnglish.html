@@ -597,6 +597,14 @@
     auth.onAuthStateChanged((user) => {
         if (user) {
             loadProcesses();
+
+            // Set initial display state for event-display
+            const eventDisplay = document.getElementById('event-display');
+            const toggleButton = document.getElementById('toggle-event-display');
+    
+            // Start with the event-display hidden
+            eventDisplay.style.display = "none"; // Initially hidden
+            toggleButton.innerText = 'View Details'; // Set button text
     
             // Check for currentProcessId in local storage
             const storedProcessId = localStorage.getItem('currentProcessId');
@@ -636,12 +644,6 @@
                 });
                 localStorage.removeItem('newEventId'); // Clear after using
             }
-            // Set initial display state for event-display
-            const eventDisplay = document.getElementById('event-display');
-            const toggleButton = document.getElementById('toggle-event-display');
-            
-            eventDisplay.style.display = "none"; // Ensure it's hidden initially
-            toggleButton.innerText = 'View Details'; // Set button text
         }
     });
 
@@ -659,15 +661,14 @@
 
     document.getElementById('toggle-event-display').onclick = function() {
         const eventDisplay = document.getElementById('event-display');
-        const isCollapsed = eventDisplay.classList.toggle('collapsed');
     
-        // Show or hide the event display based on the toggle state
-        if (isCollapsed) {
-            eventDisplay.style.display = "none"; // Hide the element
-            this.innerText = 'View Details'; // Change button text
-        } else {
+        // Toggle visibility
+        if (eventDisplay.style.display === "none") {
             eventDisplay.style.display = "block"; // Show the element
             this.innerText = 'Hide Details'; // Change button text
+        } else {
+            eventDisplay.style.display = "none"; // Hide the element
+            this.innerText = 'View Details'; // Change button text
         }
     };
 
