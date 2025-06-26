@@ -390,7 +390,7 @@
             this.innerText = "Modify Information"; // Reset button text
         }
     };
-
+    
     document.getElementById('confirm-company-button').onclick = function() {
         const user = auth.currentUser;
         const companyInput = document.getElementById('event-company-input').value;
@@ -399,10 +399,15 @@
         if (currentProcessId) {
             processesRef.child(currentProcessId).update({ company: companyInput })
                 .then(() => {
-                    document.getElementById('event-company-display').innerText = companyInput; // Update display with new company
-                    document.getElementById('event-company-input').style.display = "none"; // Hide input field
-                    document.getElementById('confirm-company-button').style.display = "none"; // Hide confirm button
-                    document.getElementById('add-field-button').innerText = "Modify Information"; // Reset button text
+                    // Update display with new company immediately after successful update
+                    document.getElementById('event-company-display').innerText = companyInput; 
+                    
+                    // Hide input field and confirm button
+                    document.getElementById('event-company-input').style.display = "none"; 
+                    document.getElementById('confirm-company-button').style.display = "none"; 
+                    
+                    // Reset button text
+                    document.getElementById('add-field-button').innerText = "Modify Information"; 
                 })
                 .catch((error) => {
                     console.error("Error updating company: ", error);
