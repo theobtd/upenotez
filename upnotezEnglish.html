@@ -428,31 +428,34 @@
             const storedProcessId = localStorage.getItem('currentProcessId');
             if (storedProcessId) {
                 currentProcessId = storedProcessId;
-                openEventDisplay(user.uid, currentProcessId);
+                const processesRef = database.ref('users/' + user.uid + '/Processes');
+                processesRef.child(currentProcessId).once('value').then((snapshot) => {
+                    const process = snapshot.val();
+                    if (process) {
+                        document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
+                        document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
+                        document.getElementById('event-display').style.display = "block"; // Show the event name box
+                    }
+                });
                 localStorage.removeItem('currentProcessId');
             }
     
             // Check for new event ID
             const newEventId = localStorage.getItem('newEventId');
             if (newEventId) {
-                openEventDisplay(user.uid, newEventId);
+                const processesRef = database.ref('users/' + user.uid + '/Processes');
+                processesRef.child(newEventId).once('value').then((snapshot) => {
+                    const process = snapshot.val();
+                    if (process) {
+                        document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
+                        document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
+                        document.getElementById('event-display').style.display = "block"; // Show the event name box
+                    }
+                });
                 localStorage.removeItem('newEventId');
             }
         }
     });
-    
-    // Function to open the event display
-    function openEventDisplay(userId, processId) {
-        const processesRef = database.ref('users/' + userId + '/Processes');
-        processesRef.child(processId).once('value').then((snapshot) => {
-            const process = snapshot.val();
-            if (process) {
-                document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
-                document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
-                document.getElementById('event-display').style.display = "block"; // Show the event name box
-            }
-        });
-    }
 
     const resizeHandle = document.getElementById('resize-handle');
     let isResizing = false;
