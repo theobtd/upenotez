@@ -359,8 +359,12 @@
             .then(() => {
                 // Store the new event ID in local storage
                 localStorage.setItem('newEventId', eventId);
-                loadProcesses();
-                document.getElementById('confirm-modal').style.display = "none";
+    
+                // Set currentProcessId to the new event ID before refreshing
+                currentProcessId = eventId;
+    
+                // Refresh the page
+                location.reload(); // This will refresh the page
             })
             .catch((error) => {
                 console.error("Error adding new event: ", error);
@@ -423,7 +427,7 @@
     auth.onAuthStateChanged((user) => {
         if (user) {
             loadProcesses();
-            
+    
             // Check for existing currentProcessId
             const storedProcessId = localStorage.getItem('currentProcessId');
             if (storedProcessId) {
