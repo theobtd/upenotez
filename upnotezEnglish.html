@@ -455,6 +455,8 @@
                 document.getElementById('event-field2-input').style.display = "none";
                 document.getElementById('add-field-button').innerText = "Modify Information"; // Reset button text
                 document.getElementById('confirm-update-button').style.display = "none"; // Hide confirm button
+
+                location.reload(); // This will refresh the page
             })
             .catch((error) => {
                 console.error("Error updating fields: ", error);
