@@ -208,10 +208,10 @@
 <div id="event-display">
     <span id="event-close">&times;</span>
     <h2 id="event-name-title">Event Name</h2>
-    <p><strong>Company:</strong> <span id="event-company-display"></span></p>
-    <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" /> <!-- Hidden input field -->
-    <button id="add-field-button">Modify Information</button>
-    <button id="confirm-company-button" style="display: none;">Confirm</button> <!-- Confirm button for updating -->
+    <p><strong>Company:</strong> 
+        <input type="text" id="event-company-input" placeholder="Enter company name" /> <!-- Always visible input field -->
+    </p>
+    <button id="add-field-button">Modify Information</button> <!-- Modify button -->
 </div>
 
 <script>
@@ -371,23 +371,21 @@
     };
 
     document.getElementById('add-field-button').onclick = function() {
-        const companyDisplay = document.getElementById('event-company-display');
-        const companyInput = document.getElementById('event-company-input');
-        const confirmButton = document.getElementById('confirm-company-button');
+        const user = auth.currentUser;
+        const companyInput = document.getElementById('event-company-input').value;
+        const processesRef = database.ref('users/' + user.uid + '/Processes');
     
-        if (companyInput.style.display === "none") {
-            // Show input field and confirm button
-            companyInput.style.display = "block"; 
-            confirmButton.style.display = "block"; 
-            companyInput.value = companyDisplay.innerText; // Set input value to current company
-            companyDisplay.style.display = "none"; // Hide the display
-            this.innerText = "Cancel"; // Change button text to "Cancel"
+        if (currentProcessId) {
+            processesRef.child(currentProcessId).update({ company: companyInput })
+                .then(() => {
+                    console.log("Company updated to:", companyInput); // Log success message
+                    // No need to update the display since the text box is always visible
+                })
+                .catch((error) => {
+                    console.error("Error updating company: ", error);
+                });
         } else {
-            // Hide input field and confirm button
-            companyInput.style.display = "none"; 
-            confirmButton.style.display = "none"; 
-            companyDisplay.style.display = "inline"; // Show display again
-            this.innerText = "Modify Information"; // Reset button text
+            console.error("No current process ID set.");
         }
     };
     
