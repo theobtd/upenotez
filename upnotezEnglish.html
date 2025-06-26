@@ -367,6 +367,9 @@
     const companyInput = document.getElementById('company-input');
     
     addFieldButton.onclick = function() {
+        const user = auth.currentUser; // Get the current user
+        const processesRef = database.ref('users/' + user.uid + '/Processes/' + currentProcessId); // Reference to the specific process
+    
         if (addFieldButton.innerText === "Modify Information") {
             addFieldButton.innerText = "Confirm Changes";
             companyInput.style.display = "block"; // Show the input field
@@ -376,7 +379,15 @@
             const newCompanyName = companyInput.value; // Get the input value
             document.getElementById('event-company-display').innerText = newCompanyName; // Update the displayed company name
             companyInput.style.display = "none"; // Hide the input field
-            // Add logic to update the database here if needed
+    
+            // Update the database with the new company name
+            processesRef.update({ company: newCompanyName })
+                .then(() => {
+                    console.log("Company updated successfully.");
+                })
+                .catch((error) => {
+                    console.error("Error updating company: ", error);
+                });
         }
     };
 
