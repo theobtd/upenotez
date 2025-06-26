@@ -147,6 +147,7 @@
             width: 200px; /* Fixed width */
             height: 60vh; /* 80% of the viewport height */
             overflow-y: auto; /* Allow scrolling if content is long */
+            transition: width 0.3s ease;
         }
 
         #event-display h2 {
@@ -212,6 +213,12 @@
             width: 300px;
             text-align: left;
         }
+        
+        .collapsed {
+            width: 0;
+            padding: 0;
+            opacity: 0; /* Optional: fade out effect */
+        }
     </style>
 </head>
 <body>
@@ -251,6 +258,7 @@
 </div>
 
 <!-- Event Name Display Box -->
+<button id="toggle-event-display" style="margin-bottom: 10px;">Toggle</button>
 <div id="event-display">
     <h2 id="event-name-title">Event Name</h2>
     <p><strong>Company:</strong> <span id="event-company-display"></span></p>
@@ -583,6 +591,14 @@
     
     document.getElementById('confirm-error-button').onclick = function() {
         document.getElementById('error-modal').style.display = "none"; // Close the modal
+    };
+
+    document.getElementById('toggle-event-display').onclick = function() {
+        const eventDisplay = document.getElementById('event-display');
+        eventDisplay.classList.toggle('collapsed');
+        
+        // Optionally, adjust the button text based on state
+        this.innerText = eventDisplay.classList.contains('collapsed') ? 'Expand' : 'Collapse';
     };
 
     document.getElementById('confirm-note-button').onclick = function() {
