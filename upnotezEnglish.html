@@ -323,6 +323,8 @@
                     li.onclick = () => {
                         document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
                         document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name or show "N/A"
+                        document.getElementById('event-field1-display').innerText = process.field1 || "N/A";
+                        document.getElementById('event-field2-display').innerText = process.field2 || "N/A";
                         currentProcessId = process.id; // Set currentProcessId here
                         document.getElementById('event-display').style.display = "block"; // Show the event name box
                     };
