@@ -557,6 +557,10 @@
         document.getElementById('note-modal').style.display = "block"; // Show the note modal if a process is selected
     };
 
+    document.addEventListener('click', function() {
+        document.getElementById('message').innerText = ""; // Clear the message on any click
+    });
+
     document.getElementById('confirm-note-button').onclick = function() {
         const user = auth.currentUser;
         const noteTitle = document.getElementById('note-title').value;
