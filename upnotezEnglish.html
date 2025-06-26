@@ -306,7 +306,9 @@
                             id: key,
                             eventId: processes[key].eventId,
                             name: processes[key].name,
-                            company: processes[key].company || "" // Ensure company is included
+                            company: processes[key].company || "",
+                            field1: processes[key].field1 || "",
+                            field2: processes[key].field2 || "" 
                         });
                     }
                 }
