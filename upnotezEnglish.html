@@ -456,6 +456,7 @@
                 document.getElementById('add-field-button').innerText = "Modify Information"; // Reset button text
                 document.getElementById('confirm-update-button').style.display = "none"; // Hide confirm button
 
+                localStorage.setItem('currentProcessId', currentProcessId);
                 location.reload(); // This will refresh the page
             })
             .catch((error) => {
@@ -482,13 +483,9 @@
                         document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
                         document.getElementById('event-field1-display').innerText = process.field1 || "N/A"; // Set Field 1
                         document.getElementById('event-field2-display').innerText = process.field2 || "N/A"; // Set Field 2
-                
-                        // Set the input fields with current values
-                        document.getElementById('event-company-input').value = process.company || ""; // Set input value to current company
-                        document.getElementById('event-field1-input').value = process.field1 || ""; // Set input value to current Field 1
-                        document.getElementById('event-field2-input').value = process.field2 || ""; // Set input value to current Field 2
-                
-                        document.getElementById('event-display').style.display = "block"; // Show the event name box
+    
+                        // Show the event name box
+                        document.getElementById('event-display').style.display = "block"; 
                     }
                 }).catch((error) => {
                     console.error("Error fetching process data: ", error);
