@@ -371,10 +371,13 @@
                             name: processes[key].name,
                             company: processes[key].company || "",
                             field1: processes[key].field1 || "",
-                            field2: processes[key].field2 || "" 
+                            field2: processes[key].field2 || ""
                         });
                     }
                 }
+    
+                // Sort processesArray by name
+                processesArray.sort((a, b) => a.name.localeCompare(b.name));
     
                 const processesUl = document.getElementById('processes-ul');
                 processesUl.innerHTML = '';
