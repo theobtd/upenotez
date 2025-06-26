@@ -208,9 +208,10 @@
 <div id="event-display">
     <span id="event-close">&times;</span>
     <h2 id="event-name-title">Event Name</h2>
-    <p><strong>Company:</strong> <span id="event-company-display"></span> 
-    <input type="text" id="company-input" style="display:none;" placeholder="Enter company name"></p>
+    <p><strong>Company:</strong> <span id="event-company-display"></span></p>
+    <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" /> <!-- Hidden input field -->
     <button id="add-field-button">Modify Information</button>
+    <button id="confirm-company-button" style="display: none;">Confirm</button> <!-- Confirm button for updating -->
 </div>
 
 <script>
@@ -283,7 +284,7 @@
         document.getElementById('event-name').value = "";
         document.getElementById('confirm-modal').style.display = "block";
     };
-
+    
     function loadProcesses() {
         const user = auth.currentUser;
         if (user) {
@@ -291,16 +292,21 @@
             processesRef.on('value', (snapshot) => {
                 const processes = snapshot.val();
                 const processesArray = [];
-
+    
                 for (const key in processes) {
                     if (processes.hasOwnProperty(key)) {
-                        processesArray.push({ id: key, eventId: processes[key].eventId, name: processes[key].name });
+                        processesArray.push({
+                            id: key,
+                            eventId: processes[key].eventId,
+                            name: processes[key].name,
+                            company: processes[key].company || "" // Ensure company is included
+                        });
                     }
                 }
-
+    
                 const processesUl = document.getElementById('processes-ul');
                 processesUl.innerHTML = '';
-
+    
                 processesArray.forEach(process => {
                     const li = document.createElement('li');
                     li.className = 'process-item';
@@ -308,9 +314,10 @@
                     li.onclick = () => {
                         document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
                         document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name or show "N/A"
+                        currentProcessId = process.id; // Set currentProcessId here
                         document.getElementById('event-display').style.display = "block"; // Show the event name box
                     };
-
+    
                     const deleteButton = document.createElement('button');
                     deleteButton.className = 'delete-button';
                     deleteButton.textContent = '-';
@@ -328,7 +335,7 @@
                         }
                     };
                     li.appendChild(deleteButton);
-
+    
                     processesUl.appendChild(li);
                 });
             });
@@ -363,31 +370,55 @@
         document.getElementById('confirm-modal').style.display = "none";
     };
 
-    const addFieldButton = document.getElementById('add-field-button');
-    const companyInput = document.getElementById('company-input');
+    document.getElementById('add-field-button').onclick = function() {
+        const companyDisplay = document.getElementById('event-company-display');
+        const companyInput = document.getElementById('event-company-input');
+        const confirmButton = document.getElementById('confirm-company-button');
     
-    addFieldButton.onclick = function() {
-        const user = auth.currentUser; // Get the current user
-        const processesRef = database.ref('users/' + user.uid + '/Processes/' + currentProcessId); // Reference to the specific process
-    
-        if (addFieldButton.innerText === "Modify Information") {
-            addFieldButton.innerText = "Confirm Changes";
-            companyInput.style.display = "block"; // Show the input field
-            document.getElementById('event-company-display').style.display = "none"; // Hide the span
+        if (companyInput.style.display === "none") {
+            // Show input field and confirm button
+            companyInput.style.display = "block"; 
+            confirmButton.style.display = "block"; 
+            companyInput.value = companyDisplay.innerText; // Set input value to current company
+            companyDisplay.style.display = "none"; // Hide the display
+            this.innerText = "Cancel"; // Change button text to "Cancel"
         } else {
-            addFieldButton.innerText = "Modify Information";
-            const newCompanyName = companyInput.value; // Get the input value
-            document.getElementById('event-company-display').innerText = newCompanyName; // Update the displayed company name
-            companyInput.style.display = "none"; // Hide the input field
+            // Hide input field and confirm button
+            companyInput.style.display = "none"; 
+            confirmButton.style.display = "none"; 
+            companyDisplay.style.display = "inline"; // Show display again
+            this.innerText = "Modify Information"; // Reset button text
+        }
+    };
     
-            // Update the database with the new company name
-            processesRef.update({ company: newCompanyName })
-                .then(() => {
-                    console.log("Company updated successfully.");
+    document.getElementById('confirm-company-button').onclick = function() {
+        const user = auth.currentUser;
+        const companyInput = document.getElementById('event-company-input').value;
+        const processesRef = database.ref('users/' + user.uid + '/Processes');
+
+        console.log("Current Process ID:", currentProcessId); // Log currentProcessId
+        console.log("Company Input Value:", companyInput); // Log the value to be updated
+    
+        if (currentProcessId) {
+            processesRef.child(currentProcessId).update({ company: companyInput })
+                .then(() => {  
+                    console.log("Database updated successfully."); // Log success message
+
+                    // Load processes again to refresh display
+                    loadProcesses();
+                    
+                    // Optionally, set the input and confirm button to hidden
+                    document.getElementById('event-company-input').style.display = "none"; 
+                    document.getElementById('confirm-company-button').style.display = "none"; 
+                    
+                    // Reset button text
+                    document.getElementById('add-field-button').innerText = "Modify Information"; 
                 })
                 .catch((error) => {
                     console.error("Error updating company: ", error);
                 });
+        } else {
+            console.error("No current process ID set.");
         }
     };
 
