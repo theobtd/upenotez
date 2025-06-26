@@ -135,6 +135,8 @@
 
         /* Event Name Box */
         #event-display {
+            flex: 0 0 auto;
+            margin-right: 20px;
             display: none; /* Hidden by default */
             position: fixed;
             top: 50%;
@@ -233,20 +235,12 @@
             z-index: 3; /* Higher z-index for note modal */
         }
 
-        #event-display-container {
-            flex: 0 0 200px; /* Set the width for the event display container */
-            height: 60vh; /* Same height as note containers */
-            margin-right: 20px; /* Space between the event display and notes container */
-            margin-left: 0; /* Ensure there's no left margin */
-        }
-
         #notes-container {
             display: flex; /* Use flexbox layout */
             flex-wrap: nowrap; /* Prevent wrapping to new lines */
         }
 
         .note-container {
-            flex: 0 0 200px; /* Set the same width as the event display */
             width: 200px; /* Width of note containers */
             height: 60vh; /* Height of note containers */
             background-color: #e0e0e0; /* Background color for note containers */
@@ -258,18 +252,6 @@
             border-radius: 5px; /* Optional: rounded corners */
             display: inline-block; /* Allow them to sit side by side */
         }
-
-        #process-name-button {
-            margin: 20px; 
-            padding: 10px; 
-            background-color: #f0ad4e; 
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
-            font-size: 18px; 
-            display: inline-block; /* Ensure it's inline */
-            z-index: 1; /* Make sure it's on top if needed */
-        }
     </style>
 </head>
 <body>
@@ -277,26 +259,6 @@
 <button id="create-note-button" style="margin: 20px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 18px;">
     Create Note
 </button>
-
-<div id="process-container">
-    <button id="process-name-button" style="margin: 20px; padding: 10px; background-color: #f0ad4e; color: white; border: none; border-radius: 5px; font-size: 18px;">
-        Process Name
-    </button>
-    <div id="event-display" style="display: none;"> <!-- Initially hidden -->
-        <h2 id="event-name-title">Event Name</h2>
-        <p><strong>Company:</strong> <span id="event-company-display"></span></p>
-        <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" />
-        
-        <p><strong>Field 1:</strong> <span id="event-field1-display"></span></p>
-        <input type="text" id="event-field1-input" style="display: none;" placeholder="Enter Field 1" />
-        
-        <p><strong>Field 2:</strong> <span id="event-field2-display"></span></p>
-        <input type="text" id="event-field2-input" style="display: none;" placeholder="Enter Field 2" />
-        
-        <button id="add-field-button">Modify Information</button>
-        <button id="confirm-update-button" style="display: none;">Confirm</button>
-    </div>
-</div>
 
 <div id="info-box">
     <button id="profile-button">My Profile</button>
@@ -330,24 +292,22 @@
 
 <!-- Event Name Display Box -->
 <div id="event-container">
-    <div id="event-display-container"> <!-- New container for event display -->
-        <div id="event-display">
-            <h2 id="event-name-title">Event Name</h2>
-            <p><strong>Company:</strong> <span id="event-company-display"></span></p>
-            <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" />
-            
-            <p><strong>Field 1:</strong> <span id="event-field1-display"></span></p>
-            <input type="text" id="event-field1-input" style="display: none;" placeholder="Enter Field 1" />
-            
-            <p><strong>Field 2:</strong> <span id="event-field2-display"></span></p>
-            <input type="text" id="event-field2-input" style="display: none;" placeholder="Enter Field 2" />
-            
-            <button id="add-field-button">Modify Information</button>
-            <button id="confirm-update-button" style="display: none;">Confirm</button>
-        </div>
+    <div id="event-display">
+        <h2 id="event-name-title">Event Name</h2>
+        <p><strong>Company:</strong> <span id="event-company-display"></span></p>
+        <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" />
+        
+        <p><strong>Field 1:</strong> <span id="event-field1-display"></span></p>
+        <input type="text" id="event-field1-input" style="display: none;" placeholder="Enter Field 1" />
+        
+        <p><strong>Field 2:</strong> <span id="event-field2-display"></span></p>
+        <input type="text" id="event-field2-input" style="display: none;" placeholder="Enter Field 2" />
+        
+        <button id="add-field-button">Modify Information</button>
+        <button id="confirm-update-button" style="display: none;">Confirm</button>
     </div>
 
-    <div id="notes-container"> <!-- Existing container for notes -->
+    <div id="notes-container"> <!-- New container for notes -->
         <!-- Note containers will be added here dynamically -->
     </div>
 </div>
@@ -475,8 +435,6 @@ function loadProcesses() {
                     currentProcessId = process.id; // Set currentProcessId here
                     document.getElementById('event-display').style.display = "block"; // Show the event name box
                     loadNotes(process.id); // Load notes for the selected process
-                    // Update the process name button
-                    document.getElementById('process-name-button').innerText = process.name;
                 };
 
                 const deleteButton = document.createElement('button');
@@ -736,17 +694,6 @@ function loadNotes(processId) {
 
     document.getElementById('close-note-modal').onclick = function() {
         document.getElementById('note-modal').style.display = "none";
-    };
-
-    document.getElementById('process-name-button').onclick = function() {
-        const eventDisplay = document.getElementById('event-display');
-        
-        // Toggle visibility
-        if (eventDisplay.style.display === "none") {
-            eventDisplay.style.display = "block"; // Show the event display
-        } else {
-            eventDisplay.style.display = "none"; // Hide the event display
-        }
     };
 
     const resizeHandle = document.getElementById('resize-handle');
