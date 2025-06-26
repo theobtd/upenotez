@@ -212,6 +212,12 @@
             width: 300px;
             text-align: left;
         }
+
+        .collapsed {
+            height: 40px; /* Adjust height for collapsed state */
+            overflow: hidden; /* Hide overflow when collapsed */
+            cursor: pointer; /* Change cursor to indicate it's clickable */
+        }
     </style>
 </head>
 <body>
@@ -251,7 +257,7 @@
 </div>
 
 <!-- Event Name Display Box -->
-<div id="event-display">
+<div id="event-display" class="collapsed">
     <span id="event-close">&times;</span>
     <h2 id="event-name-title">Event Name</h2>
     <p><strong>Company:</strong> <span id="event-company-display"></span></p>
@@ -618,6 +624,17 @@
                 });
         } else {
             console.log("No user is logged in or no process selected.");
+        }
+    };
+
+    document.getElementById('event-display').onclick = function() {
+        const eventDisplay = document.getElementById('event-display');
+        if (eventDisplay.classList.contains('collapsed')) {
+            eventDisplay.classList.remove('collapsed');
+            eventDisplay.style.height = 'auto'; // Reset height to show full content
+        } else {
+            eventDisplay.classList.add('collapsed');
+            eventDisplay.style.height = '40px'; // Set height to collapsed state
         }
     };
 
