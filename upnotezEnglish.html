@@ -249,6 +249,13 @@
             border-radius: 5px; /* Optional: rounded corners */
             display: inline-block; /* Allow them to sit side by side */
         }
+
+        #process-message {
+            background-color: #e0e0e0; /* Light background */
+            padding: 10px; /* Padding for the message */
+            border-radius: 5px; /* Rounded corners */
+            text-align: left; /* Align text to the left */
+        }
     </style>
 </head>
 <body>
@@ -257,9 +264,14 @@
     Create Note
 </button>
 
-<button id="process-name-button" style="margin: 20px; padding: 10px; background-color: #f0ad4e; color: white; border: none; border-radius: 5px; font-size: 18px;">
-    Select Process
-</button>
+<div id="process-container">
+    <button id="process-name-button" style="margin: 20px; padding: 10px; background-color: #f0ad4e; color: white; border: none; border-radius: 5px; font-size: 18px;">
+        Select Process
+    </button>
+    <div id="process-message" style="display: none; margin-top: 10px;">
+        It's expanded!
+    </div>
+</div>
 
 <div id="info-box">
     <button id="profile-button">My Profile</button>
@@ -664,6 +676,17 @@ function loadNotes(processId) {
     
     document.getElementById('confirm-error-button').onclick = function() {
         document.getElementById('error-modal').style.display = "none"; // Close the modal
+    };
+
+    document.getElementById('process-name-button').onclick = function() {
+        const processMessage = document.getElementById('process-message');
+        
+        // Toggle visibility
+        if (processMessage.style.display === "none") {
+            processMessage.style.display = "block"; // Show the message
+        } else {
+            processMessage.style.display = "none"; // Hide the message
+        }
     };
 
     document.getElementById('confirm-note-button').onclick = function() {
