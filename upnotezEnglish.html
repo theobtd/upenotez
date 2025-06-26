@@ -250,6 +250,11 @@
             display: inline-block; /* Allow them to sit side by side */
         }
 
+        #process-container {
+            display: inline-block; /* Ensure it occupies its own space */
+            margin: 20px; /* Add margin around the container */
+        }
+
         #process-message {
             background-color: #e0e0e0; /* Light background */
             padding: 10px; /* Padding for the message */
@@ -264,14 +269,16 @@
     Create Note
 </button>
 
-<div id="process-container">
-    <button id="process-name-button" style="margin: 20px; padding: 10px; background-color: #f0ad4e; color: white; border: none; border-radius: 5px; font-size: 18px;">
+
+<div id="process-container" style="margin: 20px; display: inline-block;">
+    <button id="process-name-button" style="padding: 10px; background-color: #f0ad4e; color: white; border: none; border-radius: 5px; font-size: 18px;">
         Select Process
     </button>
     <div id="process-message" style="display: none; margin-top: 10px;">
         It's expanded!
     </div>
 </div>
+
 
 <div id="info-box">
     <button id="profile-button">My Profile</button>
