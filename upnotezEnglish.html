@@ -208,8 +208,7 @@
 <div id="event-display">
     <span id="event-close">&times;</span>
     <h2 id="event-name-title">Event Name</h2>
-    <p id="event-name-display"></p>
-    <p><strong>Company:</strong> <span id="event-company-display"></span></p> <!-- Added Company display -->
+    <p><strong>Company:</strong> <span id="event-company-display"></span></p> <!-- Company display -->
     <button id="add-field-button">Modify Information</button>
 </div>
 
@@ -306,9 +305,8 @@
                     li.className = 'process-item';
                     li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
                     li.onclick = () => {
-                        document.getElementById('event-name-display').innerText = process.name;
-                        document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name or show "N/A"
                         document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
+                        document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name or show "N/A"
                         document.getElementById('event-display').style.display = "block"; // Show the event name box
                     };
 
