@@ -309,6 +309,7 @@
                     li.onclick = () => {
                         document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
                         document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name or show "N/A"
+                        currentProcessId = process.id; // Set currentProcessId here
                         document.getElementById('event-display').style.display = "block"; // Show the event name box
                     };
 
@@ -390,17 +391,20 @@
         const companyInput = document.getElementById('event-company-input').value;
         const processesRef = database.ref('users/' + user.uid + '/Processes');
     
-        // Assuming you have access to the current process ID
-        processesRef.child(currentProcessId).update({ company: companyInput })
-            .then(() => {
-                document.getElementById('event-company-display').innerText = companyInput; // Update display with new company
-                document.getElementById('event-company-input').style.display = "none"; // Hide input field
-                document.getElementById('confirm-company-button').style.display = "none"; // Hide confirm button
-                document.getElementById('add-field-button').innerText = "Modify Information"; // Reset button text
-            })
-            .catch((error) => {
-                console.error("Error updating company: ", error);
-            });
+        if (currentProcessId) {
+            processesRef.child(currentProcessId).update({ company: companyInput })
+                .then(() => {
+                    document.getElementById('event-company-display').innerText = companyInput; // Update display with new company
+                    document.getElementById('event-company-input').style.display = "none"; // Hide input field
+                    document.getElementById('confirm-company-button').style.display = "none"; // Hide confirm button
+                    document.getElementById('add-field-button').innerText = "Modify Information"; // Reset button text
+                })
+                .catch((error) => {
+                    console.error("Error updating company: ", error);
+                });
+        } else {
+            console.error("No current process ID set.");
+        }
     };
 
     auth.onAuthStateChanged((user) => {
