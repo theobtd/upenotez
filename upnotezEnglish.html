@@ -433,8 +433,6 @@
 
                         // Load notes for the selected process
                         loadNotes(currentProcessId);
-                        
-                        document.getElementById('event-display').style.display = "block"; // Show the event name box
                     };
     
                     const deleteButton = document.createElement('button');
@@ -656,9 +654,15 @@
     document.getElementById('toggle-event-display').onclick = function() {
         const eventDisplay = document.getElementById('event-display');
         eventDisplay.classList.toggle('collapsed');
-        
-        // Optionally, adjust the button text based on state
-        this.innerText = eventDisplay.classList.contains('collapsed') ? 'View Details' : 'Hide Details';
+    
+        // Show or hide the event display based on the toggle state
+        if (eventDisplay.classList.contains('collapsed')) {
+            eventDisplay.style.display = "none"; // Hide the element
+            this.innerText = 'View Details'; // Change button text
+        } else {
+            eventDisplay.style.display = "block"; // Show the element
+            this.innerText = 'Hide Details'; // Change button text
+        }
     };
 
     document.getElementById('confirm-note-button').onclick = function() {
