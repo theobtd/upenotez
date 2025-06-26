@@ -209,12 +209,16 @@
     <span id="event-close">&times;</span>
     <h2 id="event-name-title">Event Name</h2>
     <p><strong>Company:</strong> <span id="event-company-display"></span></p>
-    <p><strong>Field 1:</strong> <span id="event-field1-display"></span></p> <!-- New Field 1 display -->
-    <p><strong>Field 2:</strong> <span id="event-field2-display"></span></p> <!-- New Field 2 display -->
-    <input type="text" id="event-company-input" style="display: none;" 
-    <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" /> <!-- Hidden input field -->
+    <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" />
+    
+    <p><strong>Field 1:</strong> <span id="event-field1-display"></span></p>
+    <input type="text" id="event-field1-input" style="display: none;" placeholder="Enter Field 1" />
+    
+    <p><strong>Field 2:</strong> <span id="event-field2-display"></span></p>
+    <input type="text" id="event-field2-input" style="display: none;" placeholder="Enter Field 2" />
+    
     <button id="add-field-button">Modify Information</button>
-    <button id="confirm-company-button" style="display: none;">Confirm</button> <!-- Confirm button for updating -->
+    <button id="confirm-update-button" style="display: none;">Confirm</button> <!-- Confirm button for updating -->
 </div>
 
 <script>
@@ -383,44 +387,74 @@
 
     document.getElementById('add-field-button').onclick = function() {
         const companyDisplay = document.getElementById('event-company-display');
+        const field1Display = document.getElementById('event-field1-display');
+        const field2Display = document.getElementById('event-field2-display');
+    
         const companyInput = document.getElementById('event-company-input');
-        const confirmButton = document.getElementById('confirm-company-button');
+        const field1Input = document.getElementById('event-field1-input');
+        const field2Input = document.getElementById('event-field2-input');
+        const confirmButton = document.getElementById('confirm-update-button');
     
         if (companyInput.style.display === "none") {
-            // Show input field and confirm button
+            // Show input fields and confirm button
             companyInput.style.display = "block"; 
-            confirmButton.style.display = "block"; 
+            field1Input.style.display = "block"; 
+            field2Input.style.display = "block"; 
+    
             companyInput.value = companyDisplay.innerText; // Set input value to current company
-            companyDisplay.style.display = "none"; // Hide the display
+            field1Input.value = field1Display.innerText; // Set input value to current Field 1
+            field2Input.value = field2Display.innerText; // Set input value to current Field 2
+            
+            companyDisplay.style.display = "none"; // Hide display
+            field1Display.style.display = "none"; // Hide display
+            field2Display.style.display = "none"; // Hide display
+            
             this.innerText = "Cancel"; // Change button text to "Cancel"
+            confirmButton.style.display = "block"; // Show confirm button
         } else {
-            // Hide input field and confirm button
+            // Hide input fields and confirm button
             companyInput.style.display = "none"; 
-            confirmButton.style.display = "none"; 
+            field1Input.style.display = "none"; 
+            field2Input.style.display = "none"; 
+            
             companyDisplay.style.display = "inline"; // Show display again
+            field1Display.style.display = "inline"; // Show display again
+            field2Display.style.display = "inline"; // Show display again
+            
             this.innerText = "Modify Information"; // Reset button text
+            confirmButton.style.display = "none"; // Hide confirm button
         }
     };
-    
-    document.getElementById('confirm-company-button').onclick = function() {
+
+    document.getElementById('confirm-update-button').onclick = function() {
         const user = auth.currentUser;
-        const companyInput = document.getElementById('event-company-input').value;
+        const companyValue = document.getElementById('event-company-input').value;
+        const field1Value = document.getElementById('event-field1-input').value;
+        const field2Value = document.getElementById('event-field2-input').value;
         const processesRef = database.ref('users/' + user.uid + '/Processes');
     
         if (currentProcessId) {
-            processesRef.child(currentProcessId).update({ company: companyInput })
-                .then(() => {
-                    console.log("Database updated successfully."); // Log success message
-                    
-                    // Store currentProcessId in local storage
-                    localStorage.setItem('currentProcessId', currentProcessId);
-                    
-                    // Refresh the page
-                    location.reload(); // This will refresh the page
-                })
-                .catch((error) => {
-                    console.error("Error updating company: ", error);
-                });
+            processesRef.child(currentProcessId).update({ 
+                company: companyValue, 
+                field1: field1Value, 
+                field2: field2Value 
+            })
+            .then(() => {
+                console.log("Database updated successfully.");
+                // Refresh the display
+                document.getElementById('event-company-display').innerText = companyValue;
+                document.getElementById('event-field1-display').innerText = field1Value;
+                document.getElementById('event-field2-display').innerText = field2Value;
+                // Hide input fields
+                document.getElementById('event-company-input').style.display = "none";
+                document.getElementById('event-field1-input').style.display = "none";
+                document.getElementById('event-field2-input').style.display = "none";
+                document.getElementById('add-field-button').innerText = "Modify Information"; // Reset button text
+                document.getElementById('confirm-update-button').style.display = "none"; // Hide confirm button
+            })
+            .catch((error) => {
+                console.error("Error updating fields: ", error);
+            });
         } else {
             console.error("No current process ID set.");
         }
