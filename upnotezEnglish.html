@@ -548,7 +548,11 @@
     });
 
     document.getElementById('create-note-button').onclick = function() {
-        document.getElementById('note-modal').style.display = "block"; // Show the note modal
+        if (!currentProcessId) {
+            document.getElementById('message').innerText = "Please select a process first."; // Show message
+            return; // Stop further execution
+        }
+        document.getElementById('note-modal').style.display = "block"; // Show the note modal if a process is selected
     };
 
     document.getElementById('confirm-note-button').onclick = function() {
