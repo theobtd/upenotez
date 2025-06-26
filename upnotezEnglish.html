@@ -345,18 +345,20 @@
     document.getElementById('confirm-yes').onclick = function() {
         const user = auth.currentUser;
         const processesRef = database.ref('users/' + user.uid + '/Processes');
-
+    
         if (currentAction === 'add') {
             const eventName = document.getElementById('event-name').value;
             const newEventRef = processesRef.push();
             const eventId = newEventRef.key;
-
+    
             newEventRef.set({ 
                 eventId: eventId, 
                 name: eventName,
                 company: "" // Add the Company field as an empty string
             })
             .then(() => {
+                // Store the new event ID in local storage
+                localStorage.setItem('newEventId', eventId);
                 loadProcesses();
                 document.getElementById('confirm-modal').style.display = "none";
             })
@@ -422,28 +424,35 @@
         if (user) {
             loadProcesses();
             
-            // Check if there is a currentProcessId stored in local storage
+            // Check for existing currentProcessId
             const storedProcessId = localStorage.getItem('currentProcessId');
             if (storedProcessId) {
-                // Set currentProcessId and open the event display
                 currentProcessId = storedProcessId;
-    
-                // Find the process and update the display
-                const processesRef = database.ref('users/' + user.uid + '/Processes');
-                processesRef.child(currentProcessId).once('value').then((snapshot) => {
-                    const process = snapshot.val();
-                    if (process) {
-                        document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
-                        document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
-                        document.getElementById('event-display').style.display = "block"; // Show the event name box
-                    }
-                });
-    
-                // Clear the stored Process ID from local storage
+                openEventDisplay(user.uid, currentProcessId);
                 localStorage.removeItem('currentProcessId');
+            }
+    
+            // Check for new event ID
+            const newEventId = localStorage.getItem('newEventId');
+            if (newEventId) {
+                openEventDisplay(user.uid, newEventId);
+                localStorage.removeItem('newEventId');
             }
         }
     });
+    
+    // Function to open the event display
+    function openEventDisplay(userId, processId) {
+        const processesRef = database.ref('users/' + userId + '/Processes');
+        processesRef.child(processId).once('value').then((snapshot) => {
+            const process = snapshot.val();
+            if (process) {
+                document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
+                document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
+                document.getElementById('event-display').style.display = "block"; // Show the event name box
+            }
+        });
+    }
 
     const resizeHandle = document.getElementById('resize-handle');
     let isResizing = false;
