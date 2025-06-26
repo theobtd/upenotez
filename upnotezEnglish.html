@@ -636,6 +636,9 @@
                 });
                 localStorage.removeItem('newEventId'); // Clear after using
             }
+            // Set initial display state for event-display
+            const eventDisplay = document.getElementById('event-display');
+            eventDisplay.style.display = "none"; // Ensure it's hidden initially
         }
     });
 
