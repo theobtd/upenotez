@@ -257,6 +257,10 @@
     Create Note
 </button>
 
+<button id="process-name-button" style="margin: 20px; padding: 10px; background-color: #f0ad4e; color: white; border: none; border-radius: 5px; font-size: 18px;">
+    Process Name
+</button>
+
 <div id="info-box">
     <button id="profile-button">My Profile</button>
     <button id="add-button">+</button>
@@ -433,6 +437,9 @@ function loadProcesses() {
                     currentProcessId = process.id; // Set currentProcessId here
                     document.getElementById('event-display').style.display = "block"; // Show the event name box
                     loadNotes(process.id); // Load notes for the selected process
+
+                    // Update the process name button
+                    document.getElementById('process-name-button').innerText = process.name; // Set the button text to the process name
                 };
 
                 const deleteButton = document.createElement('button');
