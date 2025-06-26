@@ -252,7 +252,6 @@
 
 <!-- Event Name Display Box -->
 <div id="event-display">
-    <span id="event-close">&times;</span>
     <h2 id="event-name-title">Event Name</h2>
     <p><strong>Company:</strong> <span id="event-company-display"></span></p>
     <input type="text" id="event-company-input" style="display: none;" placeholder="Enter company name" />
@@ -322,10 +321,6 @@
 
     document.getElementById('close-modal').onclick = function() {
         document.getElementById('profile-modal').style.display = "none";
-    };
-
-    document.getElementById('event-close').onclick = function() {
-        document.getElementById('event-display').style.display = "none";
     };
 
     window.onclick = function(event) {
