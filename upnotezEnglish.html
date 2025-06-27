@@ -736,6 +736,13 @@
                         document.getElementById('confirm-task-button').setAttribute('data-note-id', note.id);
                     };
 
+                    // Create the new rectangular container
+                    const newContainer = document.createElement('div');
+                    newContainer.style.width = '100%'; // Same width as tasks button
+                    newContainer.style.height = '10vh'; // Set height to 10vh
+                    newContainer.style.backgroundColor = '#f0f0f0'; // Optional: background color for visibility
+                    newContainer.style.marginTop = '10px'; // Optional: add some spacing above
+
     
                     // Create the Save button
                     const saveButton = document.createElement('button');
@@ -761,6 +768,7 @@
                     noteBox.appendChild(dateElement);
                     noteBox.appendChild(textBox); // Add the text box here
                     noteBox.appendChild(tasksButton); // Add the Tasks button here
+                    noteBox.appendChild(newContainer); // Add the new container here
                     noteBox.appendChild(saveButton);
                     notesList.appendChild(noteBox);
         
