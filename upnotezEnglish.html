@@ -1169,30 +1169,19 @@
             const noteId = this.getAttribute('data-note-id'); // Get the note ID
             const tasksRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Tasks`);
     
-            tasksRef.once('value', (snapshot) => {
-                if (!snapshot.exists()) {
-                    // If no Tasks path exists, create it
-                    tasksRef.set({ [Date.now()]: taskName }) // Use timestamp as unique key
-                        .then(() => {
-                            console.log("Task added successfully.");
-                            document.getElementById('task-modal').style.display = "none"; // Hide the modal
-                            document.getElementById('task-name').value = ""; // Clear input
-                        })
-                        .catch((error) => {
-                            console.error("Error adding task:", error);
-                        });
-                } else {
-                    // If Tasks path exists, add a new task under it
-                    tasksRef.child(Date.now()).set(taskName) // Use timestamp as unique key
-                        .then(() => {
-                            console.log("Task added successfully.");
-                            document.getElementById('task-modal').style.display = "none"; // Hide the modal
-                            document.getElementById('task-name').value = ""; // Clear input
-                        })
-                        .catch((error) => {
-                            console.error("Error adding task:", error);
-                        });
-                }
+            // Create a new task with a unique ID and store the name as a child
+            const newTaskRef = tasksRef.push(); // Generate a new unique key for the task
+            newTaskRef.set({
+                name: taskName, // Store the task name as a child property
+                completed: false // Initialize the completed status
+            })
+            .then(() => {
+                console.log("Task added successfully.");
+                document.getElementById('task-modal').style.display = "none"; // Hide the modal
+                document.getElementById('task-name').value = ""; // Clear input
+            })
+            .catch((error) => {
+                console.error("Error adding task:", error);
             });
         } else {
             console.log("No user is logged in or no note selected.");
