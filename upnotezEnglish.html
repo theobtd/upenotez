@@ -364,6 +364,12 @@
     <div id="confirm-content">
         <p id="confirm-message">Are you sure you want to proceed?</p>
         <input type="text" id="event-name" placeholder="Enter event name" />
+        <input type="text" id="event-company" placeholder="Enter company name" />
+        <input type="text" id="event-field1" placeholder="Enter Title" />
+        <input type="text" id="event-field2" placeholder="Enter Primary Email" />
+        <input type="text" id="event-field3" placeholder="Enter Secondary Email" />
+        <input type="text" id="event-field4" placeholder="Enter Primary Phone Number" />
+        <input type="text" id="event-field5" placeholder="Enter Secondary Phone Number" />
         <button class="confirm-button" id="confirm-yes">Confirm</button>
         <button class="close" id="confirm-no">Cancel</button>
     </div>
@@ -729,6 +735,13 @@
     
         if (currentAction === 'add') {
             const eventName = document.getElementById('event-name').value;
+            const companyValue = document.getElementById('event-company').value;
+            const field1Value = document.getElementById('event-field1').value;
+            const field2Value = document.getElementById('event-field2').value;
+            const field3Value = document.getElementById('event-field3').value;
+            const field4Value = document.getElementById('event-field4').value;
+            const field5Value = document.getElementById('event-field5').value;
+            
             const newEventRef = processesRef.push();
             const eventId = newEventRef.key;
     
