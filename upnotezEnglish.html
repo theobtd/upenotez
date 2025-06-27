@@ -731,6 +731,9 @@
                     // Add event listener for the Tasks button
                     tasksButton.onclick = function() {
                         document.getElementById('task-modal').style.display = "block"; // Show the task modal
+
+                        // Store the current note ID in a variable
+                        document.getElementById('confirm-task-button').setAttribute('data-note-id', note.id);
                     };
 
     
