@@ -793,8 +793,8 @@
                                     // Set task text based on the child property
                                     const taskText = document.createTextNode(tasks[taskId].name); // Accessing the name property
 
-                                    taskItem.innerText = tasks[taskId];
                                     taskItem.appendChild(checkbox);
+                                    taskItem.appendChild(taskText);
                                     
                                     tasksList.appendChild(taskItem); // Add task to the list
                                 }
