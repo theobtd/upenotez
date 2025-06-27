@@ -524,25 +524,40 @@
             notesArray.forEach(note => {
                 const noteBox = document.createElement('li');
                 noteBox.className = 'note-box';
-            
+    
                 // Create a title element
                 const titleElement = document.createElement('strong');
                 titleElement.innerText = note.title;
-            
+    
                 // Create a date element
                 const dateElement = document.createElement('span');
                 dateElement.innerText = `Date: ${note.date}`;
-            
+    
                 // Append the title and date to the note box
                 noteBox.appendChild(titleElement);
                 noteBox.appendChild(dateElement);
-            
+    
                 // Create the delete button
                 const deleteButton = document.createElement('button');
-                deleteButton.className = 'delete-note'; 
+                deleteButton.className = 'delete-note';
                 deleteButton.innerText = 'Delete';
                 deleteButton.style.marginTop = '10px'; // Add margin
-            
+    
+                // Delete button functionality
+                deleteButton.onclick = function() {
+                    const confirmDelete = confirm(`Are you sure you want to delete the note titled "${note.title}"?`);
+                    if (confirmDelete) {
+                        notesRef.child(note.id).remove()
+                            .then(() => {
+                                console.log("Note deleted successfully.");
+                                loadNotes(processId); // Reload notes after deletion
+                            })
+                            .catch((error) => {
+                                console.error("Error deleting note:", error);
+                            });
+                    }
+                };
+    
                 // Append the delete button to the note box
                 noteBox.appendChild(deleteButton);
                 notesList.appendChild(noteBox);
