@@ -326,6 +326,21 @@
             margin-top: 5px; /* Add space between title and date */
             display: block; /* Make the date a block element */
         }
+
+        .tasks-button {
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            padding: 10px; /* Padding for spacing */
+            cursor: pointer; /* Pointer cursor on hover */
+            width: 100%; /* Full width to match text box */
+            margin-top: 10px; /* Space between text box and button */
+        }
+        
+        .tasks-button:hover {
+            opacity: 0.8; /* Slightly transparent on hover */
+        }
     </style>
 </head>
 <body>
@@ -670,6 +685,12 @@
                         hasUnsavedChanges = textBox.value !== lastSavedContent; // Check for changes
                         saveButton.style.backgroundColor = hasUnsavedChanges ? '#FF5E00' : '#d3d3d3'; // Change color
                     });
+
+                    // Create the Tasks button
+                    const tasksButton = document.createElement('button');
+                    tasksButton.innerText = 'Tasks';
+                    tasksButton.className = 'tasks-button'; // Add a class for styling
+                    tasksButton.style.width = '100%'; // Set width to 100% to match the text box
     
                     // Create the Save button
                     const saveButton = document.createElement('button');
