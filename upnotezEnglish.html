@@ -533,9 +533,16 @@
                 const dateElement = document.createElement('span');
                 dateElement.innerText = `Date: ${note.date}`;
     
-                // Append the title and date to the note box
+                // Create a text box
+                const textBox = document.createElement('textarea');
+                textBox.style.width = '180px'; // Set width to 180px
+                textBox.style.height = '30vh'; // Set height to 30vh
+                textBox.placeholder = 'Add your notes here...'; // Optional placeholder
+    
+                // Append the title, date, and text box to the note box
                 noteBox.appendChild(titleElement);
                 noteBox.appendChild(dateElement);
+                noteBox.appendChild(textBox); // Add the text box here
     
                 // Create the delete button
                 const deleteButton = document.createElement('button');
