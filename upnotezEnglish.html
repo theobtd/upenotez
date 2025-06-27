@@ -285,11 +285,26 @@
             margin-top: 5px; /* Add space between title and date */
             display: block; /* Make the date a block element */
         }
+
+        .common-button {
+            padding: 10px;  /* Adjust padding for height */
+            width: 200px;   /* Set a fixed width */
+            font-size: 18px; /* Ensure font size is consistent */
+            border: none;   /* Remove default border */
+            border-radius: 5px; /* Rounded corners */
+            background-color: #4CAF50; /* Common background color */
+            color: white;   /* Common text color */
+            cursor: pointer; /* Pointer cursor for button */
+        }
+        
+        .common-button:hover {
+            opacity: 0.8; /* Slightly transparent on hover */
+        }
     </style>
 </head>
 <body>
 
-<button id="create-note-button" style="margin: 20px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 18px;">
+<button id="create-note-button" class="common-button" style="margin: 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 18px;">
     Create Note
 </button>
 
@@ -324,7 +339,9 @@
 </div>
 
 <!-- Event Name Display Box -->
-<button id="toggle-event-display" style="margin-bottom: 10px;">View Details</button>
+<button id="toggle-event-display" class="common-button" style="margin-bottom: 10px;">
+    View Details
+</button>
 <div id="event-display">
     <h2 id="event-name-title">Event Name</h2>
     <p><strong>Company:</strong> <span id="event-company-display"></span></p>
