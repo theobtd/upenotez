@@ -550,21 +550,32 @@
                     };
                 };
     
+                // Keep track of the last saved content
+                let lastSavedContent = textBox.value;
+                
                 // Update function for saving content
                 const updateContent = (content) => {
-                    notesRef.child(note.id).update({ content: content }) // Update the note content in the database
-                        .then(() => {
-                            console.log("Note content saved successfully.");
-                        })
-                        .catch((error) => {
-                            console.error("Error saving note content:", error);
-                        });
+                    if (content !== lastSavedContent) {
+                        notesRef.child(note.id).update({ content: content })
+                            .then(() => {
+                                console.log("Note content saved successfully.");
+                                lastSavedContent = content; // Update the last saved content
+                            })
+                            .catch((error) => {
+                                console.error("Error saving note content:", error);
+                            });
+                    }
                 };
     
-                // Attach event listener to the text box
-                textBox.addEventListener('input', debounce(() => {
-                    updateContent(textBox.value);
-                }, 1000)); // Adjust delay as needed (1000ms = 1 second)
+                // Attach event listener to the text box for real-time updates
+                textBox.addEventListener('input', () => {
+                    updateContent(textBox.value); // Update content as user types
+                });
+                
+                // Optional: Save content when the textbox loses focus
+                textBox.addEventListener('blur', () => {
+                    updateContent(textBox.value); // Final save on blur
+                });
     
                 // Append the title, date, and text box to the note box
                 noteBox.appendChild(titleElement);
