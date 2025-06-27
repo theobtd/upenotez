@@ -526,7 +526,7 @@
                 processesArray.forEach(process => {
                     const li = document.createElement('li');
                     li.className = 'process-item';
-                    li.setAttribute('data-id', process.id); // Add this line
+                    li.setAttribute('data-id', process.id);
                     li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
 
                     li.onclick = () => {
@@ -771,6 +771,9 @@
                 });
                 
                 document.getElementById('confirm-modal').style.display = "none";
+    
+                // Refresh the page
+                // location.reload(); // This will refresh the page
             })
             .catch((error) => {
                 console.error("Error adding new event: ", error);
