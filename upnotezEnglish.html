@@ -743,6 +743,25 @@
                     newContainer.style.backgroundColor = '#f0f0f0'; // Optional: background color for visibility
                     newContainer.style.marginTop = '10px'; // Optional: add some spacing above
 
+                    // Create a list for tasks
+                    const tasksList = document.createElement('ul');
+                    tasksList.style.listStyleType = 'none'; // Remove bullets
+                    tasksList.style.padding = '0'; // Remove padding
+
+                    // Fetch tasks for the current note
+                    const tasksRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes/${note.id}/Tasks`);
+                    tasksRef.on('value', (taskSnapshot) => {
+                        const tasks = taskSnapshot.val();
+                        if (tasks) {
+                            for (const taskId in tasks) {
+                                if (tasks.hasOwnProperty(taskId)) {
+                                    const taskItem = document.createElement('li');
+                                    taskItem.innerText = tasks[taskId];
+                                    tasksList.appendChild(taskItem); // Add task to the list
+                                }
+                            }
+                        }
+                    });
     
                     // Create the Save button
                     const saveButton = document.createElement('button');
@@ -768,6 +787,7 @@
                     noteBox.appendChild(dateElement);
                     noteBox.appendChild(textBox); // Add the text box here
                     noteBox.appendChild(tasksButton); // Add the Tasks button here
+                    newContainer.appendChild(tasksList); // Add tasks list to the new container
                     noteBox.appendChild(newContainer); // Add the new container here
                     noteBox.appendChild(saveButton);
                     notesList.appendChild(noteBox);
