@@ -570,7 +570,8 @@
                     saveButton.style.backgroundColor = 'green'; // Default color
 
                     saveButton.onclick = function() {
-                        updateContent(textBox.value); // Save the current content
+                        const newContent = textBox.value; // Get new content
+                        updateContent(newContent, note.id); // Save the current content using the note ID
                         lastSavedContent = textBox.value; // Update last saved content
                         hasUnsavedChanges = false; // Reset change tracking
                         saveButton.style.backgroundColor = 'green'; // Reset button color
