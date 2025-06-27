@@ -528,11 +528,7 @@
     
             notesArray.sort((a, b) => new Date(b.date) - new Date(a.date));
     
-            const notesList = document.getElementById('notes-list');
             notesList.innerHTML = '';
-
-            // Select the no-notes-message element
-            const noNotesMessage = document.getElementById('no-notes-message');
 
             if (notesArray.length > 0) {
                 noNotesMessage.style.display = 'none'; // Hide the message
