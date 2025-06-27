@@ -341,6 +341,33 @@
         .tasks-button:hover {
             opacity: 0.8; /* Slightly transparent on hover */
         }
+
+        #task-modal {
+            display: none;
+            position: fixed;
+            z-index: 4; /* Higher z-index for the modal */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        #modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            text-align: left;
+        }
+        
+        .close-task {
+            cursor: pointer;
+            float: right;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -366,7 +393,7 @@
 
 <div id="profile-modal">
     <div id="modal-content">
-        <span class="close" id="close-modal">&times;</span>
+        <span class="close-task" id="close-modal">&times;</span>
         <h2>User Profile</h2>
         <p><strong>Email:</strong> <span id="user-email"></span></p>
         <p><strong>City:</strong> <span id="user-city"></span></p>
@@ -425,6 +452,15 @@
         <input type="text" id="note-title" placeholder="Enter note title" required />
         <input type="date" id="note-date" required />
         <button class="confirm-button" id="confirm-note-button">Create Note</button>
+    </div>
+</div>
+
+<div id="task-modal" style="display: none;">
+    <div id="modal-content">
+        <span class="close" id="close-task-modal">&times;</span>
+        <h2>Add a Task</h2>
+        <input type="text" id="task-name" placeholder="Enter task name" required />
+        <button id="confirm-task-button">Add Task</button>
     </div>
 </div>
 
@@ -1038,6 +1074,54 @@
                 });
         } else {
             console.log("No user is logged in or no process selected.");
+        }
+    };
+
+    // Add event listener for the Tasks button
+    tasksButton.onclick = function() {
+        document.getElementById('task-modal').style.display = "block"; // Show the task modal
+    };
+    
+    // Close the task modal when the close button is clicked
+    document.getElementById('close-task-modal').onclick = function() {
+        document.getElementById('task-modal').style.display = "none"; // Hide the modal
+    };
+    
+    // Add task to the database
+    document.getElementById('confirm-task-button').onclick = function() {
+        const taskName = document.getElementById('task-name').value;
+        const user = auth.currentUser;
+    
+        if (user && currentProcessId) {
+            const tasksRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${note.id}/Tasks`);
+    
+            tasksRef.once('value', (snapshot) => {
+                if (!snapshot.exists()) {
+                    // If no Tasks path exists, create it
+                    tasksRef.set({ [Date.now()]: taskName }) // Use timestamp as unique key
+                        .then(() => {
+                            console.log("Task added successfully.");
+                            document.getElementById('task-modal').style.display = "none"; // Hide the modal
+                            document.getElementById('task-name').value = ""; // Clear input
+                        })
+                        .catch((error) => {
+                            console.error("Error adding task:", error);
+                        });
+                } else {
+                    // If Tasks path exists, add a new task under it
+                    tasksRef.child(Date.now()).set(taskName) // Use timestamp as unique key
+                        .then(() => {
+                            console.log("Task added successfully.");
+                            document.getElementById('task-modal').style.display = "none"; // Hide the modal
+                            document.getElementById('task-name').value = ""; // Clear input
+                        })
+                        .catch((error) => {
+                            console.error("Error adding task:", error);
+                        });
+                }
+            });
+        } else {
+            console.log("No user is logged in or no note selected.");
         }
     };
 
