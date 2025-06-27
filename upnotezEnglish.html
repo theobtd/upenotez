@@ -239,7 +239,7 @@
             align-items: center; /* Center items vertically if needed */
             overflow-x: auto; /* Allow horizontal scrolling */
             height: 60vh; /* Set a fixed height for the notes list */
-            width: 1000px; /* Width of each note box */
+            width: 1200px; /* Width of each note box */
             border: 1px solid #888; /* Optional: border for visibility */
             max-width: calc(100% - 20px); /* Set max width to avoid overflow issues */
             margin-right: 20px; /* Space from the right edge of the screen */
@@ -358,11 +358,10 @@
 </div>
 
 <div id="notes-container">
-    <ul id="notes-list">
-        <li id="no-notes-message" style="display: block; text-align: center;">
-            Choose a contact to display meeting notes
-        </li>
-    </ul>
+    <ul id="notes-list"></ul>
+    <div id="no-notes-message" style="display: none; text-align: center; margin: 20px;">
+        Choose a contact to display meeting note
+    </div>
 </div>
     
 <script>
@@ -528,7 +527,11 @@
     
             notesArray.sort((a, b) => new Date(b.date) - new Date(a.date));
     
+            const notesList = document.getElementById('notes-list');
             notesList.innerHTML = '';
+
+            // Select the no-notes-message element
+            const noNotesMessage = document.getElementById('no-notes-message');
 
             if (notesArray.length > 0) {
                 noNotesMessage.style.display = 'none'; // Hide the message
