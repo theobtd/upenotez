@@ -1093,13 +1093,13 @@
         document.getElementById('task-modal').style.display = "none"; // Hide the modal
     };
     
-    // Add task to the database
     document.getElementById('confirm-task-button').onclick = function() {
         const taskName = document.getElementById('task-name').value;
         const user = auth.currentUser;
     
         if (user && currentProcessId) {
-            const tasksRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${note.id}/Tasks`);
+            const noteId = this.getAttribute('data-note-id'); // Get the note ID
+            const tasksRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Tasks`);
     
             tasksRef.once('value', (snapshot) => {
                 if (!snapshot.exists()) {
