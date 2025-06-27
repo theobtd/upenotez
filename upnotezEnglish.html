@@ -770,7 +770,25 @@
                                     // Create a checkbox
                                     const checkbox = document.createElement('input');
                                     checkbox.type = 'checkbox'; // Set type to checkbox
-                                    checkbox.style.marginRight = '30px'; // Add some space between checkbox and text
+                                    checkbox.style.marginRight = '5px'; // Add some space between checkbox and text
+
+                                    // Set the checkbox state based on the task data (assumed to be a boolean)
+                                    checkbox.checked = tasks[taskId].completed || false; // Adjust this as necessary
+
+                                    // Add event listener to update the database when the checkbox state changes
+                                    checkbox.addEventListener('change', (event) => {
+                                        const isChecked = event.target.checked; // Get the checkbox state
+                                        const taskRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes/${note.id}/Tasks/${taskId}`);
+                                        
+                                        // Update the task in the database
+                                        taskRef.update({ completed: isChecked })
+                                            .then(() => {
+                                                console.log(`Task ${taskId} updated to ${isChecked}`);
+                                            })
+                                            .catch((error) => {
+                                                console.error("Error updating task:", error);
+                                            });
+                                    });
 
                                     taskItem.innerText = tasks[taskId];
                                     taskItem.appendChild(checkbox);
