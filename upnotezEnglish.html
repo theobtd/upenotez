@@ -45,7 +45,7 @@
 
         .info-box-button {
             width: 90px;  /* Set a fixed width */
-            height: 50px; /* Set a fixed height */
+            height: 40px; /* Set a fixed height */
             border-radius: 5px; /* Rounded corners */
             background-color: transparent; /* Common background color */
             color: black; /* Common text color */
@@ -686,6 +686,8 @@
                         lastSavedContent = textBox.value; // Update last saved content
                         hasUnsavedChanges = false; // Reset change tracking
                         saveButton.style.backgroundColor = '#d3d3d3'; // Reset button color
+                        saveButton.style.width = '70px'; // Set width
+                        saveButton.style.height = '30px'; // Set height
                     };
                 
                     // Append the title, date, text box, and save button to the note box
