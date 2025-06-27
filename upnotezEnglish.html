@@ -508,7 +508,7 @@
 
         // Show the no-notes-message initially
         const noNotesMessage = document.getElementById('no-notes-message');
-        noNotesMessage.style.display = 'block'; // Ensure it's visible
+        noNotesMessage.style.display = 'none'; // Ensure it's visible
     
         notesRef.on('value', (snapshot) => {
             const notes = snapshot.val();
