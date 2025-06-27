@@ -293,6 +293,10 @@
     Create Note
 </button>
 
+<button id="save-all-notes-button" style="margin: 20px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 18px;">
+    Save All Notes
+</button>
+
 <div id="info-box">
     <button id="profile-button">My Profile</button>
     <button id="add-button">+</button>
@@ -525,6 +529,7 @@
             notesArray.forEach(note => {
                 const noteBox = document.createElement('li');
                 noteBox.className = 'note-box';
+                noteBox.setAttribute('data-note-id', note.id); // Add this line
     
                 // Create a title element
                 const titleElement = document.createElement('strong');
@@ -540,34 +545,6 @@
                 textBox.style.height = '30vh'; // Set height to 30vh
                 textBox.placeholder = 'Add your notes here...'; // Optional placeholder
                 textBox.value = note.content; // Set existing content
-    
-                // Keep track of the last saved content
-                let lastSavedContent = textBox.value;
-
-                // Update function for saving content
-                const updateContent = (content) => {
-                    if (content !== lastSavedContent) {
-                        notesRef.child(note.id).update({ content: content })
-                            .then(() => {
-                                console.log("Note content saved successfully.");
-                                lastSavedContent = content; // Update the last saved content
-                            })
-                            .catch((error) => {
-                                console.error("Error saving note content:", error);
-                            });
-                    }
-                };
-
-                // Create the Save button
-                const saveButton = document.createElement('button');
-                saveButton.className = 'save-note';
-                saveButton.innerText = 'Save';
-                saveButton.style.marginTop = '10px'; // Add margin
-            
-                // Save button functionality
-                saveButton.onclick = function() {
-                    updateContent(textBox.value); // Save the current content when clicked
-                };
             
                 // Append the title, date, text box, and save button to the note box
                 noteBox.appendChild(titleElement);
@@ -607,6 +584,34 @@
             });
         });
     }
+
+    // Save All Notes button functionality
+    document.getElementById('save-all-notes-button').onclick = function() {
+        const notesList = document.getElementById('notes-list');
+        const notes = notesList.getElementsByClassName('note-box');
+    
+        Array.from(notes).forEach(noteBox => {
+            const textBox = noteBox.querySelector('textarea');
+            const noteId = noteBox.getAttribute('data-note-id'); // Assuming you set this attribute when creating notes
+            if (textBox) {
+                const content = textBox.value;
+                updateContent(noteId, content); // Call the update function for each note
+            }
+        });
+    };
+    
+    // Update function to save content for a specific note ID
+    const updateContent = (noteId, content) => {
+        const user = auth.currentUser;
+        const notesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes`);
+        notesRef.child(noteId).update({ content: content })
+            .then(() => {
+                console.log("All notes saved successfully.");
+            })
+            .catch((error) => {
+                console.error("Error saving notes:", error);
+            });
+    };
 
     document.getElementById('confirm-yes').onclick = function() {
         const user = auth.currentUser;
