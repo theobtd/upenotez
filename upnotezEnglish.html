@@ -541,9 +541,17 @@
                 textBox.placeholder = 'Add your notes here...'; // Optional placeholder
                 textBox.value = note.content; // Set existing content
     
-                // Event listener to save content automatically
-                textBox.addEventListener('input', () => {
-                    const content = textBox.value;
+                // Debounce function to limit the rate of updates
+                const debounce = (func, delay) => {
+                    let timeout;
+                    return function(...args) {
+                        clearTimeout(timeout);
+                        timeout = setTimeout(() => func.apply(this, args), delay);
+                    };
+                };
+    
+                // Update function for saving content
+                const updateContent = (content) => {
                     notesRef.child(note.id).update({ content: content }) // Update the note content in the database
                         .then(() => {
                             console.log("Note content saved successfully.");
@@ -551,7 +559,12 @@
                         .catch((error) => {
                             console.error("Error saving note content:", error);
                         });
-                });
+                };
+    
+                // Event listener to save content automatically with debounce
+                textBox.addEventListener('input', debounce(() => {
+                    updateContent(textBox.value);
+                }, 1000)); // Adjust delay as needed (1000ms = 1 second)
     
                 // Append the title, date, and text box to the note box
                 noteBox.appendChild(titleElement);
