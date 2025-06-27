@@ -790,8 +790,7 @@
                                             });
                                     });
 
-                                    // taskItem.innerText = tasks[taskId];
-                                    const taskText = document.createTextNode(tasks[taskId].text); // Adjust based on your task structure
+                                    taskItem.innerText = tasks[taskId];
                                     taskItem.appendChild(checkbox);
                                     
                                     tasksList.appendChild(taskItem); // Add task to the list
