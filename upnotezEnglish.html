@@ -261,6 +261,21 @@
             margin-right: 20px; /* Space from the right edge of the screen */
             width: calc(100% - 20px); /* Full width minus margin */
         }
+
+        .delete-note {
+            background-color: red; /* Red background */
+            color: white; /* White text */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            padding: 8px; /* Padding for spacing */
+            cursor: pointer; /* Pointer cursor on hover */
+            margin-top: 10px; /* Space above the button */
+            display: inline-block; /* Make it inline-block */
+        }
+        
+        .delete-note:hover {
+            opacity: 0.8; /* Slightly transparent on hover */
+        }
     </style>
 </head>
 <body>
@@ -482,7 +497,6 @@
             const notes = snapshot.val();
             const notesArray = [];
     
-            // Collect notes in an array
             for (const key in notes) {
                 if (notes.hasOwnProperty(key)) {
                     notesArray.push({
@@ -493,26 +507,22 @@
                 }
             }
     
-            // Sort notesArray by date
             notesArray.sort((a, b) => new Date(b.date) - new Date(a.date));
     
             const notesList = document.getElementById('notes-list');
-            notesList.innerHTML = ''; // Clear existing notes
+            notesList.innerHTML = '';
     
-            // Display sorted notes
             notesArray.forEach(note => {
                 const noteBox = document.createElement('li');
                 noteBox.className = 'note-box';
-                noteBox.innerText = `${note.title}\nDate: ${note.date}`; // Display note title and date
-                
-                // Create the delete button
+                noteBox.innerText = `${note.title}\nDate: ${note.date}`;
+    
+                // Create the delete button with the new class name
                 const deleteButton = document.createElement('button');
-                deleteButton.className = 'delete-button';
-                deleteButton.style.backgroundColor = 'red';
-                deleteButton.style.color = 'white';
+                deleteButton.className = 'delete-note'; // Change here
                 deleteButton.innerText = 'Delete';
-                deleteButton.style.marginTop = '10px'; // Add some margin
-                
+                deleteButton.style.marginTop = '10px'; // Add margin
+    
                 // Append the delete button to the note box
                 noteBox.appendChild(deleteButton);
                 notesList.appendChild(noteBox);
