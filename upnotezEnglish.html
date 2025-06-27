@@ -658,109 +658,128 @@
         });
     }
 
-function loadNotes(processId) {
-    const user = auth.currentUser;
-    const notesRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes`);
-
-    // Clear previous notes and keep message visible initially
-    const notesList = document.getElementById('notes-list');
-    notesList.innerHTML = ''; // Clear previous notes
-
-    // Show the no-notes-message initially
-    const noNotesMessage = document.getElementById('no-notes-message');
-    noNotesMessage.style.display = 'none'; // Ensure it's visible
-
-    notesRef.on('value', (snapshot) => {
-        const notes = snapshot.val();
-        const notesArray = [];
-
-        for (const key in notes) {
-            if (notes.hasOwnProperty(key)) {
-                notesArray.push({
-                    id: key,
-                    title: notes[key].title,
-                    date: notes[key].date,
-                    content: notes[key].content || "" // Get existing content or default to empty
-                });
+    function loadNotes(processId) {
+        const user = auth.currentUser;
+        const notesRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes`);
+    
+        // Clear previous notes and keep message visible initially
+        const notesList = document.getElementById('notes-list');
+        notesList.innerHTML = ''; // Clear previous notes
+    
+        // Show the no-notes-message initially
+        const noNotesMessage = document.getElementById('no-notes-message');
+        noNotesMessage.style.display = 'none'; // Ensure it's visible
+    
+        notesRef.on('value', (snapshot) => {
+            const notes = snapshot.val();
+            const notesArray = [];
+    
+            for (const key in notes) {
+                if (notes.hasOwnProperty(key)) {
+                    notesArray.push({
+                        id: key,
+                        title: notes[key].title,
+                        date: notes[key].date,
+                        content: notes[key].content || "" // Get existing content or default to empty
+                    });
+                }
             }
-        }
-
-        notesArray.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        if (notesArray.length > 0) {
-            noNotesMessage.style.display = 'none'; // Hide the message
-            notesArray.forEach(note => {
-                const noteBox = document.createElement('li');
-                noteBox.className = 'note-box';
-
-                // Create a title element
-                const titleElement = document.createElement('strong');
-                titleElement.innerText = note.title;
-
-                // Create a date element
-                const dateElement = document.createElement('span');
-                dateElement.innerText = `Date: ${note.date}`;
-
-                // Create a text box
-                const textBox = document.createElement('textarea');
-                textBox.style.width = '375px'; // Set width to 375px
-                textBox.style.height = '55vh'; // Set height to 55vh
-                textBox.placeholder = 'Add your notes here...'; // Optional placeholder
-                textBox.value = note.content; // Set existing content
-
-                let lastSavedContent = textBox.value;
-                let hasUnsavedChanges = false; // Track unsaved changes
-
-                textBox.addEventListener('input', () => {
-                    hasUnsavedChanges = textBox.value !== lastSavedContent; // Check for changes
+    
+            notesArray.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+            if (notesArray.length > 0) {
+                noNotesMessage.style.display = 'none'; // Hide the message
+                notesArray.forEach(note => {
+                    const noteBox = document.createElement('li');
+                    noteBox.className = 'note-box';
+    
+                    const titleElement = document.createElement('strong');
+                    titleElement.innerText = note.title;
+    
+                    const dateElement = document.createElement('span');
+                    dateElement.innerText = `Date: ${note.date}`;
+    
+                    const textBox = document.createElement('textarea');
+                    textBox.style.width = '375px'; // Set width to 375px
+                    textBox.style.height = '55vh'; // Set height to 55vh
+                    textBox.placeholder = 'Add your notes here...'; // Optional placeholder
+                    textBox.value = note.content; // Set existing content
+    
+                    let lastSavedContent = textBox.value;
+                    let hasUnsavedChanges = false; // Track unsaved changes
+    
+                    textBox.addEventListener('input', () => {
+                        hasUnsavedChanges = textBox.value !== lastSavedContent; // Check for changes
+                    });
+    
+                    // Create the Tasks button
+                    const tasksButton = document.createElement('button');
+                    tasksButton.innerText = 'Tasks';
+                    tasksButton.className = 'tasks-button'; // Add a class for styling
+                    tasksButton.style.width = '100%'; // Set width to 100% to match the text box
+    
+                    // Create a container for task list
+                    const taskListContainer = document.createElement('ul');
+                    taskListContainer.className = 'task-list'; // Add a class for styling
+                    noteBox.appendChild(taskListContainer); // Append the task list container to the note box
+    
+                    // Add event listener for the Tasks button
+                    tasksButton.onclick = function() {
+                        document.getElementById('task-modal').style.display = "block"; // Show the task modal
+                        document.getElementById('confirm-task-button').setAttribute('data-note-id', note.id); // Store the note ID
+                        loadTasks(note.id, taskListContainer); // Load tasks for this note
+                    };
+    
+                    // Create the Save button
+                    const saveButton = document.createElement('button');
+                    saveButton.className = 'save-note';
+                    saveButton.innerText = 'Save';
+    
+                    saveButton.onclick = function() {
+                        const newContent = textBox.value; // Get new content
+                        updateContent(newContent, note.id); // Save the current content using the note ID
+                        lastSavedContent = textBox.value; // Update last saved content
+                        hasUnsavedChanges = false; // Reset change tracking
+                    };
+    
+                    // Create the delete button
+                    const deleteButton = document.createElement('button');
+                    deleteButton.className = 'delete-note';
+                    deleteButton.innerText = 'Delete';
+                    deleteButton.style.marginTop = '10px'; // Add margin
+    
+                    // Delete button functionality
+                    deleteButton.onclick = function() {
+                        const confirmDelete = confirm(`Are you sure you want to delete the note titled "${note.title}"?`);
+                        if (confirmDelete) {
+                            notesRef.child(note.id).remove()
+                                .then(() => {
+                                    console.log("Note deleted successfully.");
+                                    loadNotes(processId); // Reload notes after deletion
+                                })
+                                .catch((error) => {
+                                    console.error("Error deleting note:", error);
+                                });
+                        }
+                    };
+    
+                    // Append elements to the note box
+                    noteBox.appendChild(titleElement);
+                    noteBox.appendChild(dateElement);
+                    noteBox.appendChild(textBox); // Add the text box here
+                    noteBox.appendChild(tasksButton); // Add the Tasks button here
+                    noteBox.appendChild(saveButton); // Add the save button here
+                    noteBox.appendChild(deleteButton); // Add the delete button here
+                    notesList.appendChild(noteBox); // Append the note box to the notes list
+    
+                    // Load existing tasks for this note
+                    loadTasks(note.id, taskListContainer);
                 });
-
-                // Create the Tasks button
-                const tasksButton = document.createElement('button');
-                tasksButton.innerText = 'Tasks';
-                tasksButton.className = 'tasks-button'; // Add a class for styling
-                tasksButton.style.width = '100%'; // Set width to 100% to match the text box
-
-                // Create a container for task list
-                const taskListContainer = document.createElement('ul');
-                taskListContainer.className = 'task-list'; // Add a class for styling
-                noteBox.appendChild(taskListContainer); // Append the task list container to the note box
-
-                // Add event listener for the Tasks button
-                tasksButton.onclick = function() {
-                    document.getElementById('task-modal').style.display = "block"; // Show the task modal
-                    document.getElementById('confirm-task-button').setAttribute('data-note-id', note.id); // Store the note ID
-                    loadTasks(note.id, taskListContainer); // Load tasks for this note
-                };
-
-                // Create the Save button
-                const saveButton = document.createElement('button');
-                saveButton.className = 'save-note';
-                saveButton.innerText = 'Save';
-
-                saveButton.onclick = function() {
-                    const newContent = textBox.value; // Get new content
-                    updateContent(newContent, note.id); // Save the current content using the note ID
-                    lastSavedContent = textBox.value; // Update last saved content
-                    hasUnsavedChanges = false; // Reset change tracking
-                };
-
-                // Append the title, date, text box, and save button to the note box
-                noteBox.appendChild(titleElement);
-                noteBox.appendChild(dateElement);
-                noteBox.appendChild(textBox); // Add the text box here
-                noteBox.appendChild(tasksButton); // Add the Tasks button here
-                noteBox.appendChild(saveButton); // Add the save button here
-                notesList.appendChild(noteBox); // Append the note box to the notes list
-
-                // Load existing tasks for this note
-                loadTasks(note.id, taskListContainer);
-            });
-        } else {
-            noNotesMessage.style.display = 'block'; // Show message if no notes exist
-        }
-    });
-}
+            } else {
+                noNotesMessage.style.display = 'block'; // Show message if no notes exist
+            }
+        });
+    }
 
     // Function to load existing tasks for a specific note
     function loadTasks(noteId, taskListContainer) {
