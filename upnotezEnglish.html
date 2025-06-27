@@ -742,11 +742,14 @@
                     newContainer.style.height = '10vh'; // Set height to 10vh
                     newContainer.style.backgroundColor = '#f0f0f0'; // Optional: background color for visibility
                     newContainer.style.marginTop = '10px'; // Optional: add some spacing above
+                    newContainer.style.overflowY = 'auto'; // Enable vertical scrolling
+                    newContainer.style.boxSizing = 'border-box'; // Ensure padding/borders are included in the total width and height
 
                     // Create a list for tasks
                     const tasksList = document.createElement('ul');
                     tasksList.style.listStyleType = 'none'; // Remove bullets
                     tasksList.style.padding = '0'; // Remove padding
+                    tasksList.style.margin = '0'; // Remove margin
 
                     // Fetch tasks for the current note
                     const tasksRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes/${note.id}/Tasks`);
