@@ -275,7 +275,7 @@
             display: flex; /* Use flexbox for alignment */
             align-items: center; /* Center items vertically if needed */
             overflow-x: auto; /* Allow horizontal scrolling */
-            height: 95vh; /* Set a fixed height for the notes list */
+            height: 90vh; /* Set a fixed height for the notes list */
             width: 1100px; /* Width of each note box */
             border: 1px solid transparent; /* Optional: border for visibility */
             max-width: calc(100% - 20px); /* Set max width to avoid overflow issues */
@@ -284,7 +284,7 @@
         
         .note-box {
             width: 400px; /* Width of each note box */
-            height: 85vh; /* Height of each note box */
+            height: 80vh; /* Height of each note box */
             background-color: rgba(255, 255, 255, 0.8); /* Light background for visibility */
             border: 1px solid #888; /* Optional: border for visibility */
             margin: 10px; /* Space between notes */
@@ -661,11 +661,11 @@
     function loadNotes(processId) {
         const user = auth.currentUser;
         const notesRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes`);
-    
+
         // Clear previous notes and keep message visible initially
         const notesList = document.getElementById('notes-list');
         notesList.innerHTML = ''; // Clear previous notes
-    
+
         // Show the no-notes-message initially
         const noNotesMessage = document.getElementById('no-notes-message');
         noNotesMessage.style.display = 'none'; // Ensure it's visible
@@ -687,67 +687,89 @@
     
             notesArray.sort((a, b) => new Date(b.date) - new Date(a.date));
     
+            const notesList = document.getElementById('notes-list');
+            notesList.innerHTML = '';
+
+            // Select the no-notes-message element
+            const noNotesMessage = document.getElementById('no-notes-message');
+
             if (notesArray.length > 0) {
                 noNotesMessage.style.display = 'none'; // Hide the message
                 notesArray.forEach(note => {
                     const noteBox = document.createElement('li');
                     noteBox.className = 'note-box';
-    
+        
+                    // Create a title element
                     const titleElement = document.createElement('strong');
                     titleElement.innerText = note.title;
-    
+        
+                    // Create a date element
                     const dateElement = document.createElement('span');
                     dateElement.innerText = `Date: ${note.date}`;
-    
+        
+                    // Create a text box
                     const textBox = document.createElement('textarea');
-                    textBox.style.width = '375px'; // Set width to 375px
+                    textBox.style.width = '375px'; // Set width to 200px
                     textBox.style.height = '55vh'; // Set height to 55vh
                     textBox.placeholder = 'Add your notes here...'; // Optional placeholder
                     textBox.value = note.content; // Set existing content
-    
+
                     let lastSavedContent = textBox.value;
                     let hasUnsavedChanges = false; // Track unsaved changes
-    
+
                     textBox.addEventListener('input', () => {
                         hasUnsavedChanges = textBox.value !== lastSavedContent; // Check for changes
+                        saveButton.style.backgroundColor = hasUnsavedChanges ? '#FF5E00' : '#d3d3d3'; // Change color
                     });
-    
+
                     // Create the Tasks button
                     const tasksButton = document.createElement('button');
                     tasksButton.innerText = 'Tasks';
                     tasksButton.className = 'tasks-button'; // Add a class for styling
                     tasksButton.style.width = '100%'; // Set width to 100% to match the text box
-    
-                    // Create a container for task list
-                    const taskListContainer = document.createElement('ul');
-                    taskListContainer.className = 'task-list'; // Add a class for styling
-                    noteBox.appendChild(taskListContainer); // Append the task list container to the note box
-    
+
                     // Add event listener for the Tasks button
                     tasksButton.onclick = function() {
                         document.getElementById('task-modal').style.display = "block"; // Show the task modal
-                        document.getElementById('confirm-task-button').setAttribute('data-note-id', note.id); // Store the note ID
-                        loadTasks(note.id, taskListContainer); // Load tasks for this note
+
+                        // Store the current note ID in a variable
+                        document.getElementById('confirm-task-button').setAttribute('data-note-id', note.id);
                     };
+
     
                     // Create the Save button
                     const saveButton = document.createElement('button');
                     saveButton.className = 'save-note';
                     saveButton.innerText = 'Save';
-    
+                    saveButton.style.marginTop = '10px'; // Add margin
+                    saveButton.style.backgroundColor = '#d3d3d3'; // Default color
+                    saveButton.style.border = '1px solid black'; // Thin black border
+                    saveButton.style.borderRadius = '5px'; // Rounded corners
+
                     saveButton.onclick = function() {
                         const newContent = textBox.value; // Get new content
                         updateContent(newContent, note.id); // Save the current content using the note ID
                         lastSavedContent = textBox.value; // Update last saved content
                         hasUnsavedChanges = false; // Reset change tracking
+                        saveButton.style.backgroundColor = '#d3d3d3'; // Reset button color
+                        saveButton.style.width = '70px'; // Set width
+                        saveButton.style.height = '30px'; // Set height
                     };
-    
+                
+                    // Append the title, date, text box, and save button to the note box
+                    noteBox.appendChild(titleElement);
+                    noteBox.appendChild(dateElement);
+                    noteBox.appendChild(textBox); // Add the text box here
+                    noteBox.appendChild(tasksButton); // Add the Tasks button here
+                    noteBox.appendChild(saveButton);
+                    notesList.appendChild(noteBox);
+        
                     // Create the delete button
                     const deleteButton = document.createElement('button');
                     deleteButton.className = 'delete-note';
                     deleteButton.innerText = 'Delete';
                     deleteButton.style.marginTop = '10px'; // Add margin
-    
+        
                     // Delete button functionality
                     deleteButton.onclick = function() {
                         const confirmDelete = confirm(`Are you sure you want to delete the note titled "${note.title}"?`);
@@ -762,41 +784,12 @@
                                 });
                         }
                     };
-    
-                    // Append elements to the note box
-                    noteBox.appendChild(titleElement);
-                    noteBox.appendChild(dateElement);
-                    noteBox.appendChild(textBox); // Add the text box here
-                    noteBox.appendChild(tasksButton); // Add the Tasks button here
+        
+                    // Append the delete button to the note box
+                    noteBox.appendChild(deleteButton);
+                    notesList.appendChild(noteBox);
                     noteBox.appendChild(saveButton); // Add the save button here
-                    noteBox.appendChild(deleteButton); // Add the delete button here
-                    notesList.appendChild(noteBox); // Append the note box to the notes list
-    
-                    // Load existing tasks for this note
-                    loadTasks(note.id, taskListContainer);
                 });
-            } else {
-                noNotesMessage.style.display = 'block'; // Show message if no notes exist
-            }
-        });
-    }
-
-    // Function to load existing tasks for a specific note
-    function loadTasks(noteId, taskListContainer) {
-        const user = auth.currentUser;
-        const tasksRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Tasks`);
-    
-        // Clear previous tasks
-        taskListContainer.innerHTML = '';
-    
-        tasksRef.on('value', (snapshot) => {
-            const tasks = snapshot.val();
-            if (tasks) {
-                for (const taskId in tasks) {
-                    const taskItem = document.createElement('li');
-                    taskItem.innerText = tasks[taskId]; // Set the task name
-                    taskListContainer.appendChild(taskItem); // Append the task to the list
-                }
             }
         });
     }
@@ -1111,10 +1104,9 @@
             tasksRef.once('value', (snapshot) => {
                 if (!snapshot.exists()) {
                     // If no Tasks path exists, create it
-                    tasksRef.set({ [Date.now()]: taskName })
+                    tasksRef.set({ [Date.now()]: taskName }) // Use timestamp as unique key
                         .then(() => {
                             console.log("Task added successfully.");
-                            addTaskToList(taskName); // Update the task list display
                             document.getElementById('task-modal').style.display = "none"; // Hide the modal
                             document.getElementById('task-name').value = ""; // Clear input
                         })
@@ -1123,10 +1115,9 @@
                         });
                 } else {
                     // If Tasks path exists, add a new task under it
-                    tasksRef.child(Date.now()).set(taskName)
+                    tasksRef.child(Date.now()).set(taskName) // Use timestamp as unique key
                         .then(() => {
                             console.log("Task added successfully.");
-                            addTaskToList(taskName); // Update the task list display
                             document.getElementById('task-modal').style.display = "none"; // Hide the modal
                             document.getElementById('task-name').value = ""; // Clear input
                         })
@@ -1139,14 +1130,6 @@
             console.log("No user is logged in or no note selected.");
         }
     };
-    
-    // Function to add task to the displayed task list
-    function addTaskToList(taskName) {
-        const taskListContainer = document.querySelector('.task-list'); // Select the task list container
-        const taskItem = document.createElement('li');
-        taskItem.innerText = taskName; // Set the task name
-        taskListContainer.appendChild(taskItem); // Append the new task to the list
-    }
 
     document.getElementById('close-event-display').onclick = function() {
         document.getElementById('event-display').style.display = "none"; // Hide the event display
