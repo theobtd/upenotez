@@ -164,6 +164,21 @@
             display: block;
         }
 
+        .info-button {
+            background-color: #4CAF50; /* Same as delete button */
+            color: white; /* Text color */
+            border: none; /* Remove default border */
+            border-radius: 50%; /* Make it circular */
+            width: 25px; /* Match dimensions */
+            height: 25px; /* Match dimensions */
+            cursor: pointer; /* Pointer cursor on hover */
+            display: none; /* Initially hidden */
+        }
+        
+        .process-item:hover .info-button {
+            display: inline-block; /* Show on hover */
+        }
+
         /* Event Name Box */
         #event-display {
             display: none; /* Hidden by default */
@@ -528,7 +543,15 @@
                                 });
                         }
                     };
+                    
+                    // Create the "i" button
+                    const infoButton = document.createElement('button');
+                    infoButton.className = 'info-button';
+                    infoButton.textContent = 'i'; // Set text for the info button
+                    infoButton.style.marginLeft = '5px'; // Add some spacing
+                    
                     li.appendChild(deleteButton);
+                    li.appendChild(infoButton);
     
                     processesUl.appendChild(li);
                 });
