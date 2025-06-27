@@ -391,6 +391,8 @@
     
     <button id="add-field-button">Modify Information</button>
     <button id="confirm-update-button" style="display: none;">Confirm</button> <!-- Confirm button for updating -->
+
+    <button id="close-event-display" style="float: right;">Close</button>
 </div>
 
 <div id="note-modal" style="display: none;">
@@ -924,6 +926,10 @@
         } else {
             console.log("No user is logged in or no process selected.");
         }
+    };
+
+    document.getElementById('close-event-display').onclick = function() {
+        document.getElementById('event-display').style.display = "none"; // Hide the event display
     };
 
     document.getElementById('close-note-modal').onclick = function() {
