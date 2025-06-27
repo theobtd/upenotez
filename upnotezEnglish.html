@@ -42,7 +42,6 @@
         }
 
         .common-button {
-            display: none;
             padding: 10px;  /* Adjust padding for height */
             width: 60%;   /* Set a fixed width */
             font-size: 13px; /* Ensure font size is consistent */
@@ -337,13 +336,15 @@
 </head>
 <body>
 
+<button id="toggle-event-display" display="none", style="margin-left: 10px;">
+    View Details
+</button>
+
 <div id="main-container" style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
+    
     <div id="button-container" style="display: flex; justify-content: center; background-color: #f0f0f0; padding: 20px; border: 1px solid #888; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
         <button id="create-note-button" class="common-button">
             Create Note
-        </button>
-        <button id="toggle-event-display" class="common-button" style="margin-left: 10px;">
-            View Details
         </button>
     </div>
     <div id="info-box" style="margin-top: 20px;">
