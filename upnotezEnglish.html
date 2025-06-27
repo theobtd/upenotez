@@ -376,8 +376,14 @@
     <p><strong>Field 2:</strong> <span id="event-field2-display"></span></p>
     <input type="text" id="event-field2-input" style="display: none;" placeholder="Enter Field 2" />
 
-    <p><strong>Field 1:</strong> <span id="event-field3-display"></span></p>
+    <p><strong>Field 3:</strong> <span id="event-field3-display"></span></p>
     <input type="text" id="event-field3-input" style="display: none;" placeholder="Enter Field 3" />
+
+    <p><strong>Field 4:</strong> <span id="event-field4-display"></span></p>
+    <input type="text" id="event-field4-input" style="display: none;" placeholder="Enter Field 4" />
+
+    <p><strong>Field 5:</strong> <span id="event-field5-display"></span></p>
+    <input type="text" id="event-field5-input" style="display: none;" placeholder="Enter Field 5" />
     
     <button id="add-field-button">Modify Information</button>
     <button id="confirm-update-button" style="display: none;">Confirm</button> <!-- Confirm button for updating -->
@@ -493,7 +499,9 @@
                             company: processes[key].company || "",
                             field1: processes[key].field1 || "",
                             field2: processes[key].field2 || "",
-                            field3: processes[key].field2 || ""
+                            field3: processes[key].field2 || "",
+                            field4: processes[key].field2 || "",
+                            field5: processes[key].field2 || ""
                         });
                     }
                 }
@@ -515,6 +523,8 @@
                         document.getElementById('event-field1-display').innerText = process.field1 || "N/A";
                         document.getElementById('event-field2-display').innerText = process.field2 || "N/A";
                         document.getElementById('event-field3-display').innerText = process.field3 || "N/A";
+                        document.getElementById('event-field4-display').innerText = process.field4 || "N/A";
+                        document.getElementById('event-field5-display').innerText = process.field5 || "N/A";
                         currentProcessId = process.id; // Set currentProcessId here
 
                         // Load notes for the selected process
@@ -554,6 +564,8 @@
                         document.getElementById('event-field1-display').innerText = process.field1 || "N/A"; // Set Field 1
                         document.getElementById('event-field2-display').innerText = process.field2 || "N/A"; // Set Field 2
                         document.getElementById('event-field3-display').innerText = process.field3 || "N/A"; // Set Field 3
+                        document.getElementById('event-field4-display').innerText = process.field4 || "N/A"; // Set Field 4
+                        document.getElementById('event-field5-display').innerText = process.field5 || "N/A"; // Set Field 5
                         document.getElementById('event-display').style.display = "block"; // Show the event display
                     };
                     
@@ -713,7 +725,9 @@
                 company: "", // Add the Company field as an empty string
                 field1: "", // New Field 1
                 field2: "",  // New Field 2
-                field2: "" // New Field 3
+                field3: "", // New Field 3
+                field4: "", // New Field 4
+                field5: "" // New Field 5
             })
             .then(() => {
                 // Store the new event ID in local storage
@@ -740,11 +754,15 @@
         const field1Display = document.getElementById('event-field1-display');
         const field2Display = document.getElementById('event-field2-display');
         const field3Display = document.getElementById('event-field3-display');
+        const field4Display = document.getElementById('event-field4-display');
+        const field5Display = document.getElementById('event-field5-display');
     
         const companyInput = document.getElementById('event-company-input');
         const field1Input = document.getElementById('event-field1-input');
         const field2Input = document.getElementById('event-field2-input');
         const field3Input = document.getElementById('event-field3-input');
+        const field4Input = document.getElementById('event-field4-input');
+        const field5Input = document.getElementById('event-field5-input');
         const confirmButton = document.getElementById('confirm-update-button');
     
         if (companyInput.style.display === "none") {
@@ -753,16 +771,22 @@
             field1Input.style.display = "block"; 
             field2Input.style.display = "block"; 
             field3Input.style.display = "block";
+            field4Input.style.display = "block";
+            field5Input.style.display = "block";
     
             companyInput.value = companyDisplay.innerText; // Set input value to current company
             field1Input.value = field1Display.innerText; // Set input value to current Field 1
             field2Input.value = field2Display.innerText; // Set input value to current Field 2
             field3Input.value = field3Display.innerText; // Set input value to current Field 3
+            field3Input.value = field4Display.innerText; // Set input value to current Field 4
+            field3Input.value = field5Display.innerText; // Set input value to current Field 5
             
             companyDisplay.style.display = "none"; // Hide display
             field1Display.style.display = "none"; // Hide display
             field2Display.style.display = "none"; // Hide display
             field3Display.style.display = "none"; // Hide display
+            field4Display.style.display = "none"; // Hide display
+            field5Display.style.display = "none"; // Hide display
             
             this.innerText = "Cancel"; // Change button text to "Cancel"
             confirmButton.style.display = "block"; // Show confirm button
@@ -772,11 +796,15 @@
             field1Input.style.display = "none"; 
             field2Input.style.display = "none"; 
             field3Input.style.display = "none";
+            field4Input.style.display = "none";
+            field5Input.style.display = "none";
             
             companyDisplay.style.display = "inline"; // Show display again
             field1Display.style.display = "inline"; // Show display again
             field2Display.style.display = "inline"; // Show display again
             field3Display.style.display = "inline"; // Show display again
+            field4Display.style.display = "inline"; // Show display again
+            field5Display.style.display = "inline"; // Show display again
             
             this.innerText = "Modify Information"; // Reset button text
             confirmButton.style.display = "none"; // Hide confirm button
@@ -789,6 +817,8 @@
         const field1Value = document.getElementById('event-field1-input').value;
         const field2Value = document.getElementById('event-field2-input').value;
         const field3Value = document.getElementById('event-field3-input').value;
+        const field4Value = document.getElementById('event-field4-input').value;
+        const field5Value = document.getElementById('event-field5-input').value;
         const processesRef = database.ref('users/' + user.uid + '/Processes');
     
         if (currentProcessId) {
@@ -796,7 +826,9 @@
                 company: companyValue, 
                 field1: field1Value, 
                 field2: field2Value, 
-                field3: field3Value
+                field3: field3Value,
+                field4: field4Value,
+                field5: field5Value
             })
             .then(() => {
                 console.log("Database updated successfully.");
@@ -805,11 +837,15 @@
                 document.getElementById('event-field1-display').innerText = field1Value;
                 document.getElementById('event-field2-display').innerText = field2Value;
                 document.getElementById('event-field3-display').innerText = field3Value;
+                document.getElementById('event-field4-display').innerText = field4Value;
+                document.getElementById('event-field5-display').innerText = field5Value;
                 // Hide input fields
                 document.getElementById('event-company-input').style.display = "none";
                 document.getElementById('event-field1-input').style.display = "none";
                 document.getElementById('event-field2-input').style.display = "none";
                 document.getElementById('event-field3-input').style.display = "none";
+                document.getElementById('event-field4-input').style.display = "none";
+                document.getElementById('event-field5-input').style.display = "none";
                 document.getElementById('add-field-button').innerText = "Modify Information"; // Reset button text
                 document.getElementById('confirm-update-button').style.display = "none"; // Hide confirm button
 
@@ -848,7 +884,9 @@
                         document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
                         document.getElementById('event-field1-display').innerText = process.field1 || "N/A"; // Set Field 1
                         document.getElementById('event-field2-display').innerText = process.field2 || "N/A"; // Set Field 2
-                        document.getElementById('event-field3-display').innerText = process.field3 || "N/A"; // Set Field 2
+                        document.getElementById('event-field3-display').innerText = process.field3 || "N/A"; // Set Field 3
+                        document.getElementById('event-field4-display').innerText = process.field4 || "N/A"; // Set Field 4
+                        document.getElementById('event-field5-display').innerText = process.field5 || "N/A"; // Set Field 5
     
                         // Show the event name box
                         document.getElementById('event-display').style.display = "block"; 
@@ -870,6 +908,8 @@
                         document.getElementById('event-field1-display').innerText = process.field1 || "N/A";
                         document.getElementById('event-field2-display').innerText = process.field2 || "N/A";
                         document.getElementById('event-field3-display').innerText = process.field3 || "N/A";
+                        document.getElementById('event-field4-display').innerText = process.field4 || "N/A";
+                        document.getElementById('event-field5-display').innerText = process.field5 || "N/A";
                         document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
                         document.getElementById('event-display').style.display = "block"; // Show the event name box
                     }
