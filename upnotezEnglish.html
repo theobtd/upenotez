@@ -43,24 +43,16 @@
             opacity: 0.8; /* Slightly transparent on hover */
         }
 
-        #profile-button {
-            width: 90px;
-            height: 50px
+        .info-box-button {
+            width: 90px;  /* Set a fixed width */
+            height: 50px; /* Set a fixed height */
             border-radius: 5px; /* Rounded corners */
             background-color: transparent; /* Common background color */
-            color: black;   /* Common text color */
-            border: 1px solid black;   /* Remove default border */
-            font-size: 15px;
-        }
-
-        #add-button {
-            width: 90px;
-            height: 50px
-            background-color: transparent;
-            color: black;
-            border: 1px solid black;
-            border-radius: 5px;
-            font-size: 15px;
+            color: black; /* Common text color */
+            border: 1px solid black; /* Uniform border */
+            font-size: 15px; /* Consistent font size */
+            cursor: pointer; /* Pointer cursor on hover */
+            margin: 5px; /* Add some margin for spacing */
         }
 
         #resize-handle {
@@ -348,8 +340,8 @@
         </button>
     <div id="info-box" style="margin-top: 20px;">
         <!-- Your info-box content here -->
-        <button id="profile-button">My Profile</button>
-        <button id="add-button">+</button>
+        <button id="profile-button" class="info-box-button">My Profile</button>
+        <button id="add-button" class="info-box-button">+</button>
         <div id="processes-list">
             <ul id="processes-ul"></ul>
         </div>
