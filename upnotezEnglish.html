@@ -281,6 +281,11 @@
         .delete-note:hover {
             opacity: 0.8; /* Slightly transparent on hover */
         }
+
+        .note-box span {
+            margin-top: 5px; /* Add space between title and date */
+            display: block; /* Make the date a block element */
+        }
     </style>
 </head>
 <body>
@@ -520,7 +525,18 @@
             notesArray.forEach(note => {
                 const noteBox = document.createElement('li');
                 noteBox.className = 'note-box';
-                noteBox.innerHTML = `<strong>${note.title}</strong><br>Date: ${note.date}`; // Use innerHTML for formatting
+            
+                // Create a title element
+                const titleElement = document.createElement('strong');
+                titleElement.innerText = note.title;
+            
+                // Create a date element
+                const dateElement = document.createElement('span');
+                dateElement.innerText = `Date: ${note.date}`;
+            
+                // Append the title and date to the note box
+                noteBox.appendChild(titleElement);
+                noteBox.appendChild(dateElement);
             
                 // Create the delete button
                 const deleteButton = document.createElement('button');
