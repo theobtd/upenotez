@@ -778,7 +778,7 @@
                                     // Add event listener to update the database when the checkbox state changes
                                     checkbox.addEventListener('change', (event) => {
                                         const isChecked = event.target.checked; // Get the checkbox state
-                                        const taskRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes/${note.id}/Tasks/${taskId}`);
+                                        const taskRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${note.id}/Tasks/${taskId}`);
                                         
                                         // Update the task in the database
                                         taskRef.update({ completed: isChecked })
