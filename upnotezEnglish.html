@@ -501,6 +501,14 @@
     function loadNotes(processId) {
         const user = auth.currentUser;
         const notesRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes`);
+
+        // Clear previous notes and keep message visible initially
+        const notesList = document.getElementById('notes-list');
+        notesList.innerHTML = ''; // Clear previous notes
+
+        // Show the no-notes-message initially
+        const noNotesMessage = document.getElementById('no-notes-message');
+        noNotesMessage.style.display = 'block'; // Ensure it's visible
     
         notesRef.on('value', (snapshot) => {
             const notes = snapshot.val();
@@ -525,10 +533,8 @@
             // Select the no-notes-message element
             const noNotesMessage = document.getElementById('no-notes-message');
 
-            if (notesArray.length === 0) {
-                // Show the no-notes-message if there are no notes
-                noNotesMessage.style.display = 'block';
-            } else {
+            if (notesArray.length > 0) {
+                noNotesMessage.style.display = 'none'; // Hide the message
                 notesArray.forEach(note => {
                     const noteBox = document.createElement('li');
                     noteBox.className = 'note-box';
