@@ -549,6 +549,16 @@
                     infoButton.className = 'info-button';
                     infoButton.textContent = 'i'; // Set text for the info button
                     infoButton.style.marginLeft = '1px'; // Add some spacing
+
+                    // Add click event to open the event-display
+                    infoButton.onclick = () => {
+                        currentProcessId = process.id; // Set current process ID
+                        document.getElementById('event-name-title').innerText = process.name; // Set title
+                        document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
+                        document.getElementById('event-field1-display').innerText = process.field1 || "N/A"; // Set Field 1
+                        document.getElementById('event-field2-display').innerText = process.field2 || "N/A"; // Set Field 2
+                        document.getElementById('event-display').style.display = "block"; // Show the event display
+                    };
                     
                     li.appendChild(deleteButton);
                     li.appendChild(infoButton);
