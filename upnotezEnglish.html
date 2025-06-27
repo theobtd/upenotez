@@ -300,13 +300,29 @@
         .common-button:hover {
             opacity: 0.8; /* Slightly transparent on hover */
         }
+
+        #button-container {
+            background-color: #f0f0f0; /* Light gray background */
+            padding: 20px; /* Add some padding */
+            border: 1px solid #888; /* Border for visibility */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+            display: flex; /* Flexbox for layout */
+            justify-content: center; /* Center items horizontally */
+            align-items: center; /* Center items vertically */
+        }
     </style>
 </head>
 <body>
 
-<button id="create-note-button" class="common-button" style="margin: 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 18px;">
-    Create Note
-</button>
+<div id="button-container" style="display: flex; justify-content: center; margin: 20px;">
+    <button id="create-note-button" class="common-button">
+        Create Note
+    </button>
+    <button id="toggle-event-display" class="common-button" style="margin-left: 10px;">
+        View Details
+    </button>
+</div>
 
 <div id="info-box">
     <button id="profile-button">My Profile</button>
@@ -339,9 +355,6 @@
 </div>
 
 <!-- Event Name Display Box -->
-<button id="toggle-event-display" class="common-button" style="margin-bottom: 10px;">
-    View Details
-</button>
 <div id="event-display">
     <h2 id="event-name-title">Event Name</h2>
     <p><strong>Company:</strong> <span id="event-company-display"></span></p>
