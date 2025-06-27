@@ -541,18 +541,9 @@
                 textBox.placeholder = 'Add your notes here...'; // Optional placeholder
                 textBox.value = note.content; // Set existing content
     
-                // Debounce function to limit the rate of updates
-                const debounce = (func, delay) => {
-                    let timeout;
-                    return function(...args) {
-                        clearTimeout(timeout);
-                        timeout = setTimeout(() => func.apply(this, args), delay);
-                    };
-                };
-    
                 // Keep track of the last saved content
                 let lastSavedContent = textBox.value;
-                
+
                 // Update function for saving content
                 const updateContent = (content) => {
                     if (content !== lastSavedContent) {
@@ -566,16 +557,23 @@
                             });
                     }
                 };
-    
-                // Attach event listener to the text box for real-time updates
-                textBox.addEventListener('input', () => {
-                    updateContent(textBox.value); // Update content as user types
-                });
-                
-                // Optional: Save content when the textbox loses focus
-                textBox.addEventListener('blur', () => {
-                    updateContent(textBox.value); // Final save on blur
-                });
+
+                // Create the Save button
+                const saveButton = document.createElement('button');
+                saveButton.className = 'save-note';
+                saveButton.innerText = 'Save';
+                saveButton.style.marginTop = '10px'; // Add margin
+            
+                // Save button functionality
+                saveButton.onclick = function() {
+                    updateContent(textBox.value); // Save the current content when clicked
+                };
+            
+                // Append the title, date, text box, and save button to the note box
+                noteBox.appendChild(titleElement);
+                noteBox.appendChild(dateElement);
+                noteBox.appendChild(textBox); // Add the text box here
+                noteBox.appendChild(saveButton); // Add the save button here
     
                 // Append the title, date, and text box to the note box
                 noteBox.appendChild(titleElement);
