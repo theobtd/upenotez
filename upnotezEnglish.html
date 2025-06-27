@@ -790,6 +790,9 @@
                                             });
                                     });
 
+                                    // Set task text based on the child property
+                                    const taskText = document.createTextNode(tasks[taskId].name); // Accessing the name property
+
                                     taskItem.innerText = tasks[taskId];
                                     taskItem.appendChild(checkbox);
                                     
@@ -1133,6 +1136,7 @@
                 title: noteTitle,
                 date: noteDate,
                 createdAt: new Date().toISOString() // Timestamp for when the note was created
+                Tasks: {} // Initialize an empty object for tasks
             };
     
             // Set the new note in the database
