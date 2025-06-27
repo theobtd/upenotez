@@ -511,7 +511,8 @@
                     notesArray.push({
                         id: key,
                         title: notes[key].title,
-                        date: notes[key].date
+                        date: notes[key].date,
+                        content: notes[key].content || "" // Get existing content or default to empty
                     });
                 }
             }
@@ -538,6 +539,19 @@
                 textBox.style.width = '180px'; // Set width to 180px
                 textBox.style.height = '30vh'; // Set height to 30vh
                 textBox.placeholder = 'Add your notes here...'; // Optional placeholder
+                textBox.value = note.content; // Set existing content
+    
+                // Event listener to save content automatically
+                textBox.addEventListener('input', () => {
+                    const content = textBox.value;
+                    notesRef.child(note.id).update({ content: content }) // Update the note content in the database
+                        .then(() => {
+                            console.log("Note content saved successfully.");
+                        })
+                        .catch((error) => {
+                            console.error("Error saving note content:", error);
+                        });
+                });
     
                 // Append the title, date, and text box to the note box
                 noteBox.appendChild(titleElement);
