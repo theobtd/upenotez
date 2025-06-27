@@ -617,6 +617,19 @@
         });
     }
 
+    function updateContent(content, noteId) {
+        const user = auth.currentUser;
+        const notesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}`);
+        
+        notesRef.update({ content: content })
+            .then(() => {
+                console.log("Note content saved successfully.");
+            })
+            .catch((error) => {
+                console.error("Error saving note content:", error);
+            });
+    }
+
     document.getElementById('confirm-yes').onclick = function() {
         const user = auth.currentUser;
         const processesRef = database.ref('users/' + user.uid + '/Processes');
