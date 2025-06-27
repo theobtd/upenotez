@@ -526,6 +526,7 @@
                 processesArray.forEach(process => {
                     const li = document.createElement('li');
                     li.className = 'process-item';
+                    li.setAttribute('data-id', process.id); // Add this line
                     li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
 
                     li.onclick = () => {
@@ -760,10 +761,16 @@
                 localStorage.setItem('newEventId', eventId);
                 localStorage.setItem('currentProcessId', eventId); // Store currentProcessId as well
                 loadProcesses();
+
+                // After loading processes, select the new event
+                loadProcesses().then(() => {
+                    const listItem = document.querySelector(`.process-item[data-id="${eventId}"]`);
+                    if (listItem) {
+                        listItem.click(); // Simulate click on the new process
+                    }
+                });
+                
                 document.getElementById('confirm-modal').style.display = "none";
-    
-                // Refresh the page
-                // location.reload(); // This will refresh the page
             })
             .catch((error) => {
                 console.error("Error adding new event: ", error);
