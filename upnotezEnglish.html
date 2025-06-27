@@ -253,6 +253,10 @@
             margin: 10px; /* Space between notes */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Optional: shadow for depth */
             flex-shrink: 0; /* Prevent boxes from shrinking */
+            display: flex; /* Use flexbox */
+            flex-direction: column; /* Stack items vertically */
+            justify-content: space-between; /* Space out items */
+            padding: 10px; /* Add padding */
         }
 
         #notes-container {
@@ -269,8 +273,9 @@
             border-radius: 5px; /* Rounded corners */
             padding: 8px; /* Padding for spacing */
             cursor: pointer; /* Pointer cursor on hover */
-            margin-top: 10px; /* Space above the button */
             display: inline-block; /* Make it inline-block */
+            align-self: center; /* Center the button horizontally */
+            margin-top: auto; /* Push the button to the bottom */
         }
         
         .delete-note:hover {
@@ -515,14 +520,14 @@
             notesArray.forEach(note => {
                 const noteBox = document.createElement('li');
                 noteBox.className = 'note-box';
-                noteBox.innerText = `${note.title}\nDate: ${note.date}`;
-    
-                // Create the delete button with the new class name
+                noteBox.innerHTML = `<strong>${note.title}</strong><br>Date: ${note.date}`; // Use innerHTML for formatting
+            
+                // Create the delete button
                 const deleteButton = document.createElement('button');
-                deleteButton.className = 'delete-note'; // Change here
+                deleteButton.className = 'delete-note'; 
                 deleteButton.innerText = 'Delete';
                 deleteButton.style.marginTop = '10px'; // Add margin
-    
+            
                 // Append the delete button to the note box
                 noteBox.appendChild(deleteButton);
                 notesList.appendChild(noteBox);
