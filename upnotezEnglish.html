@@ -894,7 +894,7 @@
                 document.getElementById('confirm-update-button').style.display = "none"; // Hide confirm button
 
                 localStorage.setItem('currentProcessId', currentProcessId);
-                location.reload(); // This will refresh the page
+                // location.reload(); // This will refresh the page
             })
             .catch((error) => {
                 console.error("Error updating fields: ", error);
