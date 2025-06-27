@@ -555,6 +555,7 @@
                     notesRef.child(note.id).update({ content: content }) // Update the note content in the database
                         .then(() => {
                             console.log("Note content saved successfully.");
+                            textBox.focus(); // Regain focus after saving
                         })
                         .catch((error) => {
                             console.error("Error saving note content:", error);
