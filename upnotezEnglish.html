@@ -497,22 +497,26 @@
             notesArray.sort((a, b) => new Date(b.date) - new Date(a.date));
     
             const notesList = document.getElementById('notes-list');
-            const noNotesMessage = document.getElementById('no-notes-message');
             notesList.innerHTML = ''; // Clear existing notes
     
-            // Show or hide the message based on notes count
-            if (notesArray.length === 0) {
-                noNotesMessage.style.display = 'block'; // Show message
-            } else {
-                noNotesMessage.style.display = 'none'; // Hide message
-                // Display sorted notes
-                notesArray.forEach(note => {
-                    const noteBox = document.createElement('li');
-                    noteBox.className = 'note-box';
-                    noteBox.innerText = `${note.title}\nDate: ${note.date}`; // Display note title and date
-                    notesList.appendChild(noteBox);
-                });
-            }
+            // Display sorted notes
+            notesArray.forEach(note => {
+                const noteBox = document.createElement('li');
+                noteBox.className = 'note-box';
+                noteBox.innerText = `${note.title}\nDate: ${note.date}`; // Display note title and date
+                
+                // Create the delete button
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'delete-button';
+                deleteButton.style.backgroundColor = 'red';
+                deleteButton.style.color = 'white';
+                deleteButton.innerText = 'Delete';
+                deleteButton.style.marginTop = '10px'; // Add some margin
+                
+                // Append the delete button to the note box
+                noteBox.appendChild(deleteButton);
+                notesList.appendChild(noteBox);
+            });
         });
     }
 
