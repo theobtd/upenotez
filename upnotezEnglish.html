@@ -551,7 +551,9 @@
                     infoButton.style.marginLeft = '1px'; // Add some spacing
 
                     // Add click event to open the event-display
-                    infoButton.onclick = () => {
+                    infoButton.onclick = (event) => {
+                        event.stopPropagation(); // Prevent the click from bubbling up to the li
+                    
                         currentProcessId = process.id; // Set current process ID
                         document.getElementById('event-name-title').innerText = process.name; // Set title
                         document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
