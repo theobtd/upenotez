@@ -553,33 +553,27 @@
                     textBox.style.height = '30vh'; // Set height to 30vh
                     textBox.placeholder = 'Add your notes here...'; // Optional placeholder
                     textBox.value = note.content; // Set existing content
-        
-                    // Keep track of the last saved content
+
                     let lastSavedContent = textBox.value;
-    
-                    // Update function for saving content
-                    const updateContent = (content) => {
-                        if (content !== lastSavedContent) {
-                            notesRef.child(note.id).update({ content: content })
-                                .then(() => {
-                                    console.log("Note content saved successfully.");
-                                    lastSavedContent = content; // Update the last saved content
-                                })
-                                .catch((error) => {
-                                    console.error("Error saving note content:", error);
-                                });
-                        }
-                    };
+                    let hasUnsavedChanges = false; // Track unsaved changes
+
+                    textBox.addEventListener('input', () => {
+                        hasUnsavedChanges = textBox.value !== lastSavedContent; // Check for changes
+                        saveButton.style.backgroundColor = hasUnsavedChanges ? 'orange' : 'green'; // Change color
+                    });
     
                     // Create the Save button
                     const saveButton = document.createElement('button');
                     saveButton.className = 'save-note';
                     saveButton.innerText = 'Save';
                     saveButton.style.marginTop = '10px'; // Add margin
-                
-                    // Save button functionality
+                    saveButton.style.backgroundColor = 'green'; // Default color
+
                     saveButton.onclick = function() {
-                        updateContent(textBox.value); // Save the current content when clicked
+                        updateContent(textBox.value); // Save the current content
+                        lastSavedContent = textBox.value; // Update last saved content
+                        hasUnsavedChanges = false; // Reset change tracking
+                        saveButton.style.backgroundColor = 'green'; // Reset button color
                     };
                 
                     // Append the title, date, text box, and save button to the note box
