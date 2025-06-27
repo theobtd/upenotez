@@ -761,7 +761,15 @@
                             for (const taskId in tasks) {
                                 if (tasks.hasOwnProperty(taskId)) {
                                     const taskItem = document.createElement('li');
+
+                                    // Create a checkbox
+                                    const checkbox = document.createElement('input');
+                                    checkbox.type = 'checkbox'; // Set type to checkbox
+                                    checkbox.style.marginRight = '10px'; // Add some space between checkbox and text
+
                                     taskItem.innerText = tasks[taskId];
+                                    taskItem.appendChild(checkbox);
+                                    
                                     tasksList.appendChild(taskItem); // Add task to the list
                                 }
                             }
