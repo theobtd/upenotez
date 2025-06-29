@@ -827,12 +827,12 @@
             newEventRef.set({ 
                 eventId: eventId, 
                 name: eventName,
-                company: "", // Add the Company field as an empty string
-                field1: "", // New Field 1
-                field2: "",  // New Field 2
-                field3: "", // New Field 3
-                field4: "", // New Field 4
-                field5: "" // New Field 5
+                company: companyValue, // Add the Company field as an empty string
+                field1: field1Value, // New Field 1
+                field2: field2Value,  // New Field 2
+                field3: field3Value, // New Field 3
+                field4: field4Value, // New Field 4
+                field5: field5Value // New Field 5
             })
             .then(() => {
                 // Store the new event ID in local storage
