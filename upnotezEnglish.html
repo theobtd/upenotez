@@ -762,36 +762,10 @@
                                 if (tasks.hasOwnProperty(taskId)) {
                                     const taskItem = document.createElement('li');
 
-                                    // Set display to flex for horizontal alignment
-                                    taskItem.style.display = 'flex';
-                                    taskItem.style.alignItems = 'center'; // Center items vertically
-                                    taskItem.style.marginBottom = '5px'; // Optional: Add some spacing between tasks
-
                                     // Create a checkbox
                                     const checkbox = document.createElement('input');
                                     checkbox.type = 'checkbox'; // Set type to checkbox
-                                    checkbox.style.marginRight = '5px'; // Add some space between checkbox and text
-
-                                    // Set the checkbox state based on the task data (assumed to be a boolean)
-                                    checkbox.checked = tasks[taskId].completed || false; // Adjust this as necessary
-
-                                    // Add event listener to update the database when the checkbox state changes
-                                    checkbox.addEventListener('change', (event) => {
-                                        const isChecked = event.target.checked; // Get the checkbox state
-                                        const taskRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes/${note.id}/Tasks/${taskId}`);
-                                        
-                                        // Update the task in the database
-                                        taskRef.update({ completed: isChecked })
-                                            .then(() => {
-                                                console.log(`Task ${taskId} updated to ${isChecked}`);
-                                            })
-                                            .catch((error) => {
-                                                console.error("Error updating task:", error);
-                                            });
-                                    });
-
-                                    // Set task text based on the child property
-                                    const taskText = document.createTextNode(tasks[taskId].name); // Accessing the name property
+                                    checkbox.style.marginRight = '10px'; // Add some space between checkbox and text
 
                                     taskItem.innerText = tasks[taskId];
                                     taskItem.appendChild(checkbox);
@@ -1135,8 +1109,7 @@
             const noteData = {
                 title: noteTitle,
                 date: noteDate,
-                createdAt: new Date().toISOString(), // Timestamp for when the note was created
-                Tasks: {} // Initialize an empty object for tasks
+                createdAt: new Date().toISOString() // Timestamp for when the note was created
             };
     
             // Set the new note in the database
@@ -1169,19 +1142,30 @@
             const noteId = this.getAttribute('data-note-id'); // Get the note ID
             const tasksRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Tasks`);
     
-            // Create a new task with a unique ID and store the name as a child
-            const newTaskRef = tasksRef.push(); // Generate a new unique key for the task
-            newTaskRef.set({
-                name: taskName, // Store the task name as a child property
-                completed: false // Initialize the completed status
-            })
-            .then(() => {
-                console.log("Task added successfully.");
-                document.getElementById('task-modal').style.display = "none"; // Hide the modal
-                document.getElementById('task-name').value = ""; // Clear input
-            })
-            .catch((error) => {
-                console.error("Error adding task:", error);
+            tasksRef.once('value', (snapshot) => {
+                if (!snapshot.exists()) {
+                    // If no Tasks path exists, create it
+                    tasksRef.set({ [Date.now()]: taskName }) // Use timestamp as unique key
+                        .then(() => {
+                            console.log("Task added successfully.");
+                            document.getElementById('task-modal').style.display = "none"; // Hide the modal
+                            document.getElementById('task-name').value = ""; // Clear input
+                        })
+                        .catch((error) => {
+                            console.error("Error adding task:", error);
+                        });
+                } else {
+                    // If Tasks path exists, add a new task under it
+                    tasksRef.child(Date.now()).set(taskName) // Use timestamp as unique key
+                        .then(() => {
+                            console.log("Task added successfully.");
+                            document.getElementById('task-modal').style.display = "none"; // Hide the modal
+                            document.getElementById('task-name').value = ""; // Clear input
+                        })
+                        .catch((error) => {
+                            console.error("Error adding task:", error);
+                        });
+                }
             });
         } else {
             console.log("No user is logged in or no note selected.");
