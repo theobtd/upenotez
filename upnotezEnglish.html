@@ -765,13 +765,13 @@
                                     // Set display to flex for horizontal alignment
                                     taskItem.style.display = 'flex';
                                     taskItem.style.alignItems = 'flex-start'; // Align items to the left
-                                    taskItem.style.marginBottom = '5px'; // Optional: Add some spacing between tasks
+                                    taskItem.style.marginBottom = '1px'; // Optional: Add some spacing between tasks
                                     taskItem.style.width = '100%'; // Ensure it takes full width
 
                                     // Create a checkbox
                                     const checkbox = document.createElement('input');
                                     checkbox.type = 'checkbox'; // Set type to checkbox
-                                    checkbox.style.marginRight = '0px'; // Add some space between checkbox and text
+                                    checkbox.style.marginRight = '1px'; // Add some space between checkbox and text
 
                                     // Set the checkbox state based on the task data (assumed to be a boolean)
                                     checkbox.checked = tasks[taskId].completed || false; // Adjust this as necessary
