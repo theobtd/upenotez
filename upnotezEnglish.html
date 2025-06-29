@@ -750,7 +750,8 @@
                     tasksList.style.listStyleType = 'none'; // Remove bullets
                     tasksList.style.padding = '0'; // Remove padding
                     tasksList.style.margin = '0'; // Remove margin
-                    tasksList.style.width = '100%'; // Set a width less than the container
+                    tasksList.style.width = '90%'; // Set a width less than the container
+                    tasksList.style.marginRight = '40%'; // Center it to the left
 
                     // Fetch tasks for the current note
                     const tasksRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes/${note.id}/Tasks`);
@@ -763,13 +764,13 @@
 
                                     // Set display to flex for horizontal alignment
                                     taskItem.style.display = 'flex';
-                                    taskItem.style.justifyContent = 'space-between'; // Align items to the left
-                                    taskItem.style.marginBottom = '1px'; // Optional: Add some spacing between tasks
-                                    taskItem.style.width = '100%'; // Ensure it takes full width
+                                    taskItem.style.alignItems = 'center'; // Center items vertically
+                                    taskItem.style.marginBottom = '5px'; // Optional: Add some spacing between tasks
 
                                     // Create a checkbox
                                     const checkbox = document.createElement('input');
                                     checkbox.type = 'checkbox'; // Set type to checkbox
+                                    checkbox.style.marginRight = '5px'; // Add some space between checkbox and text
 
                                     // Set the checkbox state based on the task data (assumed to be a boolean)
                                     checkbox.checked = tasks[taskId].completed || false; // Adjust this as necessary
@@ -777,7 +778,7 @@
                                     // Add event listener to update the database when the checkbox state changes
                                     checkbox.addEventListener('change', (event) => {
                                         const isChecked = event.target.checked; // Get the checkbox state
-                                        const taskRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${note.id}/Tasks/${taskId}`);
+                                        const taskRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes/${note.id}/Tasks/${taskId}`);
                                         
                                         // Update the task in the database
                                         taskRef.update({ completed: isChecked })
@@ -792,8 +793,8 @@
                                     // Set task text based on the child property
                                     const taskText = document.createTextNode(tasks[taskId].name); // Accessing the name property
 
-                                    taskItem.appendChild(taskText);
-                                    // taskItem.appendChild(checkbox);
+                                    taskItem.innerText = tasks[taskId];
+                                    taskItem.appendChild(checkbox);
                                     
                                     tasksList.appendChild(taskItem); // Add task to the list
                                 }
