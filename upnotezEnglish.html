@@ -751,7 +751,7 @@
                     tasksList.style.padding = '0'; // Remove padding
                     tasksList.style.margin = '0'; // Remove margin
                     tasksList.style.width = '90%'; // Set a width less than the container
-                    tasksList.style.marginRight = '40%'; // Center it to the left
+                    tasksList.style.marginLeft = '40%'; // Center it to the left
 
                     // Fetch tasks for the current note
                     const tasksRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes/${note.id}/Tasks`);
@@ -761,15 +761,7 @@
                             for (const taskId in tasks) {
                                 if (tasks.hasOwnProperty(taskId)) {
                                     const taskItem = document.createElement('li');
-
-                                    // Create a checkbox
-                                    const checkbox = document.createElement('input');
-                                    checkbox.type = 'checkbox'; // Set type to checkbox
-                                    checkbox.style.marginRight = '10px'; // Add some space between checkbox and text
-
                                     taskItem.innerText = tasks[taskId];
-                                    taskItem.appendChild(checkbox);
-                                    
                                     tasksList.appendChild(taskItem); // Add task to the list
                                 }
                             }
