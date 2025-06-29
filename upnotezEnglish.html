@@ -750,8 +750,7 @@
                     tasksList.style.listStyleType = 'none'; // Remove bullets
                     tasksList.style.padding = '0'; // Remove padding
                     tasksList.style.margin = '0'; // Remove margin
-                    tasksList.style.width = '90%'; // Set a width less than the container
-                    tasksList.style.textAlign = 'left'; // Align text to the left
+                    tasksList.style.width = '100%'; // Set a width less than the container
 
                     // Fetch tasks for the current note
                     const tasksRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes/${note.id}/Tasks`);
@@ -771,7 +770,6 @@
                                     // Create a checkbox
                                     const checkbox = document.createElement('input');
                                     checkbox.type = 'checkbox'; // Set type to checkbox
-                                    checkbox.style.margin = '0'; // Remove default margin
 
                                     // Set the checkbox state based on the task data (assumed to be a boolean)
                                     checkbox.checked = tasks[taskId].completed || false; // Adjust this as necessary
