@@ -737,6 +737,10 @@
                     tasksContainer.style.border = '1px solid #ccc';
                     tasksContainer.style.display = 'none';
 
+                    // Append to note box
+                    noteBox.appendChild(tasksButton);
+                    noteBox.appendChild(tasksContainer);
+
                     tasksButton.onclick = function() {
                         const noteId = note.id; // Get the note ID
                         const tasksRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Tasks`);
