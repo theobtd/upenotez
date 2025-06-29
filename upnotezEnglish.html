@@ -751,7 +751,7 @@
                     tasksList.style.padding = '0'; // Remove padding
                     tasksList.style.margin = '0'; // Remove margin
                     tasksList.style.width = '90%'; // Set a width less than the container
-                    tasksList.style.marginRight = '40%'; // Center it to the left
+                    tasksList.style.textAlign = 'left'; // Align text to the left
 
                     // Fetch tasks for the current note
                     const tasksRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes/${note.id}/Tasks`);
@@ -766,6 +766,7 @@
                                     taskItem.style.display = 'flex';
                                     taskItem.style.alignItems = 'center'; // Center items vertically
                                     taskItem.style.marginBottom = '5px'; // Optional: Add some spacing between tasks
+                                    taskItem.style.width = '100%'; // Ensure it takes full width
 
                                     // Create a checkbox
                                     const checkbox = document.createElement('input');
