@@ -728,13 +728,46 @@
                     tasksButton.className = 'tasks-button'; // Add a class for styling
                     tasksButton.style.width = '100%'; // Set width to 100% to match the text box
 
-                    // Add event listener for the Tasks button
-                    tasksButton.onclick = function() {
-                        document.getElementById('task-modal').style.display = "block"; // Show the task modal
+                    // Create the tasks container
+                    const tasksContainer = document.createElement('div');
+                    tasksContainer.className = 'tasks-container';
+                    tasksContainer.style.width = '100%';
+                    tasksContainer.style.height = '100px';
+                    tasksContainer.style.overflowY = 'auto';
+                    tasksContainer.style.border = '1px solid #ccc';
+                    tasksContainer.style.display = 'none';
 
-                        // Store the current note ID in a variable
-                        document.getElementById('confirm-task-button').setAttribute('data-note-id', note.id);
+                    tasksButton.onclick = function() {
+                        const noteId = note.id; // Get the note ID
+                        const tasksRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Tasks`);
+                    
+                        tasksRef.once('value', (snapshot) => {
+                            tasksContainer.innerHTML = ''; // Clear previous tasks
+                            const tasks = snapshot.val();
+                    
+                            if (tasks) {
+                                Object.keys(tasks).forEach(taskId => {
+                                    const taskItem = document.createElement('div');
+                                    taskItem.innerText = tasks[taskId]; // Display task text
+                                    tasksContainer.appendChild(taskItem);
+                                });
+                            } else {
+                                tasksContainer.innerText = 'No tasks available.'; // Message if no tasks
+                            }
+                    
+                            // Show or hide the tasks container
+                            tasksContainer.style.display = tasksContainer.style.display === 'none' ? 'block' : 'none';
+                        });
                     };
+
+                    // Create a container for tasks
+                    const tasksContainer = document.createElement('div');
+                    tasksContainer.className = 'tasks-container';
+                    tasksContainer.style.width = '100%'; // Set width to match tasksButton
+                    tasksContainer.style.height = '100px'; // Set height
+                    tasksContainer.style.overflowY = 'auto'; // Allow scrolling if tasks overflow
+                    tasksContainer.style.border = '1px solid #ccc'; // Optional border for visibility
+                    tasksContainer.style.display = 'none'; // Initially hidden
 
     
                     // Create the Save button
@@ -761,6 +794,7 @@
                     noteBox.appendChild(dateElement);
                     noteBox.appendChild(textBox); // Add the text box here
                     noteBox.appendChild(tasksButton); // Add the Tasks button here
+                    noteBox.appendChild(tasksContainer);
                     noteBox.appendChild(saveButton);
                     notesList.appendChild(noteBox);
         
