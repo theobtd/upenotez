@@ -379,6 +379,8 @@
             background-color: #d3d3d3; /* Default color */
             border: 1px solid black; /* Thin black border */
             border-radius: 5px; /* Rounded corners */
+            width: 100px; /* Set the width */
+            height: 40px; /* Set the height */
         }
     </style>
 </head>
@@ -760,10 +762,6 @@
                     const saveButton = document.createElement('button');
                     saveButton.className = 'save-note';
                     saveButton.innerText = 'Save';
-                    saveButton.style.marginTop = '10px'; // Add margin
-                    saveButton.style.backgroundColor = '#d3d3d3'; // Default color
-                    saveButton.style.border = '1px solid black'; // Thin black border
-                    saveButton.style.borderRadius = '5px'; // Rounded corners
                     saveButton.style.zIndex = '5'; // Set z-index to 5
 
                     saveButton.onclick = function() {
