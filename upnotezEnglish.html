@@ -296,6 +296,7 @@
             padding: 10px; /* Add padding */
             border-radius: 8px; /* Rounded corners */
             align-items: center; /* Center items horizontally */
+            position: relative; /* Position relative for absolute positioning of children */
         }
 
         #notes-container {
@@ -371,8 +372,12 @@
         }
 
         .save-note {
-            margin-top: 20px; /* Pushes it to the bottom of the noteBox */
-            align-self: center;
+            position: absolute; /* Position the button absolutely */
+            bottom: 10px; /* Distance from the bottom of the noteBox */
+            right: 10px; /* Distance from the right side */
+            background-color: #d3d3d3; /* Default color */
+            border: 1px solid black; /* Thin black border */
+            border-radius: 5px; /* Rounded corners */
         }
     </style>
 </head>
