@@ -369,11 +369,6 @@
             float: right;
             font-size: 18px;
         }
-
-        .note-box {
-            /* existing styles */
-            position: relative; /* Ensure the note box can position children properly */
-        }
     </style>
 </head>
 <body>
@@ -719,14 +714,10 @@
                     // Create a date element
                     const dateElement = document.createElement('span');
                     dateElement.innerText = `Date: ${note.date}`;
-
-                    // Create a container for the text box and save button
-                    const textBoxContainer = document.createElement('div');
-                    textBoxContainer.style.position = 'relative'; // Set position to relative for absolute positioning inside
         
                     // Create a text box
                     const textBox = document.createElement('textarea');
-                    textBox.style.width = '375px'; // Set width to 375px
+                    textBox.style.width = '375px'; // Set width to 200px
                     textBox.style.height = '70vh'; // Set height to 70vh
                     textBox.placeholder = 'Add your notes here...'; // Optional placeholder
                     textBox.value = note.content; // Set existing content
@@ -758,11 +749,11 @@
                     const saveButton = document.createElement('button');
                     saveButton.className = 'save-note';
                     saveButton.innerText = 'Save';
-                    saveButton.style.position = 'absolute'; // Set position to absolute
-                    saveButton.style.bottom = '10px'; // Align to the bottom
-                    saveButton.style.left = '50%'; // Center horizontally
-                    saveButton.style.transform = 'translateX(-50%)'; // Adjust for centering
-                    saveButton.style.zIndex = '5'; // Ensure it appears above other elements
+                    saveButton.style.marginTop = '10px'; // Add margin
+                    saveButton.style.backgroundColor = '#d3d3d3'; // Default color
+                    saveButton.style.border = '1px solid black'; // Thin black border
+                    saveButton.style.borderRadius = '5px'; // Rounded corners
+                    saveButton.style.zIndex = '5'; // Set z-index to 5
 
                     saveButton.onclick = function() {
                         const newContent = textBox.value; // Get new content
@@ -773,16 +764,13 @@
                         saveButton.style.width = '70px'; // Set width
                         saveButton.style.height = '30px'; // Set height
                     };
-
-                    // Append the text box and save button to the container
-                    textBoxContainer.appendChild(textBox);
-                    textBoxContainer.appendChild(saveButton);
-                    
+                
                     // Append the title, date, text box, and save button to the note box
                     noteBox.appendChild(titleElement);
                     noteBox.appendChild(dateElement);
-                    noteBox.appendChild(textBoxContainer); // Add the text box container here
+                    noteBox.appendChild(textBox); // Add the text box here
                     // noteBox.appendChild(tasksButton);
+                    noteBox.appendChild(saveButton);
                     notesList.appendChild(noteBox);
         
                     // Create the delete button
