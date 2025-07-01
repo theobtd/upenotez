@@ -579,12 +579,6 @@
     
                     const processesUl = document.getElementById('processes-ul');
                     processesUl.innerHTML = '';
-
-                    if (processesArray.length === 0) {
-                        document.getElementById('no-process-message').style.display = "block"; // Show message if no processes
-                    } else {
-                        document.getElementById('no-process-message').style.display = "none"; // Hide message if processes exist
-                    }
     
                     processesArray.forEach(process => {
                         const li = document.createElement('li');
