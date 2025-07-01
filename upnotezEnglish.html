@@ -17,8 +17,8 @@
             transform: translateY(-50%);
             width: 15%;
             height: 75%;
-            background-color: #fefefe;
-            border: transparent;
+            background-color: transparent;
+            border: 2px solid black;
             border-radius: 8px; /* Rounded corners */
             padding: 10px;
             overflow: hidden;
@@ -34,8 +34,8 @@
             font-size: 18px; /* Ensure font size is consistent */
             border: 2px solid black;   /* Remove default border */
             border-radius: 5px; /* Rounded corners */
-            background-color: #000000; /* Common background color */
-            color: #FFFFFF;   /* Common text color */
+            background-color: transparent; /* Common background color */
+            color: black;   /* Common text color */
             cursor: pointer; /* Pointer cursor for button */
         }
         
@@ -44,9 +44,6 @@
         }
 
         .info-box-button {
-            position: absolute;
-            left: 2%;
-            top: 90%
             width: 90px;  /* Set a fixed width */
             height: 40px; /* Set a fixed height */
             border-radius: 5px; /* Rounded corners */
@@ -405,21 +402,19 @@
     View Details
 </button>
 
-<div id="main-container" style="display: flex; flex-direction: column; align-items: center; height: 50vh; margin: 20px;">
-    <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; width: 100%;">
-        <div id="info-box" style="margin-top: 20px;">
-            <div id="processes-list">
-                <ul id="processes-ul"></ul>
-            </div>
+<div id="main-container" style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
+        <button id="create-note-button" class="common-button">
+            Create Note
+        </button>
+    <div id="info-box" style="margin-top: 20px;">
+        <!-- Your info-box content here -->
+        <button id="profile-button" class="info-box-button">My Profile</button>
+        <button id="add-button" class="info-box-button">+</button>
+        <div id="processes-list">
+            <ul id="processes-ul"></ul>
         </div>
-        <div style="text-align: center; margin-bottom: 10px;">
-            <button id="profile-button" class="info-box-button">My Profile</button>
-            <button id="add-button" class="info-box-button">+</button>
-        </div>
+        <div id="resize-handle"></div>
     </div>
-    <button id="create-note-button" class="common-button" style="margin-bottom: 10px;">
-        Create Note
-    </button>
 </div>
 
 <div id="profile-modal">
