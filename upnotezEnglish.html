@@ -644,7 +644,7 @@
                             event.stopPropagation(); // Prevent the click from bubbling up to the li
                             currentAction = 'delete';
                             currentProcessId = process.id;
-                            const confirmDelete = confirm(`Are you sure you want to delete process ${process.name || process.eventId}?`);
+                            const confirmDelete = confirm(`Are you sure you want to delete ${process.name || process.eventId}?`);
                             if (confirmDelete) {
                                 processesRef.child(currentProcessId).remove()
                                     .then(() => loadProcesses())
