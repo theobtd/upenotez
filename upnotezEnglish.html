@@ -170,6 +170,15 @@
             display: inline-block; /* Show on hover */
         }
 
+        .button-container {
+            display: flex; /* Use flexbox for alignment */
+            align-items: right; /* Center items vertically */
+        }
+        
+        .delete-button, .info-button {
+            margin-left: 5px; /* Add a 5px gap between the buttons */
+        }
+
         /* Event Name Box */
         #event-display {
             display: none; /* Hidden by default */
@@ -634,7 +643,10 @@
                             // Load notes for the selected process
                             loadNotes(currentProcessId);
                         };
-    
+
+                        const buttonContainer = document.createElement('div');
+                        buttonContainer.className = 'button-container'; // Create a container for the buttons
+                        
                         const deleteButton = document.createElement('button');
                         deleteButton.className = 'delete-button';
                         deleteButton.textContent = '-';
@@ -673,10 +685,12 @@
                             document.getElementById('event-display').style.display = "block"; // Show the event display
                         };
                         
-                        li.appendChild(deleteButton);
-                        li.appendChild(infoButton);
-    
-                        processesUl.appendChild(li);
+                        // Append buttons to the container
+                        buttonContainer.appendChild(deleteButton);
+                        buttonContainer.appendChild(infoButton);
+
+                        // Append the button container to the list item
+                        li.appendChild(buttonContainer);
                     });
                     
                     resolve(); // Resolve the promise after loading processes
