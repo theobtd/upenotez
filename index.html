@@ -24,6 +24,7 @@
 
 <h1 id="title">Create Account</h1>
 <form id="signup-form">
+    <input type="text" id="name" placeholder="Name" required>
     <input type="email" id="email" placeholder="Email" required>
     <input type="email" id="confirm-email" placeholder="Confirm Email" required>
     <input type="password" id="password" placeholder="Password" required>
@@ -98,6 +99,7 @@
     document.getElementById('signup-form').addEventListener('submit', function(event) {
         event.preventDefault();
         
+        const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
         const confirmEmail = document.getElementById('confirm-email').value;
         const password = document.getElementById('password').value;
@@ -116,6 +118,7 @@
             .then((userCredential) => {
                 const user = userCredential.user;
                 return database.ref('users/' + user.uid).set({
+                    name: name,
                     email: user.email,
                     companyName: companyName,
                     city: city,
