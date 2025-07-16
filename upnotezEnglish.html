@@ -139,6 +139,23 @@
             font-weight: bold; /* Optional: Make text bold */
         }
 
+        .delete-button {
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            display: none;
+            margin-left: 5px; /* Add a 5px gap from the info button */
+        }
+
+        .process-item:hover .delete-button {
+            display: block;
+        }
+
         .info-button {
             background-color: #4CAF50; /* Same as delete button */
             color: white; /* Text color */
@@ -672,6 +689,23 @@
     
                             // Load notes for the selected process
                             loadNotes(currentProcessId);
+                        };
+    
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'delete-button';
+                        deleteButton.textContent = '-';
+                        deleteButton.onclick = (event) => {
+                            event.stopPropagation(); // Prevent the click from bubbling up to the li
+                            currentAction = 'delete';
+                            currentProcessId = process.id;
+                            const confirmDelete = confirm(`Are you sure you want to delete ${process.name || process.eventId}?`);
+                            if (confirmDelete) {
+                                processesRef.child(currentProcessId).remove()
+                                    .then(() => loadProcesses())
+                                    .catch((error) => {
+                                        console.error("Error deleting event: ", error);
+                                    });
+                            }
                         };
                         
                         // Create the "i" button
