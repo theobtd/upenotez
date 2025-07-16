@@ -584,10 +584,36 @@
     });
 
     document.getElementById('add-button').onclick = function() {
-        currentAction = 'add';
-        document.getElementById('confirm-message').innerText = "Input new contact details:";
-        document.getElementById('event-name').value = "";
-        document.getElementById('confirm-modal').style.display = "block";
+        const user = auth.currentUser;
+        const processesRef = database.ref('users/' + user.uid + '/Processes');
+        const eventName = document.getElementById('text-input').value.trim();
+    
+        if (eventName) {
+            const newEventRef = processesRef.push();
+            const eventId = newEventRef.key;
+    
+            // Set the new process with the name from text-input and empty strings for other fields
+            newEventRef.set({
+                eventId: eventId,
+                name: eventName,
+                company: "",
+                field1: "",
+                field2: "",
+                field3: "",
+                field4: "",
+                field5: ""
+            })
+            .then(() => {
+                console.log("New process created successfully:", { eventId, name: eventName });
+                loadProcesses(); // Refresh the list of processes
+                document.getElementById('text-input').value = ""; // Clear input after adding
+            })
+            .catch((error) => {
+                console.error("Error adding new process: ", error);
+            });
+        } else {
+            alert("Please enter a name for the contact.");
+        }
     };
     
     function loadProcesses() {
