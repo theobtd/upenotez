@@ -690,23 +690,6 @@
                             // Load notes for the selected process
                             loadNotes(currentProcessId);
                         };
-    
-                        const deleteButton = document.createElement('button');
-                        deleteButton.className = 'delete-button';
-                        deleteButton.textContent = '-';
-                        deleteButton.onclick = (event) => {
-                            event.stopPropagation(); // Prevent the click from bubbling up to the li
-                            currentAction = 'delete';
-                            currentProcessId = process.id;
-                            const confirmDelete = confirm(`Are you sure you want to delete ${process.name || process.eventId}?`);
-                            if (confirmDelete) {
-                                processesRef.child(currentProcessId).remove()
-                                    .then(() => loadProcesses())
-                                    .catch((error) => {
-                                        console.error("Error deleting event: ", error);
-                                    });
-                            }
-                        };
                         
                         // Create the "i" button
                         const infoButton = document.createElement('button');
@@ -729,7 +712,6 @@
                             document.getElementById('event-display').style.display = "block"; // Show the event display
                         };
                         
-                        li.appendChild(deleteButton);
                         li.appendChild(infoButton);
 
                         containerDiv.appendChild(li); // Wrap li in div
