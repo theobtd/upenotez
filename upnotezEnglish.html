@@ -1233,6 +1233,24 @@
         document.getElementById('note-modal').style.display = "none";
     };
 
+    document.getElementById('delete-profile-button').onclick = function() {
+        // Confirm deletion
+        const confirmDelete = confirm("Are you sure you want to delete this profile?");
+        if (confirmDelete && currentProcessId) {
+            const user = auth.currentUser;
+            const processesRef = database.ref('users/' + user.uid + '/Processes');
+    
+            processesRef.child(currentProcessId).remove()
+                .then(() => {
+                    console.log("Profile deleted successfully.");
+                    loadProcesses(); // Refresh the list of processes
+                })
+                .catch((error) => {
+                    console.error("Error deleting profile: ", error);
+                });
+        }
+    };
+
     const resizeHandle = document.getElementById('resize-handle');
     let isResizing = false;
 
