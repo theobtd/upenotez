@@ -394,6 +394,15 @@
             width: 100px; /* Set the width */
             height: 40px; /* Set the height */
         }
+
+        .process-item-container {
+            background-color: #f0f0f0; /* Light gray background for visibility */
+            border: 1px solid #ccc; /* Light border for delimitation */
+            border-radius: 5px; /* Rounded corners */
+            margin: 10px 0; /* Space between items */
+            padding: 10px; /* Padding for spacing */
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
     </style>
 </head>
 <body>
@@ -648,9 +657,12 @@
                     processesUl.innerHTML = '';
     
                     processesArray.forEach(process => {
+                        const containerDiv = document.createElement('div');
+                        containerDiv.className = 'process-item-container';
+                        
                         const li = document.createElement('li');
                         li.className = 'process-item';
-                        li.setAttribute('data-id', process.id); // Add this line
+                        li.setAttribute('data-id', process.id);
                         li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
     
                         li.onclick = () => {
@@ -718,8 +730,9 @@
                         
                         li.appendChild(deleteButton);
                         li.appendChild(infoButton);
-    
-                        processesUl.appendChild(li);
+
+                        containerDiv.appendChild(li); // Wrap li in div
+                        processesUl.appendChild(containerDiv); // Append div to the processes list
                     });
                     
                     resolve(); // Resolve the promise after loading processes
