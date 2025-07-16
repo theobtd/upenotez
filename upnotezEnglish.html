@@ -1244,6 +1244,9 @@
                 .then(() => {
                     console.log("Profile deleted successfully.");
                     loadProcesses(); // Refresh the list of processes
+
+                    // Close the event-display modal
+                    document.getElementById('event-display').style.display = "none";
                 })
                 .catch((error) => {
                     console.error("Error deleting profile: ", error);
