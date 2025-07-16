@@ -405,7 +405,7 @@
 <div id="main-container" style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
     <div id="info-box" style="margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
         <input type="text" id="text-input" placeholder="Type here..." style="width: 80%; height: 40px; border: 1px solid #888; border-radius: 5px; margin-bottom: 5px; padding: 5px; box-sizing: border-box; display: block;">
-        <button id="add-button" class="info-box-button" style="display: block; width: 80%;">+</button>
+        <button id="add-button" class="info-box-button" style="display: block; width: 80%;"disabled>+</button>
         <div id="processes-list">
             <ul id="processes-ul"></ul>
         </div>
@@ -572,6 +572,17 @@
             console.error("Error signing out: ", error);
         });
     };
+
+    const textInput = document.getElementById('text-input');
+    const addButton = document.getElementById('add-button');
+    
+    // Initially disable the button
+    addButton.disabled = true;
+    
+    // Add event listener to check for input
+    textInput.addEventListener('input', () => {
+        addButton.disabled = !textInput.value.trim(); // Enable button if there is text
+    });
 
     document.getElementById('add-button').onclick = function() {
         currentAction = 'add';
