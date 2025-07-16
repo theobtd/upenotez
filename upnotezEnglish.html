@@ -419,7 +419,7 @@
 </button>
 
 <button id="profile-button" class="info-box-button" style="position: fixed; bottom: 20px; left: 20px;">
-    My Profile
+    Profile
 </button>
 
 <div id="profile-modal">
@@ -1022,59 +1022,68 @@
     auth.onAuthStateChanged((user) => {
         if (user) {
             loadProcesses();
-
-            // Set initial display state for event-display
-            const eventDisplay = document.getElementById('event-display');
-            const toggleButton = document.getElementById('toggle-event-display');
     
-            // Start with the event-display hidden
-            eventDisplay.style.display = "none"; // Initially hidden
-            toggleButton.innerText = 'View Details'; // Set button text
+            // Fetch user data
+            database.ref('users/' + user.uid).once('value').then((snapshot) => {
+                const userData = snapshot.val();
+                // Set the profile button to display the user's name
+                document.getElementById('profile-button').innerText = userData.name || "Profile"; // Use userData.name
     
-            // Check for currentProcessId in local storage
-            const storedProcessId = localStorage.getItem('currentProcessId');
-            if (storedProcessId) {
-                currentProcessId = storedProcessId; // Set currentProcessId from local storage
-                const processesRef = database.ref('users/' + user.uid + '/Processes');
-                processesRef.child(currentProcessId).once('value').then((snapshot) => {
-                    const process = snapshot.val();
-                    if (process) {
-                        document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
-                        document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
-                        document.getElementById('event-field1-display').innerText = process.field1 || "N/A"; // Set Field 1
-                        document.getElementById('event-field2-display').innerText = process.field2 || "N/A"; // Set Field 2
-                        document.getElementById('event-field3-display').innerText = process.field3 || "N/A"; // Set Field 3
-                        document.getElementById('event-field4-display').innerText = process.field4 || "N/A"; // Set Field 4
-                        document.getElementById('event-field5-display').innerText = process.field5 || "N/A"; // Set Field 5
-    
-                        // Show the event name box
-                        document.getElementById('event-display').style.display = "block"; 
-                    }
-                }).catch((error) => {
-                    console.error("Error fetching process data: ", error);
-                });
-                localStorage.removeItem('currentProcessId'); // Clear after using
-            }
-    
-            // Check for new event ID (if applicable)
-            const newEventId = localStorage.getItem('newEventId');
-            if (newEventId) {
-                const processesRef = database.ref('users/' + user.uid + '/Processes');
-                processesRef.child(newEventId).once('value').then((snapshot) => {
-                    const process = snapshot.val();
-                    if (process) {
-                        document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
-                        document.getElementById('event-field1-display').innerText = process.field1 || "N/A";
-                        document.getElementById('event-field2-display').innerText = process.field2 || "N/A";
-                        document.getElementById('event-field3-display').innerText = process.field3 || "N/A";
-                        document.getElementById('event-field4-display').innerText = process.field4 || "N/A";
-                        document.getElementById('event-field5-display').innerText = process.field5 || "N/A";
-                        document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
-                        document.getElementById('event-display').style.display = "block"; // Show the event name box
-                    }
-                });
-                localStorage.removeItem('newEventId'); // Clear after using
-            }
+                // Set initial display state for event-display
+                const eventDisplay = document.getElementById('event-display');
+                const toggleButton = document.getElementById('toggle-event-display');
+        
+                // Start with the event-display hidden
+                eventDisplay.style.display = "none"; // Initially hidden
+                toggleButton.innerText = 'View Details'; // Set button text
+        
+                // Check for currentProcessId in local storage
+                const storedProcessId = localStorage.getItem('currentProcessId');
+                if (storedProcessId) {
+                    currentProcessId = storedProcessId; // Set currentProcessId from local storage
+                    const processesRef = database.ref('users/' + user.uid + '/Processes');
+                    processesRef.child(currentProcessId).once('value').then((snapshot) => {
+                        const process = snapshot.val();
+                        if (process) {
+                            document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
+                            document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
+                            document.getElementById('event-field1-display').innerText = process.field1 || "N/A"; // Set Field 1
+                            document.getElementById('event-field2-display').innerText = process.field2 || "N/A"; // Set Field 2
+                            document.getElementById('event-field3-display').innerText = process.field3 || "N/A"; // Set Field 3
+                            document.getElementById('event-field4-display').innerText = process.field4 || "N/A"; // Set Field 4
+                            document.getElementById('event-field5-display').innerText = process.field5 || "N/A"; // Set Field 5
+        
+                            // Show the event name box
+                            document.getElementById('event-display').style.display = "block"; 
+                        }
+                    }).catch((error) => {
+                        console.error("Error fetching process data: ", error);
+                    });
+                    localStorage.removeItem('currentProcessId'); // Clear after using
+                }
+        
+                // Check for new event ID (if applicable)
+                const newEventId = localStorage.getItem('newEventId');
+                if (newEventId) {
+                    const processesRef = database.ref('users/' + user.uid + '/Processes');
+                    processesRef.child(newEventId).once('value').then((snapshot) => {
+                        const process = snapshot.val();
+                        if (process) {
+                            document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
+                            document.getElementById('event-field1-display').innerText = process.field1 || "N/A";
+                            document.getElementById('event-field2-display').innerText = process.field2 || "N/A";
+                            document.getElementById('event-field3-display').innerText = process.field3 || "N/A";
+                            document.getElementById('event-field4-display').innerText = process.field4 || "N/A";
+                            document.getElementById('event-field5-display').innerText = process.field5 || "N/A";
+                            document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name
+                            document.getElementById('event-display').style.display = "block"; // Show the event name box
+                        }
+                    });
+                    localStorage.removeItem('newEventId'); // Clear after using
+                }
+            }).catch((error) => {
+                console.error("Error fetching user data: ", error);
+            });
         }
     });
 
