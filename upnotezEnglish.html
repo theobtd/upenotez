@@ -339,8 +339,8 @@
             display: inline-block; /* Make it inline-block */
             margin-left: auto; /* Center the button horizontally */
             margin-top: auto; /* Push the button to the bottom */
-            width: 25px;
-            height: 25px;
+            width: 10px;
+            height: 10px;
             font-weight: bold;
         }
         
@@ -883,9 +883,9 @@
                     };
         
                     // Append the delete button to the note box
-                    noteBox.appendChild(deleteButton);
                     notesList.appendChild(noteBox);
                     noteBox.appendChild(saveButton);
+                    noteBox.appendChild(deleteButton);
                 });
             }
         });
