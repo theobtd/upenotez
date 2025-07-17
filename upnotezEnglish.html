@@ -322,8 +322,10 @@
         }
 
         #error-message {
+            position: absolute; /* Absolute positioning */
+            left: 50%; /* Position at 50% of the parent container */
+            transform: translateX(-50%); /* Adjust left by half its width */
             text-align: center; /* Center the text */
-            width: 100%; /* Full width for justification */
             margin: 0; /* Remove default margins */
         }
 
