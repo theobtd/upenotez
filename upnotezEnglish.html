@@ -815,6 +815,10 @@
                     textBox.style.height = '70vh'; // Set height to 70vh
                     textBox.placeholder = 'Add your notes here...'; // Optional placeholder
                     textBox.value = note.content; // Set existing content
+                    // Remove borders
+                    textBox.style.border = 'none'; // No border
+                    textBox.style.outline = 'none'; // Remove outline on focus
+                    textBox.style.backgroundColor = 'transparent'; // Optional: make background transparent
 
                     let lastSavedContent = textBox.value;
                     let hasUnsavedChanges = false; // Track unsaved changes
