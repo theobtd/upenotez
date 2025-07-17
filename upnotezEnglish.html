@@ -681,12 +681,12 @@
                             // Remove 'selected' class from all items
                             document.querySelectorAll('.process-item-container').forEach(item => {
                                 item.classList.remove('selected');
-                                item.style.backgroundColor = "#f0f0f0"; // Reset background color
+                                item.style.backgroundColor = "#e4e7ed"; // Reset background color
                             });
                             
                             // Add 'selected' class to the clicked container
                             containerDiv.classList.add('selected');
-                            containerDiv.style.backgroundColor = "rgba(255, 204, 204, 0.5)"; // Set background color directly
+                            containerDiv.style.backgroundColor = "#ebb178"; // Set background color directly
                         
                             // Hide the message when a process is selected
                             document.getElementById('no-process-message').style.display = "none";
