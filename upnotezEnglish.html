@@ -400,7 +400,7 @@
             border-radius: 5px; /* Rounded corners */
             margin: 10px 0; /* Space between items */
             padding: 10px; /* Padding for spacing */
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            box-shadow: 0 1px 2px (0, 0, 0, 0.1); /* Subtle shadow for depth */
         }
     </style>
 </head>
@@ -669,9 +669,12 @@
                             // Remove 'selected' class from all items
                             document.querySelectorAll('.process-item-container').forEach(item => {
                                 item.classList.remove('selected');
+                                item.style.backgroundColor = "#f0f0f0"; // Reset background color
                             });
+                            
                             // Add 'selected' class to the clicked container
                             containerDiv.classList.add('selected');
+                            containerDiv.style.backgroundColor = "rgba(255, 204, 204, 0.5)"; // Set background color directly
                         
                             // Hide the message when a process is selected
                             document.getElementById('no-process-message').style.display = "none";
