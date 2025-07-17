@@ -821,6 +821,7 @@
                     textBox.addEventListener('input', () => {
                         hasUnsavedChanges = textBox.value !== lastSavedContent; // Check for changes
                         saveButton.style.backgroundColor = hasUnsavedChanges ? '#ebb178' : white; // Change color
+                        saveButton.style.color = hasUnsavedChanges ? black : white; // Change font color
                     });
 
                     // Create the Tasks button
@@ -850,6 +851,7 @@
                         lastSavedContent = textBox.value; // Update last saved content
                         hasUnsavedChanges = false; // Reset change tracking
                         saveButton.style.backgroundColor = white; // Reset button color
+                        saveButton.style.color = white; // Reset button color
                         saveButton.style.width = '70px'; // Set width
                         saveButton.style.height = '30px'; // Set height
                     };
