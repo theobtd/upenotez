@@ -665,31 +665,24 @@
                         li.className = 'process-item';
                         li.setAttribute('data-id', process.id);
                         li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
-    
-                        li.onclick = () => {
+                        
+                        containerDiv.onclick = () => {
                             // Remove 'selected' class from all items
                             document.querySelectorAll('.process-item').forEach(item => {
                                 item.classList.remove('selected');
                             });
-                            // Add 'selected' class to the clicked item
-                            li.classList.add('selected');
-
+                            // Add 'selected' class to the clicked container
+                            containerDiv.classList.add('selected');
+                        
                             // Hide the message when a process is selected
                             document.getElementById('no-process-message').style.display = "none";
                             
-                            document.getElementById('event-display').style.display = "none"; // Ensure it's hidden initially
-                            document.getElementById('event-name-title').innerText = process.name; // Set title to the event name
-                            document.getElementById('event-company-display').innerText = process.company || "N/A"; // Set company name or show "N/A"
-                            document.getElementById('event-field1-display').innerText = process.field1 || "N/A";
-                            document.getElementById('event-field2-display').innerText = process.field2 || "N/A";
-                            document.getElementById('event-field3-display').innerText = process.field3 || "N/A";
-                            document.getElementById('event-field4-display').innerText = process.field4 || "N/A";
-                            document.getElementById('event-field5-display').innerText = process.field5 || "N/A";
-                            currentProcessId = process.id; // Set currentProcessId here
-    
                             // Load notes for the selected process
-                            loadNotes(currentProcessId);
+                            loadNotes(process.id);
                         };
+                        
+                        containerDiv.appendChild(li); // Wrap li in div
+                        processesUl.appendChild(containerDiv); // Append div to the processes list
                         
                         // Create the "i" button
                         const infoButton = document.createElement('button');
