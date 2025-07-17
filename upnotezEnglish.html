@@ -416,6 +416,7 @@
         <button id="profile-button" style="width: 90%; text-align: left; border-color: transparent; font-weight: bold; background-color: transparent; font-size: 30px; cursor: pointer; margin: 30px;">
             
         </button>
+        <p id="company-name-display" style="font-size: 20px; margin: 10px 0;"></p>
         <input type="text" id="text-input" placeholder="New contact name" style="width: 80%; height: 40px; border: 1px solid #888; border-radius: 5px; margin-bottom: 5px; padding: 5px; box-sizing: border-box; display: block;">
         <button id="add-button" class="info-box-button" style="display: block; width: 80%;"disabled>Add Contact</button>
         <div id="processes-list">
@@ -1051,6 +1052,7 @@
                 const userData = snapshot.val();
                 // Set the profile button to display the user's name
                 document.getElementById('profile-button').innerText = userData.name || "Profile"; // Use userData.name
+                document.getElementById('company-name-display').innerText = userData.companyName || "Company Name"; // Add this line
     
                 // Set initial display state for event-display
                 const eventDisplay = document.getElementById('event-display');
