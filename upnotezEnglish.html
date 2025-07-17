@@ -433,11 +433,10 @@
         }
 
         #create-note-button {
-            width: 50px;
+            width: 50%;
             height: 10%
-            margin-left: auto;
-            margin-right: auto;
-            display: block; /* Ensure it behaves like a block element */
+            margin-left: -100%;
+            margin-left: auto; /* Center the button horizontally */
             color: black; /* Text color */
             border: none; /* Remove border */
             padding: 10px; /* Padding for spacing */
@@ -554,9 +553,11 @@
 </div>
 
 <div id="notes-container">
-    <button id="create-note-button">
-        Create Note
-    </button>
+    <div style="text-align: center; margin-bottom: 10px;">
+        <button id="create-note-button">
+            Create Note
+        </button>
+    </div>
     <ul id="notes-list"></ul>
     <div id="no-notes-message" style="display: none; text-align: center; margin: 20px;">
         Choose a contact to display meeting note
