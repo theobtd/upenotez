@@ -399,6 +399,7 @@
         .save-note {
             margin-top: auto; /* Push the button to the bottom */
             align-self: center;
+            color: white;
             background-color: white; /* Default color */
             border-color: transparent;
             border-radius: 5px; /* Rounded corners */
@@ -821,7 +822,7 @@
                     textBox.addEventListener('input', () => {
                         hasUnsavedChanges = textBox.value !== lastSavedContent; // Check for changes
                         saveButton.style.backgroundColor = hasUnsavedChanges ? '#ebb178' : white; // Change color
-                        saveButton.style.color = hasUnsavedChanges ? black : white; // Change font color
+                        saveButton.style.color = hasUnsavedChanges ? 'black' : 'white'; // Change font color
                     });
 
                     // Create the Tasks button
@@ -850,8 +851,8 @@
                         updateContent(newContent, note.id); // Save the current content using the note ID
                         lastSavedContent = textBox.value; // Update last saved content
                         hasUnsavedChanges = false; // Reset change tracking
-                        saveButton.style.backgroundColor = white; // Reset button color
-                        saveButton.style.color = white; // Reset button color
+                        saveButton.style.backgroundColor = 'white'; // Reset button color
+                        saveButton.style.color = 'white'; // Reset button color
                         saveButton.style.width = '70px'; // Set width
                         saveButton.style.height = '30px'; // Set height
                     };
