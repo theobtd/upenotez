@@ -820,7 +820,7 @@
 
                     textBox.addEventListener('input', () => {
                         hasUnsavedChanges = textBox.value !== lastSavedContent; // Check for changes
-                        saveButton.style.backgroundColor = hasUnsavedChanges ? '#FF5E00' : '#d3d3d3'; // Change color
+                        saveButton.style.backgroundColor = hasUnsavedChanges ? '#ebb178' : white; // Change color
                     });
 
                     // Create the Tasks button
@@ -849,7 +849,7 @@
                         updateContent(newContent, note.id); // Save the current content using the note ID
                         lastSavedContent = textBox.value; // Update last saved content
                         hasUnsavedChanges = false; // Reset change tracking
-                        saveButton.style.backgroundColor = '#d3d3d3'; // Reset button color
+                        saveButton.style.backgroundColor = white; // Reset button color
                         saveButton.style.width = '70px'; // Set width
                         saveButton.style.height = '30px'; // Set height
                     };
