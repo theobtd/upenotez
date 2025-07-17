@@ -665,7 +665,7 @@
                         li.setAttribute('data-id', process.id);
                         li.textContent = process.name || process.eventId; // Show event name or fallback to event ID
                         
-                        containerDiv.onclick = () => {
+                        li.onclick = () => {
                             // Remove 'selected' class from all items
                             document.querySelectorAll('.process-item-container').forEach(item => {
                                 item.classList.remove('selected');
