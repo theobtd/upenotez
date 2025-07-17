@@ -395,9 +395,8 @@
         }
 
         .save-note {
-            position: absolute; /* Position the button absolutely */
-            bottom: 60px; /* Distance from the bottom of the noteBox */
-            left: 50%; /* Center the button horizontally */
+            margin-top: auto; /* Push the button to the bottom */
+            align-self: center;
             transform: translateX(-50%); /* Adjust position to center */
             background-color: #d3d3d3; /* Default color */
             border: 1px solid black; /* Thin black border */
@@ -857,9 +856,9 @@
                     // Append the title, date, text box, and save button to the note box
                     noteBox.appendChild(titleElement);
                     noteBox.appendChild(dateElement);
-                    noteBox.appendChild(textBox); // Add the text box here
+                    noteBox.appendChild(textBox);
                     // noteBox.appendChild(tasksButton);
-                    noteBox.appendChild(saveButton);
+                    // noteBox.appendChild(saveButton);
                     notesList.appendChild(noteBox);
         
                     // Create the delete button
@@ -886,7 +885,7 @@
                     // Append the delete button to the note box
                     noteBox.appendChild(deleteButton);
                     notesList.appendChild(noteBox);
-                    noteBox.appendChild(saveButton); // Add the save button here
+                    noteBox.appendChild(saveButton);
                 });
             }
         });
