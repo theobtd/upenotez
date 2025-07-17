@@ -676,6 +676,12 @@
                         
                             // Hide the message when a process is selected
                             document.getElementById('no-process-message').style.display = "none";
+
+                            // Set currentProcessId to the clicked process
+                            currentProcessId = process.id;
+
+                            // Enable the create-note-button if a process is selected
+                            document.getElementById('create-note-button').disabled = false;
                             
                             // Load notes for the selected process
                             loadNotes(process.id);
