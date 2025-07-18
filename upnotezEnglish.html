@@ -916,6 +916,7 @@
                                 .then(() => {
                                     console.log("Note deleted successfully.");
                                     loadNotes(processId); // Reload notes after deletion
+                                    reSelectProcess(processId); // Re-select the process after loading notes
                                 })
                                 .catch((error) => {
                                     console.error("Error deleting note:", error);
