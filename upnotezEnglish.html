@@ -738,6 +738,8 @@
 
                             // Enable the create-note-button if a process is selected
                             document.getElementById('create-note-button').disabled = false; // Enable if a process is selected
+
+                            currentProcessId = process.id;
                             
                             // Load notes for the selected process
                             loadNotes(process.id);
