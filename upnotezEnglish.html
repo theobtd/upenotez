@@ -840,6 +840,7 @@
                         hasUnsavedChanges = textBox.value !== lastSavedContent; // Check for changes
                         saveButton.style.backgroundColor = hasUnsavedChanges ? '#ebb178' : white; // Change color
                         saveButton.style.color = hasUnsavedChanges ? 'black' : 'white'; // Change font color
+                        saveButton.style.cursor = 'pointer'; // Set cursor to pointer
                     });
 
                     // Create the Tasks button
