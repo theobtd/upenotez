@@ -709,6 +709,7 @@
                     processesArray.forEach(process => {
                         const containerDiv = document.createElement('div');
                         containerDiv.className = 'process-item-container';
+                        containerDiv.setAttribute('data-id', process.id);
                         
                         const li = document.createElement('li');
                         li.className = 'process-item';
