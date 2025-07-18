@@ -451,6 +451,12 @@
             color: #666; /* Dark gray text color */
             cursor: not-allowed; /* Change cursor style */
         }
+
+        #button-container {
+            display: flex;
+            flex-direction: column; /* Stack buttons vertically */
+            gap: 10px; /* Optional: space between buttons */
+        }
     </style>
 </head>
 <body>
@@ -523,12 +529,13 @@
 
     <p><strong>Secondary Phone Number:</strong> <span id="event-field5-display"></span></p>
     <input type="text" id="event-field5-input" style="display: none;" placeholder="Enter Secondary Phone Number" />
-    
-    <button id="add-field-button">Modify Information</button>
-    <button id="confirm-update-button" style="display: none;">Confirm</button> <!-- Confirm button for updating -->
 
-    <button id="delete-profile-button" class="info-box-button">Delete Profile</button>
-    <button id="close-event-display">Close</button>
+    <div id="button-container">
+        <button id="add-field-button">Modify Information</button>
+        <button id="confirm-update-button" style="display: none;">Confirm</button>
+        <button id="delete-profile-button" class="info-box-button">Delete Profile</button>
+        <button id="close-event-display">Close</button>
+    </div>
 </div>
 
 <div id="note-modal" style="display: none;">
