@@ -909,7 +909,7 @@
         
                     // Delete button functionality
                     deleteButton.onclick = function() {
-                        const confirmDelete = confirm(`Are you sure you want to delete the note titled "${note.title}"?`);
+                        const confirmDelete = confirm(`Etes-vous certain(e) de vouloir supprimer la note suivant: "${note.title}"?`);
                         if (confirmDelete) {
                             notesRef.child(note.id).remove()
                                 .then(() => {
@@ -1315,7 +1315,7 @@
 
     document.getElementById('delete-profile-button').onclick = function() {
         // Confirm deletion
-        const confirmDelete = confirm("Are you sure you want to delete this profile?");
+        const confirmDelete = confirm("Etes-vous certain(e) de vouloir supprimer ce contact?");
         if (confirmDelete && currentProcessId) {
             const user = auth.currentUser;
             const processesRef = database.ref('users/' + user.uid + '/Processes');
