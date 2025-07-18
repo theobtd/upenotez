@@ -65,7 +65,7 @@
         #profile-modal, #confirm-modal {
             display: none;
             position: fixed;
-            z-index: 3; /* Higher z-index for confirmation modal */
+            z-index: 10; /* Higher z-index for confirmation modal */
             left: 0;
             top: 0;
             width: 100%;
@@ -433,7 +433,7 @@
             border: none; /* Remove border */
             border-radius: 5px; /* Rounded corners */
             cursor: pointer; /* Pointer cursor on hover */
-            z-index: 50;
+            z-index: 10;
             background-color: #ebb178;
         }
 
@@ -875,7 +875,7 @@
                     const saveButton = document.createElement('button');
                     saveButton.className = 'save-note';
                     saveButton.innerText = 'Save';
-                    saveButton.style.zIndex = '5'; // Set z-index to 5
+                    saveButton.style.zIndex = '4'; // Set z-index to 5
 
                     saveButton.onclick = function() {
                         const newContent = textBox.value; // Get new content
