@@ -1218,7 +1218,9 @@
                     document.getElementById('note-modal').style.display = "none"; // Hide the modal
                     document.getElementById('note-title').value = ""; // Clear input
                     document.getElementById('note-date').value = ""; // Clear input
-                    // Optionally update the UI to reflect the new note
+
+                    // Re-select the process
+                    reSelectProcess(currentProcessId);
                 })
                 .catch((error) => {
                     console.error("Error creating note:", error);
@@ -1227,6 +1229,25 @@
             console.log("No user is logged in or no process selected.");
         }
     };
+
+    function reSelectProcess(processId) {
+        // Find the process item container and set the selected state
+        const selectedItem = document.querySelector(`.process-item-container[data-id="${processId}"]`);
+        if (selectedItem) {
+            // Remove 'selected' class from all items
+            document.querySelectorAll('.process-item-container').forEach(item => {
+                item.classList.remove('selected');
+                item.style.backgroundColor = "#e4e7ed"; // Reset background color
+            });
+            
+            // Add 'selected' class to the clicked container
+            selectedItem.classList.add('selected');
+            selectedItem.style.backgroundColor = "#ebb178"; // Set background color directly
+    
+            // Enable the create-note-button
+            document.getElementById('create-note-button').disabled = false; // Ensure it's enabled
+        }
+    }
     
     // Close the task modal when the close button is clicked
     document.getElementById('close-task-modal').onclick = function() {
