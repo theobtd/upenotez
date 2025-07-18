@@ -445,6 +445,12 @@
             z-index: 50;
             background-color: #ebb178;
         }
+
+        #create-note-button:disabled {
+            background-color: #ccc; /* Light gray color */
+            color: #666; /* Dark gray text color */
+            cursor: not-allowed; /* Change cursor style */
+        }
     </style>
 </head>
 <body>
@@ -554,7 +560,7 @@
     <h2>Select or add a new contact</h2>
 </div>
 
-<button id="create-note-button">
+<button id="create-note-button" disabled>
     Create Note
 </button>
     
