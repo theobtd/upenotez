@@ -884,6 +884,9 @@
                         saveButton.style.color = 'white'; // Reset button color
                         saveButton.style.width = '70px'; // Set width
                         saveButton.style.height = '30px'; // Set height
+
+                        // Reselect the process to ensure it remains selected
+                        reSelectProcess(currentProcessId);
                     };
                 
                     // Append the title, date, text box, and save button to the note box
