@@ -886,6 +886,7 @@
                         saveButton.style.height = '30px'; // Set height
 
                         // Reselect the process to ensure it remains selected
+                        console.log("Current Process ID:", currentProcessId);
                         reSelectProcess(currentProcessId);
                     };
                 
@@ -1234,26 +1235,20 @@
     };
 
     function reSelectProcess(processId) {
-        console.log("Re-selecting process:", processId); // Log the process ID being re-selected
-        // Find the process item container and set the selected state
         const selectedItem = document.querySelector(`.process-item-container[data-id="${processId}"]`);
         
         if (selectedItem) {
-            console.log("Found selected item:", selectedItem); // Log if the item was found
-            // Remove 'selected' class from all items
+            // Clear previous selections
             document.querySelectorAll('.process-item-container').forEach(item => {
                 item.classList.remove('selected');
                 item.style.backgroundColor = "#e4e7ed"; // Reset background color
             });
             
-            // Add 'selected' class to the clicked container
+            // Add selected class and set background color
             selectedItem.classList.add('selected');
             selectedItem.style.backgroundColor = "#ebb178"; // Set background color directly
-    
-            // Enable the create-note-button
-            document.getElementById('create-note-button').disabled = false; // Ensure it's enabled
         } else {
-            console.error("Selected item not found for process ID:", processId); // Log if the item wasn't found
+            console.error("Selected item not found for process ID:", processId);
         }
     }
     
