@@ -445,12 +445,6 @@
             z-index: 50;
             background-color: #ebb178;
         }
-
-        .disabled-button {
-            background-color: #ccc; /* Light gray color for disabled state */
-            color: #666; /* Darker gray for text */
-            cursor: not-allowed; /* Change cursor to indicate it's not clickable */
-        }
     </style>
 </head>
 <body>
@@ -734,10 +728,15 @@
 
                             // Enable the create-note-button if a process is selected
                             document.getElementById('create-note-button').disabled = false;
+
+                            // Enable the create-note-button if a process is selected
+                            document.getElementById('create-note-button').disabled = false; // Enable if a process is selected
                             
                             // Load notes for the selected process
                             loadNotes(process.id);
                         };
+
+                        document.getElementById('create-note-button').disabled = true; // Initially disable the button
                         
                         containerDiv.appendChild(li); // Wrap li in div
                         processesUl.appendChild(containerDiv); // Append div to the processes list
@@ -1061,9 +1060,6 @@
         const processesRef = database.ref('users/' + user.uid + '/Processes');
     
         if (currentProcessId) {
-            document.getElementById('create-note-button').classList.remove('disabled-button');
-            document.getElementById('create-note-button').disabled = false; // Enable the button
-            
             processesRef.child(currentProcessId).update({ 
                 company: companyValue, 
                 field1: field1Value, 
@@ -1091,9 +1087,6 @@
                 document.getElementById('add-field-button').innerText = "Modify Information"; // Reset button text
                 document.getElementById('confirm-update-button').style.display = "none"; // Hide confirm button
 
-                document.getElementById('add-field-button').innerText = "Modify Information"; // Reset button text
-                document.getElementById('confirm-update-button').style.display = "none"; // Hide confirm button
-
                 localStorage.setItem('currentProcessId', currentProcessId);
                 // location.reload(); // This will refresh the page
             })
@@ -1101,8 +1094,6 @@
                 console.error("Error updating fields: ", error);
             });
         } else {
-            document.getElementById('create-note-button').classList.add('disabled-button');
-            document.getElementById('create-note-button').disabled = true; // Disable the button
             console.error("No current process ID set.");
         }
     };
@@ -1177,8 +1168,6 @@
 
     document.getElementById('create-note-button').onclick = function() {
         if (!currentProcessId) {
-            document.getElementById('create-note-button').classList.add('disabled-button');
-            document.getElementById('create-note-button').disabled = true; // Disable the butto
             document.getElementById('error-modal').style.display = "block"; // Show the error modal
             return; // Stop further execution
         }
