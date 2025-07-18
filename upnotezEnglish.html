@@ -1239,8 +1239,7 @@
 
     function reSelectProcess(processId) {
         const selectedItem = document.querySelector(`.process-item-container[data-id="${processId}"]`);
-        const createNoteButton = document.getElementById('create-note-button');
-    
+        
         if (selectedItem) {
             // Clear previous selections
             document.querySelectorAll('.process-item-container').forEach(item => {
@@ -1248,20 +1247,11 @@
                 item.style.backgroundColor = "#e4e7ed"; // Reset background color
             });
             
-            // Add selected class and set background color for the selected process
+            // Add selected class and set background color
             selectedItem.classList.add('selected');
-            selectedItem.style.backgroundColor = "#ebb17"; // Set background color directly
-    
-            // Highlight the create-note-button
-            createNoteButton.style.backgroundColor = "#ebb178"; // Change to desired color
-            createNoteButton.style.color = "black"; // Change text color
-            createNoteButton.style.cursor = "pointer";
+            selectedItem.style.backgroundColor = "#ebb178"; // Set background color directly
         } else {
             console.error("Selected item not found for process ID:", processId);
-    
-            // Reset create-note-button styles if no process is selected
-            createNoteButton.style.backgroundColor = "#ccc"; // Light gray color
-            createNoteButton.style.color = "#e4e7ed"; // Dark gray text color
         }
     }
     
