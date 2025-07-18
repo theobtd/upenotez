@@ -1250,11 +1250,12 @@
             
             // Add selected class and set background color for the selected process
             selectedItem.classList.add('selected');
-            selectedItem.style.backgroundColor = "#ebb178"; // Set background color directly
+            selectedItem.style.backgroundColor = "#ebb17"; // Set background color directly
     
             // Highlight the create-note-button
-            createNoteButton.style.backgroundColor = "#4CAF50"; // Change to desired color
-            createNoteButton.style.color = "white"; // Change text color
+            createNoteButton.style.backgroundColor = "#e4e7ed"; // Change to desired color
+            createNoteButton.style.color = "black"; // Change text color
+            createNoteButton.style.cursor = "pointer";
         } else {
             console.error("Selected item not found for process ID:", processId);
     
