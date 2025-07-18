@@ -32,19 +32,20 @@
     <button type="submit" id="signin-button">Sign In</button>
 </form>
 
-<button type="button" id="create-account-button">Create Account</button>
-    
 <h1 id="title">Create Account</h1>
-<form id="signup-form">
-    <input type="text" id="name" placeholder="Name" required>
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="email" id="confirm-email" placeholder="Confirm Email" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <input type="password" id="confirm-password" placeholder="Confirm Password" required>
-    <input type="text" id="company-name" placeholder="Company Name" required>
-    <input type="text" id="city" placeholder="City" required>
-    <button type="submit" id="submit-button">Sign Up</button>
-</form>
+<button type="button" id="create-account-button">Create Account</button>
+<div id="signup-container" style="display: none;">
+    <form id="signup-form">
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="email" id="confirm-email" placeholder="Confirm Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="password" id="confirm-password" placeholder="Confirm Password" required>
+        <input type="text" id="company-name" placeholder="Company Name" required>
+        <input type="text" id="city" placeholder="City" required>
+        <button type="submit" id="submit-button">Sign Up</button>
+    </form>
+</div>
 
 <div id="message"></div>
 
@@ -190,6 +191,15 @@
             window.location.href = 'index.html';
         });
     };
+
+    document.getElementById('create-account-button').addEventListener('click', function() {
+        const signupContainer = document.getElementById('signup-container');
+        if (signupContainer.style.display === 'none' || signupContainer.style.display === '') {
+            signupContainer.style.display = 'block'; // Show the form
+        } else {
+            signupContainer.style.display = 'none'; // Hide the form
+        }
+    });
 </script>
 
 </body>
