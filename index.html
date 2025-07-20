@@ -169,6 +169,8 @@
             })
             .then(() => {
                 document.getElementById('message').innerText = 'Account created!';
+                // Show loading animation
+                document.getElementById('loading-animation').style.display = 'none';
             })
             .catch((error) => {
                 document.getElementById('message').innerText = error.message;
