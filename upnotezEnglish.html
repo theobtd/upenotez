@@ -834,36 +834,17 @@
                     // Create a date element
                     const dateElement = document.createElement('span');
                     dateElement.innerText = `${note.date}`;
-
-                    // Add this HTML above the textBox
-                    const formattingContainer = document.createElement('div');
-                    
-                    const boldButton = document.createElement('button');
-                    boldButton.innerText = 'B';
-                    boldButton.onclick = () => document.execCommand('bold');
-                    formattingContainer.appendChild(boldButton);
-                    
-                    const italicButton = document.createElement('button');
-                    italicButton.innerText = 'I';
-                    italicButton.onclick = () => document.execCommand('italic');
-                    formattingContainer.appendChild(italicButton);
-                    
-                    const underlineButton = document.createElement('button');
-                    underlineButton.innerText = 'U';
-                    underlineButton.onclick = () => document.execCommand('underline');
-                    formattingContainer.appendChild(underlineButton);
-                    
-                    noteBox.appendChild(formattingContainer); // Append formatting buttons to the note box
-
-                    const textBox = document.createElement('div');
-                    textBox.contentEditable = true; // Make it editable
-                    textBox.style.width = '375px'; // Set width
-                    textBox.style.height = '70vh'; // Set height
+        
+                    // Create a text box
+                    const textBox = document.createElement('textarea');
+                    textBox.style.width = '375px'; // Set width to 200px
+                    textBox.style.height = '70vh'; // Set height to 70vh
                     textBox.placeholder = 'Add your notes here...'; // Optional placeholder
+                    textBox.value = note.content; // Set existing content
+                    // Remove borders
                     textBox.style.border = 'none'; // No border
                     textBox.style.outline = 'none'; // Remove outline on focus
                     textBox.style.backgroundColor = 'transparent'; // Optional: make background transparent
-                    textBox.value = note.content; // Set existing content
 
                     let lastSavedContent = textBox.value;
                     let hasUnsavedChanges = false; // Track unsaved changes
