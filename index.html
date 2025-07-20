@@ -70,6 +70,9 @@
         <input type="text" id="company-name" placeholder="Company Name" required>
         <input type="text" id="city" placeholder="City" required>
         <button type="submit" id="submit-button">Sign Up</button>
+        <div id="loading-animation" style="display: none; margin-top: 10px;">
+            <span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+        </div>
     </form>
 </div>
 
@@ -89,7 +92,7 @@
     </div>
 </div>
 
-<div id="footer" style="margin-bottom: auto; text-align: center; padding: 10px; background-color: #ebb178; width: 100%;">
+<div id="footer" style="margin-top: auto; text-align: center; padding: 10px; background-color: #ebb178; width: 100%;">
     <h1 style="font-size: 24px; color: black;">upnoteZ</h1>
 </div>
 
@@ -134,6 +137,9 @@
     // Sign Up Submission
     document.getElementById('signup-form').addEventListener('submit', function(event) {
         event.preventDefault();
+        
+        // Show loading animation
+        document.getElementById('loading-animation').style.display = 'block';
         
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
