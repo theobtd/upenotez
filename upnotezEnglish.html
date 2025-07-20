@@ -952,7 +952,7 @@
         const processesRef = database.ref('users/' + user.uid + '/Processes');
     
         if (currentAction === 'add') {
-            const eventName = document.getElementById('event-name-title').value;
+            const eventName = document.getElementById('event-name').value;
             const companyValue = document.getElementById('event-company').value;
             const field1Value = document.getElementById('event-field1').value;
             const field2Value = document.getElementById('event-field2').value;
@@ -1003,7 +1003,6 @@
     };
 
     document.getElementById('add-field-button').onclick = function() {
-        const nameDisplay = document.getElementById('event-name-title');
         const companyDisplay = document.getElementById('event-company-display');
         const field1Display = document.getElementById('event-field1-display');
         const field2Display = document.getElementById('event-field2-display');
@@ -1011,7 +1010,6 @@
         const field4Display = document.getElementById('event-field4-display');
         const field5Display = document.getElementById('event-field5-display');
     
-        const nameInput = document.getElementById('event-name-title');
         const companyInput = document.getElementById('event-company-input');
         const field1Input = document.getElementById('event-field1-input');
         const field2Input = document.getElementById('event-field2-input');
@@ -1022,7 +1020,6 @@
     
         if (companyInput.style.display === "none") {
             // Show input fields and confirm button
-            nameInput.style.display = "block"; 
             companyInput.style.display = "block"; 
             field1Input.style.display = "block"; 
             field2Input.style.display = "block"; 
@@ -1030,7 +1027,6 @@
             field4Input.style.display = "block";
             field5Input.style.display = "block";
     
-            nameInput.value = nameDisplay.innerText;
             companyInput.value = companyDisplay.innerText; // Set input value to current company
             field1Input.value = field1Display.innerText; // Set input value to current Field 1
             field2Input.value = field2Display.innerText; // Set input value to current Field 2
@@ -1038,7 +1034,6 @@
             field4Input.value = field4Display.innerText; // Set input value to current Field 4
             field5Input.value = field5Display.innerText; // Set input value to current Field 5
             
-            nameDisplay.style.display = "none"; // Hide display
             companyDisplay.style.display = "none"; // Hide display
             field1Display.style.display = "none"; // Hide display
             field2Display.style.display = "none"; // Hide display
@@ -1050,7 +1045,6 @@
             confirmButton.style.display = "block"; // Show confirm button
         } else {
             // Hide input fields and confirm button
-            nameInput.style.display = "none";
             companyInput.style.display = "none"; 
             field1Input.style.display = "none"; 
             field2Input.style.display = "none"; 
@@ -1058,7 +1052,6 @@
             field4Input.style.display = "none";
             field5Input.style.display = "none";
             
-            nameDisplay.style.display = "inline"; // Show display again
             companyDisplay.style.display = "inline"; // Show display again
             field1Display.style.display = "inline"; // Show display again
             field2Display.style.display = "inline"; // Show display again
@@ -1073,7 +1066,6 @@
 
     document.getElementById('confirm-update-button').onclick = function() {
         const user = auth.currentUser;
-        const nameValue = document.getElementById('event-name-title').value;
         const companyValue = document.getElementById('event-company-input').value;
         const field1Value = document.getElementById('event-field1-input').value;
         const field2Value = document.getElementById('event-field2-input').value;
@@ -1084,7 +1076,6 @@
     
         if (currentProcessId) {
             processesRef.child(currentProcessId).update({ 
-                name: nameValue, 
                 company: companyValue, 
                 field1: field1Value, 
                 field2: field2Value, 
@@ -1095,7 +1086,6 @@
             .then(() => {
                 console.log("Database updated successfully.");
                 // Refresh the display
-                document.getElementById('event-name-title').innerText = nameValue;
                 document.getElementById('event-company-display').innerText = companyValue;
                 document.getElementById('event-field1-display').innerText = field1Value;
                 document.getElementById('event-field2-display').innerText = field2Value;
@@ -1103,7 +1093,6 @@
                 document.getElementById('event-field4-display').innerText = field4Value;
                 document.getElementById('event-field5-display').innerText = field5Value;
                 // Hide input fields
-                document.getElementById('event-name-title').style.display = "none";
                 document.getElementById('event-company-input').style.display = "none";
                 document.getElementById('event-field1-input').style.display = "none";
                 document.getElementById('event-field2-input').style.display = "none";
