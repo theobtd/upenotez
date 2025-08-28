@@ -839,6 +839,7 @@
                 notesArray.forEach(note => {
                     const noteBox = document.createElement('li');
                     noteBox.className = 'note-box';
+                    noteBox.setAttribute('data-note-id', note.id); // Set note ID for reference
         
                     // Create a title element
                     const titleElement = document.createElement('strong');
@@ -962,6 +963,11 @@
                     noteBox.appendChild(saveButton);
                     noteBox.appendChild(deleteButton);
                     noteBox.appendChild(uploadButton);
+
+                    loadFiles(note.id); // Load files for this note
+
+                    // Append noteBox to the notesList
+                    notesList.appendChild(noteBox);
                 });
             }
         });
@@ -1025,6 +1031,34 @@
             .catch((error) => {
                 console.error("Error saving file URL:", error);
             });
+    }
+
+    function loadFiles(noteId) {
+        const user = auth.currentUser;
+        const filesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files`);
+    
+        filesRef.on('value', (snapshot) => {
+            const files = snapshot.val();
+            const filesList = document.createElement('ul'); // Create a new list for files
+    
+            for (const key in files) {
+                if (files.hasOwnProperty(key)) {
+                    const fileItem = document.createElement('li');
+                    const fileLink = document.createElement('a');
+                    fileLink.href = files[key].url; // Set the file URL
+                    fileLink.textContent = `File ${key}`; // Set link text
+                    fileLink.target = "_blank"; // Open in new tab
+                    fileItem.appendChild(fileLink);
+                    filesList.appendChild(fileItem);
+                }
+            }
+    
+            // Append files list to the noteBox or wherever appropriate
+            const noteBox = document.querySelector(`li.note-box[data-note-id="${noteId}"]`);
+            if (noteBox) {
+                noteBox.appendChild(filesList); // Add the list to the note box
+            }
+        });
     }
 
     document.getElementById('confirm-yes').onclick = function() {
