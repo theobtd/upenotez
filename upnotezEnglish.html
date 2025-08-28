@@ -916,6 +916,18 @@
                     deleteButton.className = 'delete-note';
                     deleteButton.innerText = '-';
                     deleteButton.style.marginTop = '10px'; // Add margin
+
+                    // Create the add button
+                    const addButton = document.createElement('button');
+                    addButton.className = 'add-note'; // Add a class for styling
+                    addButton.innerText = '+'; // Set text for the add button
+                    addButton.style.marginTop = '10px'; // Add margin
+                    addButton.style.backgroundColor = 'green'; // Set background color
+                    addButton.style.color = 'white'; // Set text color
+                    addButton.style.border = 'none'; // Remove border
+                    addButton.style.borderRadius = '5px'; // Rounded corners
+                    addButton.style.padding = '5px 10px'; // Padding for spacing
+                    addButton.style.cursor = 'pointer'; // Pointer cursor on hover
         
                     // Delete button functionality
                     deleteButton.onclick = function() {
@@ -937,6 +949,7 @@
                     notesList.appendChild(noteBox);
                     noteBox.appendChild(saveButton);
                     noteBox.appendChild(deleteButton);
+                    noteBox.appendChild(addButton);
                 });
             }
         });
