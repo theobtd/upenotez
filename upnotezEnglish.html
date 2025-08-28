@@ -1032,32 +1032,22 @@
             alert("You must be logged in to upload files.");
             return;
         }
-        
-        // Show loading overlay
-        document.getElementById('loading-overlay').style.display = 'flex';
     
         const storageRef = firebase.storage().ref();
-        const fileRef = storageRef.child(`users/${user.uid}/notes/${noteId}/${file.name}`);
-        
+        const fileRef = storageRef.child(`users/${user.uid}/notes/${noteId}/${file.name}`); // Ensure this path is correct
+    
         const uploadTask = fileRef.put(file);
         
         uploadTask.on('state_changed', 
             (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');
+                // Handle progress
             }, 
             (error) => {
                 console.error("Upload failed:", error);
-                // Hide loading overlay on error
-                document.getElementById('loading-overlay').style.display = 'none';
             }, 
             () => {
                 uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                    console.log('File available at', downloadURL);
                     saveFileUrlToDatabase(noteId, downloadURL, file.name); // Pass the file name
-                }).finally(() => {
-                    // Hide loading overlay after upload completes
-                    document.getElementById('loading-overlay').style.display = 'none';
                 });
             }
         );
@@ -1066,17 +1056,15 @@
     function saveFileUrlToDatabase(noteId, downloadURL, fileName) {
         const user = auth.currentUser;
         const notesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files`);
-        
-        // Extract the path from the download URL
-        const filePath = downloadURL.split('/o/')[1].split('?')[0]; // Gets the path after /o/
+    
+        const filePath = downloadURL.split('/o/')[1].split('?')[0]; // Ensure this correctly extracts the path
     
         notesRef.push({ 
             url: downloadURL, 
-            name: fileName, // Save the original file name for display
-            path: filePath // Save the unique path for deletion
+            name: fileName, 
+            path: filePath // Store the unique path for deletion
         })
         .then(() => {
-            console.log("File URL and name saved to database.");
             loadFiles(noteId); // Load files after saving
         })
         .catch((error) => {
@@ -1134,7 +1122,12 @@
     
         filesRef.once('value').then((snapshot) => {
             const fileData = snapshot.val();
+            if (!fileData) {
+                console.error("File data not found in the database.");
+                return; // Exit if the file data does not exist
+            }
             const filePath = fileData.path; // Use the stored unique path
+            console.log("Deleting file at path:", filePath); // Log the path for debugging
     
             const storageRef = firebase.storage().ref();
             const fileRef = storageRef.child(filePath); // Use the correct path for deletion
