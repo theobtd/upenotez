@@ -962,16 +962,6 @@
                     noteBox.appendChild(saveButton);
                     noteBox.appendChild(deleteButton);
                     noteBox.appendChild(uploadButton);
-
-                    // Create a section to display uploaded files
-                    const filesList = document.createElement('ul');
-                    filesList.className = 'files-list';
-                    noteBox.appendChild(filesList);
-                    
-                    // Append the note box to the notes list
-                    notesList.appendChild(noteBox);
-
-                    loadFiles(note.id); // Load files for the current note
                 });
             }
         });
@@ -997,11 +987,14 @@
             return;
         }
     
+        // Create a reference to the storage location
         const storageRef = firebase.storage().ref();
         const fileRef = storageRef.child(`users/${user.uid}/notes/${noteId}/${file.name}`);
     
+        // Upload the file
         const uploadTask = fileRef.put(file);
     
+        // Monitor the upload progress
         uploadTask.on('state_changed', 
             (snapshot) => {
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -1011,10 +1004,11 @@
                 console.error("Upload failed:", error);
             }, 
             () => {
+                // Upload completed successfully, now we can get the download URL
                 uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                     console.log('File available at', downloadURL);
+                    // Optionally save the download URL in your database
                     saveFileUrlToDatabase(noteId, downloadURL);
-                    loadFiles(noteId); // Load files after upload
                 });
             }
         );
@@ -1024,38 +1018,13 @@
         const user = auth.currentUser;
         const notesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files`);
         
-        notesRef.push({ url: downloadURL }) 
+        notesRef.push({ url: downloadURL }) // Push the URL to the database
             .then(() => {
                 console.log("File URL saved to database.");
             })
             .catch((error) => {
                 console.error("Error saving file URL:", error);
             });
-    }
-
-    function loadFiles(noteId) {
-        const user = auth.currentUser;
-        const filesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files`);
-    
-        filesRef.on('value', (snapshot) => {
-            const filesList = document.querySelector(`.files-list[data-note-id="${noteId}"]`);
-            filesList.innerHTML = ''; // Clear previous files
-    
-            const files = snapshot.val();
-            if (files) {
-                for (const key in files) {
-                    if (files.hasOwnProperty(key)) {
-                        const fileItem = document.createElement('li');
-                        const link = document.createElement('a');
-                        link.href = files[key].url;
-                        link.textContent = files[key].url.split('/').pop(); // Get file name from URL
-                        link.target = '_blank'; // Open in new tab
-                        fileItem.appendChild(link);
-                        filesList.appendChild(fileItem);
-                    }
-                }
-            }
-        });
     }
 
     document.getElementById('confirm-yes').onclick = function() {
