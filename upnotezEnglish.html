@@ -466,6 +466,34 @@
         .note-box li {
             margin: 5px 0; /* Space between file links */
         }
+
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            z-index: 1000; /* Ensure it's on top of everything */
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+        }
+        
+        #loading-spinner {
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 60px; /* Size of the spinner */
+            height: 60px; /* Size of the spinner */
+            animation: spin 2s linear infinite; /* Spinner animation */
+        }
+        
+        /* Spinner animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -473,6 +501,10 @@
 <button id="toggle-event-display", style="display: none;">
     View Details
 </button>
+
+<div id="loading-overlay" style="display: none;">
+    <div id="loading-spinner"></div>
+</div>
 
 <div id="main-container" style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
     <div id="info-box" style="margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
@@ -1000,12 +1032,15 @@
             alert("You must be logged in to upload files.");
             return;
         }
+        
+        // Show loading overlay
+        document.getElementById('loading-overlay').style.display = 'flex';
     
         const storageRef = firebase.storage().ref();
         const fileRef = storageRef.child(`users/${user.uid}/notes/${noteId}/${file.name}`);
-    
+        
         const uploadTask = fileRef.put(file);
-    
+        
         uploadTask.on('state_changed', 
             (snapshot) => {
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -1013,11 +1048,16 @@
             }, 
             (error) => {
                 console.error("Upload failed:", error);
+                // Hide loading overlay on error
+                document.getElementById('loading-overlay').style.display = 'none';
             }, 
             () => {
                 uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                     console.log('File available at', downloadURL);
                     saveFileUrlToDatabase(noteId, downloadURL, file.name); // Pass the file name
+                }).finally(() => {
+                    // Hide loading overlay after upload completes
+                    document.getElementById('loading-overlay').style.display = 'none';
                 });
             }
         );
