@@ -1101,7 +1101,17 @@
                     fileLink.href = files[key].url; // Set the file URL
                     fileLink.textContent = files[key].name; // Use the original file name
                     fileLink.target = "_blank"; // Open in new tab
+                    
+                    // Create a delete button
+                    const deleteButton = document.createElement('button');
+                    deleteButton.innerText = 'Delete';
+                    deleteButton.className = 'delete-button'; // Add a class for styling
+                    deleteButton.onclick = () => {
+                        deleteFile(noteId, key); // Call delete function with note ID and file key
+                    };
+    
                     fileItem.appendChild(fileLink);
+                    fileItem.appendChild(deleteButton); // Append delete button to the file item
                     filesList.appendChild(fileItem);
                 }
             }
@@ -1111,6 +1121,35 @@
             if (noteBox) {
                 noteBox.appendChild(filesList); // Add the new list to the note box
             }
+        });
+    }
+
+    function deleteFile(noteId, fileKey) {
+        const user = auth.currentUser;
+        const filesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files/${fileKey}`);
+        
+        // First, get the file URL to delete from storage
+        filesRef.once('value').then((snapshot) => {
+            const fileData = snapshot.val();
+            if (fileData) {
+                const fileUrl = fileData.url;
+                const fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1); // Extract file name
+    
+                // Delete the file from storage
+                const storageRef = firebase.storage().ref(`users/${user.uid}/notes/${noteId}/${fileName}`);
+                storageRef.delete().then(() => {
+                    console.log("File deleted from storage.");
+                    // Now delete the reference from the database
+                    return filesRef.remove();
+                }).then(() => {
+                    console.log("File reference deleted from database.");
+                    loadFiles(noteId); // Reload files after deletion
+                }).catch((error) => {
+                    console.error("Error deleting file:", error);
+                });
+            }
+        }).catch((error) => {
+            console.error("Error fetching file data:", error);
         });
     }
 
