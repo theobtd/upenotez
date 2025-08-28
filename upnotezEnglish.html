@@ -474,6 +474,17 @@
             font-family: 'Segoe UI', sans-serif; /* Change to your desired font */
             font-size: 16px; /* Change to your desired font size */
         }
+        #add-file-modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 10; /* Higher z-index for the modal */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -522,6 +533,15 @@
         <input type="text" id="event-field5" placeholder="Secondary Phone Number" />
         <button class="confirm-button" id="confirm-yes">Confirm</button>
         <button class="close" id="confirm-no">Cancel</button>
+    </div>
+</div>
+
+<div id="add-file-modal" style="display: none;">
+    <div id="modal-content">
+        <span class="close" id="close-add-file-modal">&times;</span>
+        <h2>Add a File</h2>
+        <input type="text" id="file-name" placeholder="Enter file name" required />
+        <button id="confirm-add-file-button" class="contact-button">Add File</button>
     </div>
 </div>
 
@@ -1032,6 +1052,25 @@
 
     document.getElementById('confirm-no').onclick = function() {
         document.getElementById('confirm-modal').style.display = "none";
+    };
+
+    // Open the add file modal when any addFile button is clicked
+    document.querySelectorAll('.add-note').forEach(button => {
+        button.onclick = function() {
+            document.getElementById('add-file-modal').style.display = "block";
+        };
+    });
+    
+    // Close the modal when the close button is clicked
+    document.getElementById('close-add-file-modal').onclick = function() {
+        document.getElementById('add-file-modal').style.display = "none";
+    };
+    
+    // Close the modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('add-file-modal')) {
+            document.getElementById('add-file-modal').style.display = "none";
+        }
     };
 
     document.getElementById('add-field-button').onclick = function() {
