@@ -1102,6 +1102,16 @@
                     fileLink.textContent = files[key].name; // Use the original file name
                     fileLink.target = "_blank"; // Open in new tab
                     fileItem.appendChild(fileLink);
+    
+                    // Create a delete button
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.className = 'delete-file-button'; // Add a class for styling
+                    deleteButton.onclick = () => {
+                        deleteFile(key, noteId); // Call the delete function with the file ID and note ID
+                    };
+    
+                    fileItem.appendChild(deleteButton); // Append delete button to file item
                     filesList.appendChild(fileItem);
                 }
             }
@@ -1111,6 +1121,25 @@
             if (noteBox) {
                 noteBox.appendChild(filesList); // Add the new list to the note box
             }
+        });
+    }
+
+    function deleteFile(fileId, noteId) {
+        const user = auth.currentUser;
+        const fileRef = firebase.storage().ref(`users/${user.uid}/notes/${noteId}/${fileId}`); // Path to the file in storage
+        const dbRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files/${fileId}`); // Path in database
+    
+        // Delete the file from storage
+        fileRef.delete().then(() => {
+            console.log("File deleted from storage.");
+            // Now remove the file reference from the database
+            return dbRef.remove();
+        }).then(() => {
+            console.log("File reference deleted from database.");
+            // Reload the files to update the UI
+            loadFiles(noteId); // Reload files for the current note
+        }).catch((error) => {
+            console.error("Error deleting file:", error);
         });
     }
 
