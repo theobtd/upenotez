@@ -659,14 +659,14 @@
     };
 
     const textInput = document.getElementById('text-input');
-    const addButton = document.getElementById('add-button');
+    const addFile = document.getElementById('add-button');
     
     // Initially disable the button
-    addButton.disabled = true;
+    addFile.disabled = true;
     
     // Add event listener to check for input
     textInput.addEventListener('input', () => {
-        addButton.disabled = !textInput.value.trim(); // Enable button if there is text
+        addFile.disabled = !textInput.value.trim(); // Enable button if there is text
     });
 
     document.getElementById('add-button').onclick = function() {
@@ -935,10 +935,10 @@
                     deleteButton.style.marginTop = '10px'; // Add margin
 
                     // Create the add button
-                    const addButton = document.createElement('button');
-                    addButton.className = 'add-note'; // Add a class for styling
-                    addButton.innerText = '+'; // Set text for the add button
-                    addButton.style.marginTop = '10px'; // Add margin
+                    const addFile = document.createElement('button');
+                    addFile.className = 'add-note'; // Add a class for styling
+                    addFile.innerText = '+'; // Set text for the add button
+                    addFile.style.marginTop = '10px'; // Add margin
         
                     // Delete button functionality
                     deleteButton.onclick = function() {
@@ -960,7 +960,7 @@
                     notesList.appendChild(noteBox);
                     noteBox.appendChild(saveButton);
                     noteBox.appendChild(deleteButton);
-                    noteBox.appendChild(addButton);
+                    noteBox.appendChild(addFile);
                 });
             }
         });
