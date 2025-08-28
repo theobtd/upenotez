@@ -1084,15 +1084,9 @@
         const user = auth.currentUser;
         const filesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files`);
     
-        filesRef.once('value', (snapshot) => {
+        filesRef.on('value', (snapshot) => {
             const files = snapshot.val();
             const filesList = document.createElement('ul'); // Create a new list for files
-    
-            // Clear the existing file list in the note box
-            const existingFilesList = document.querySelector(`li.note-box[data-note-id="${noteId}"] ul`);
-            if (existingFilesList) {
-                existingFilesList.remove(); // Remove the old list if it exists
-            }
     
             for (const key in files) {
                 if (files.hasOwnProperty(key)) {
@@ -1102,15 +1096,53 @@
                     fileLink.textContent = files[key].name; // Use the original file name
                     fileLink.target = "_blank"; // Open in new tab
                     fileItem.appendChild(fileLink);
+    
+                    // Create the delete button
+                    const deleteButton = document.createElement('button');
+                    deleteButton.innerText = 'Delete';
+                    deleteButton.style.marginLeft = '10px'; // Add space between link and button
+                    deleteButton.onclick = () => {
+                        const confirmDelete = confirm(`Are you sure you want to delete "${files[key].name}"?`);
+                        if (confirmDelete) {
+                            deleteFile(noteId, key, files[key].url); // Call the delete function
+                        }
+                    };
+                    fileItem.appendChild(deleteButton); // Append delete button to the list item
                     filesList.appendChild(fileItem);
                 }
             }
     
-            // Append the new files list to the note box
+            // Clear existing list and append the new file list
             const noteBox = document.querySelector(`li.note-box[data-note-id="${noteId}"]`);
             if (noteBox) {
+                const existingFilesList = noteBox.querySelector('ul'); // Check for existing list
+                if (existingFilesList) {
+                    existingFilesList.remove(); // Remove the old list if it exists
+                }
                 noteBox.appendChild(filesList); // Add the new list to the note box
             }
+        });
+    }
+
+    function deleteFile(noteId, fileKey, fileUrl) {
+        const user = auth.currentUser;
+        const storageRef = firebase.storage().ref();
+    
+        // Get the file reference in storage
+        const fileRef = storageRef.child(`users/${user.uid}/notes/${noteId}/${fileUrl.split('/').pop()}`);
+    
+        // Delete the file from storage
+        fileRef.delete().then(() => {
+            console.log("File deleted successfully from storage.");
+            
+            // Now delete the file reference from the database
+            const filesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files/${fileKey}`);
+            return filesRef.remove();
+        }).then(() => {
+            console.log("File reference deleted successfully from database.");
+            loadFiles(noteId); // Refresh the file list after deletion
+        }).catch((error) => {
+            console.error("Error deleting file:", error);
         });
     }
 
