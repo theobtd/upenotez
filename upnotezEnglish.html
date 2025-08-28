@@ -1128,8 +1128,11 @@
         const user = auth.currentUser;
         const storageRef = firebase.storage().ref();
     
+        // Get the file name from the URL
+        const fileName = fileUrl.split('/').pop().split('?')[0]; // Extract the filename
+    
         // Get the file reference in storage
-        const fileRef = storageRef.child(`users/${user.uid}/notes/${noteId}/${fileUrl.split('/').pop()}`);
+        const fileRef = storageRef.child(`users/${user.uid}/notes/${noteId}/${fileName}`);
     
         // Delete the file from storage
         fileRef.delete().then(() => {
