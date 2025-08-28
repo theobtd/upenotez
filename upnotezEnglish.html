@@ -7,7 +7,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-storage-compat.js"></script>
     <style>
         body { font-family: Segoe UI, sans-serif; text-align: center; margin: 0; background-color: #e4e7ed; }
 
@@ -564,7 +563,6 @@
         <h2>Create a New Note</h2>
         <input type="text" id="note-title" placeholder="Enter note title" required />
         <input type="date" id="note-date" required />
-        <input type="file" id="note-file" accept="*/*" />
         <button class="contact-button" id="confirm-note-button">Create Note</button>
     </div>
 </div>
@@ -614,7 +612,6 @@
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const database = firebase.database();
-    const storage = firebase.storage(); // Initialize Firebase Storage
 
     let currentAction = null;
     let currentProcessId = null;
@@ -1245,7 +1242,6 @@
         const user = auth.currentUser;
         const noteTitle = document.getElementById('note-title').value;
         const noteDate = document.getElementById('note-date').value;
-        const fileInput = document.getElementById('note-file'); // Get file input
     
         if (user && currentProcessId) {
             const notesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes`);
@@ -1256,46 +1252,20 @@
                 createdAt: new Date().toISOString() // Timestamp for when the note was created
             };
     
-            // Check if a file is selected
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0]; // Get the selected file
-                const storageRef = storage.ref(`notes/${user.uid}/${newNoteRef.key}/${file.name}`); // Create storage reference
-    
-                // Upload the file to Firebase Storage
-                storageRef.put(file).then((snapshot) => {
-                    console.log("File uploaded successfully!");
-    
-                    // Get the file's download URL and save it to the note data
-                    return storageRef.getDownloadURL().then((downloadURL) => {
-                        noteData.fileURL = downloadURL; // Add download URL to note data
-                        return newNoteRef.set(noteData); // Save note data to the database
-                    });
-                }).then(() => {
+            // Set the new note in the database
+            newNoteRef.set(noteData)
+                .then(() => {
                     console.log("New note created successfully:", noteData);
                     document.getElementById('note-modal').style.display = "none"; // Hide the modal
                     document.getElementById('note-title').value = ""; // Clear input
-                    document.getElementById('note-date').value = ""; // Clear date
-                    fileInput.value = ""; // Clear file input
-    
+                    document.getElementById('note-date').value = ""; // Clear input
+
                     // Re-select the process
                     reSelectProcess(currentProcessId);
-                }).catch((error) => {
-                    console.error("Error uploading file:", error);
-                });
-            } else {
-                // If no file is selected, just save the note without a file
-                newNoteRef.set(noteData).then(() => {
-                    console.log("New note created successfully:", noteData);
-                    document.getElementById('note-modal').style.display = "none"; // Hide the modal
-                    document.getElementById('note-title').value = ""; // Clear input
-                    document.getElementById('note-date').value = ""; // Clear date
-    
-                    // Re-select the process
-                    reSelectProcess(currentProcessId);
-                }).catch((error) => {
+                })
+                .catch((error) => {
                     console.error("Error creating note:", error);
                 });
-            }
         } else {
             console.log("No user is logged in or no process selected.");
         }
