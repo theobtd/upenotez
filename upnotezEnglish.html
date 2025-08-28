@@ -1126,18 +1126,18 @@
 
     function deleteFile(fileId, noteId) {
         const user = auth.currentUser;
-        const fileRef = firebase.storage().ref(`users/${user.uid}/notes/${noteId}/${fileId}`); // Path to the file in storage
-        const dbRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files/${fileId}`); // Path in database
+        const fileRef = firebase.storage().ref(`users/${user.uid}/notes/${noteId}/${fileId}`);
+        const dbRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files/${fileId}`);
+    
+        console.log("Deleting file from storage path:", fileRef.fullPath); // Log the storage path
     
         // Delete the file from storage
         fileRef.delete().then(() => {
             console.log("File deleted from storage.");
-            // Now remove the file reference from the database
             return dbRef.remove();
         }).then(() => {
             console.log("File reference deleted from database.");
-            // Reload the files to update the UI
-            loadFiles(noteId); // Reload files for the current note
+            loadFiles(noteId);
         }).catch((error) => {
             console.error("Error deleting file:", error);
         });
