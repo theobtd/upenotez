@@ -448,6 +448,15 @@
             flex-direction: column; /* Stack buttons vertically */
             gap: 10px; /* Optional: space between buttons */
         }
+        .note-textarea {
+            width: 375px; /* Set width */
+            height: 70vh; /* Set height */
+            border: none; /* No border */
+            outline: none; /* Remove outline on focus */
+            background-color: transparent; /* Optional: make background transparent */
+            font-family: 'Segoe UI', sans-serif; /* Change to your desired font */
+            font-size: 16px; /* Change to your desired font size */
+        }
     </style>
 </head>
 <body>
@@ -839,8 +848,7 @@
         
                     // Create a text box
                     const textBox = document.createElement('textarea');
-                    textBox.style.width = '375px'; // Set width to 200px
-                    textBox.style.height = '70vh'; // Set height to 70vh
+                    textBox.className = 'note-textarea'; // Apply the class
                     textBox.placeholder = 'Add your notes here...'; // Optional placeholder
                     textBox.value = note.content; // Set existing content
                     // Remove borders
