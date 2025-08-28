@@ -336,6 +336,17 @@
             height: 10px;
             font-weight: bold;
         }
+
+        .add-note {
+            background-color: green; /* Green background */
+            color: white; /* White text */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            padding: 5px 10px; /* Padding for spacing */
+            cursor: pointer; /* Pointer cursor on hover */
+            margin-top: 10px; /* Margin to separate from other elements */
+            margin-right: auto; /* Push the button to the left */
+        }
         
         .delete-note:hover {
             opacity: 0.8; /* Slightly transparent on hover */
@@ -922,12 +933,6 @@
                     addButton.className = 'add-note'; // Add a class for styling
                     addButton.innerText = '+'; // Set text for the add button
                     addButton.style.marginTop = '10px'; // Add margin
-                    addButton.style.backgroundColor = 'green'; // Set background color
-                    addButton.style.color = 'white'; // Set text color
-                    addButton.style.border = 'none'; // Remove border
-                    addButton.style.borderRadius = '5px'; // Rounded corners
-                    addButton.style.padding = '5px 10px'; // Padding for spacing
-                    addButton.style.cursor = 'pointer'; // Pointer cursor on hover
         
                     // Delete button functionality
                     deleteButton.onclick = function() {
