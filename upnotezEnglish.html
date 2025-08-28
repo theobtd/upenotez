@@ -1044,9 +1044,15 @@
         const user = auth.currentUser;
         const filesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files`);
     
-        filesRef.on('value', (snapshot) => {
+        filesRef.once('value', (snapshot) => {
             const files = snapshot.val();
             const filesList = document.createElement('ul'); // Create a new list for files
+    
+            // Clear the existing file list in the note box
+            const existingFilesList = document.querySelector(`li.note-box[data-note-id="${noteId}"] ul`);
+            if (existingFilesList) {
+                existingFilesList.remove(); // Remove the old list if it exists
+            }
     
             for (const key in files) {
                 if (files.hasOwnProperty(key)) {
@@ -1060,10 +1066,10 @@
                 }
             }
     
-            // Append files list to the noteBox or wherever appropriate
+            // Append the new files list to the note box
             const noteBox = document.querySelector(`li.note-box[data-note-id="${noteId}"]`);
             if (noteBox) {
-                noteBox.appendChild(filesList); // Add the list to the note box
+                noteBox.appendChild(filesList); // Add the new list to the note box
             }
         });
     }
