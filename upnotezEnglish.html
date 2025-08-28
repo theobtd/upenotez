@@ -7,6 +7,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-storage-compat.js"></script>
     <style>
         body { font-family: Segoe UI, sans-serif; text-align: center; margin: 0; background-color: #e4e7ed; }
 
@@ -595,6 +596,7 @@
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const database = firebase.database();
+    const storage = firebase.storage();
 
     let currentAction = null;
     let currentProcessId = null;
@@ -932,11 +934,34 @@
                                 });
                         }
                     };
+
+                    // Create an upload button
+                    const uploadButton = document.createElement('button');
+                    uploadButton.className = 'upload-button';
+                    uploadButton.innerText = 'Upload File';
+                    uploadButton.style.marginTop = '10px'; // Add margin
+                    
+                    // Add event listener for the upload button
+                    uploadButton.onclick = function() {
+                        const fileInput = document.createElement('input');
+                        fileInput.type = 'file'; // Set type to file
+                    
+                        // Handle the file selection
+                        fileInput.onchange = (e) => {
+                            const file = e.target.files[0]; // Get the selected file
+                            if (file) {
+                                uploadFile(file, note.id); // Call the upload function
+                            }
+                        };
+                    
+                        fileInput.click(); // Programmatically click the file input
+                    };
         
                     // Append the delete button to the note box
                     notesList.appendChild(noteBox);
                     noteBox.appendChild(saveButton);
                     noteBox.appendChild(deleteButton);
+                    noteBox.appendChild(uploadButton);
                 });
             }
         });
@@ -952,6 +977,53 @@
             })
             .catch((error) => {
                 console.error("Error saving note content:", error);
+            });
+    }
+
+    function uploadFile(file, noteId) {
+        const user = auth.currentUser;
+        if (!user) {
+            alert("You must be logged in to upload files.");
+            return;
+        }
+    
+        // Create a reference to the storage location
+        const storageRef = firebase.storage().ref();
+        const fileRef = storageRef.child(`users/${user.uid}/notes/${noteId}/${file.name}`);
+    
+        // Upload the file
+        const uploadTask = fileRef.put(file);
+    
+        // Monitor the upload progress
+        uploadTask.on('state_changed', 
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+            }, 
+            (error) => {
+                console.error("Upload failed:", error);
+            }, 
+            () => {
+                // Upload completed successfully, now we can get the download URL
+                uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                    // Optionally save the download URL in your database
+                    saveFileUrlToDatabase(noteId, downloadURL);
+                });
+            }
+        );
+    }
+    
+    function saveFileUrlToDatabase(noteId, downloadURL) {
+        const user = auth.currentUser;
+        const notesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files`);
+        
+        notesRef.push({ url: downloadURL }) // Push the URL to the database
+            .then(() => {
+                console.log("File URL saved to database.");
+            })
+            .catch((error) => {
+                console.error("Error saving file URL:", error);
             });
     }
 
