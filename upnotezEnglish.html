@@ -7,6 +7,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-storage-compat.js"></script>
     <style>
         body { font-family: Segoe UI, sans-serif; text-align: center; margin: 0; background-color: #e4e7ed; }
 
@@ -939,6 +940,7 @@
                     addFile.className = 'add-note'; // Add a class for styling
                     addFile.innerText = '+'; // Set text for the add button
                     addFile.style.marginTop = '10px'; // Add margin
+                    <input type="file" id="file-input" style="display: none;" />
         
                     // Delete button functionality
                     deleteButton.onclick = function() {
@@ -1367,6 +1369,35 @@
                 });
         }
     };
+
+    addFile.onclick = function() {
+        document.getElementById('file-input').click(); // Trigger file input click
+    };
+
+    const fileInput = document.getElementById('file-input');
+
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0]; // Get the selected file
+        if (file) {
+            const user = auth.currentUser;
+            if (!user) {
+                alert("You must be logged in to upload files.");
+                return;
+            }
+    
+            const storageRef = firebase.storage().ref(); // Get a reference to the storage service
+            const fileRef = storageRef.child(`uploads/${user.uid}/${file.name}`); // Create a reference to the file location
+    
+            // Upload the file to Firebase Storage
+            fileRef.put(file).then((snapshot) => {
+                console.log("File uploaded successfully:", snapshot);
+                alert("File uploaded successfully!");
+            }).catch((error) => {
+                console.error("Error uploading file:", error);
+                alert("Error uploading file.");
+            });
+        }
+    });
 
     const resizeHandle = document.getElementById('resize-handle');
     let isResizing = false;
