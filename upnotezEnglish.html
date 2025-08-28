@@ -576,6 +576,14 @@
     </div>
 </div>
 
+<div id="popup-modal" style="display: none;">
+    <div id="popup-content">
+        <span class="close-popup" id="close-popup">&times;</span>
+        <h2>Popup Window</h2>
+        <p>This is a placeholder for future content.</p>
+    </div>
+</div>
+
 <div id="error-modal" style="display: none;">
     <div id="modal-content">
         <p id="error-message">Please select a process first.</p>
@@ -1365,6 +1373,21 @@
                 .catch((error) => {
                     console.error("Error deleting profile: ", error);
                 });
+        }
+    };
+
+    document.getElementById('.add-note').onclick = function() {
+        document.getElementById('popup-modal').style.display = "block"; // Show the popup
+    };
+
+    document.getElementById('close-popup').onclick = function() {
+        document.getElementById('popup-modal').style.display = "none"; // Hide the popup
+    };
+    
+    // Close the popup if the user clicks outside of it
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('popup-modal')) {
+            document.getElementById('popup-modal').style.display = "none"; // Hide the popup
         }
     };
 
