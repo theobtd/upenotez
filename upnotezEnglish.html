@@ -821,8 +821,7 @@
                         id: key,
                         title: notes[key].title,
                         date: notes[key].date,
-                        content: notes[key].content || "", // Get existing content or default to empty
-                        files: notes[key].Files || [] // Get uploaded files
+                        content: notes[key].content || "" // Get existing content or default to empty
                     });
                 }
             }
@@ -858,26 +857,6 @@
                     textBox.style.border = 'none'; // No border
                     textBox.style.outline = 'none'; // Remove outline on focus
                     textBox.style.backgroundColor = 'transparent'; // Optional: make background transparent
-                    
-                    // Create a section for uploaded files
-                    const filesSection = document.createElement('div');
-                    filesSection.className = 'files-section';
-
-                    // Display uploaded files
-                    if (note.files.length > 0) {
-                        note.files.forEach(file => {
-                            const fileLink = document.createElement('a');
-                            fileLink.href = file.url; // URL of the uploaded file
-                            fileLink.target = '_blank'; // Open in a new tab
-                            fileLink.innerText = file.url.split('/').pop(); // Display the file name
-                            filesSection.appendChild(fileLink);
-                            filesSection.appendChild(document.createElement('br')); // Line break
-                        });
-                    } else {
-                        const noFilesMessage = document.createElement('span');
-                        noFilesMessage.innerText = "No files uploaded.";
-                        filesSection.appendChild(noFilesMessage);
-                    }
 
                     let lastSavedContent = textBox.value;
                     let hasUnsavedChanges = false; // Track unsaved changes
@@ -930,7 +909,6 @@
                     noteBox.appendChild(dateElement);
                     textBox.style.marginTop = '5%';
                     noteBox.appendChild(textBox);
-                    noteBox.appendChild(filesSection);
                     // noteBox.appendChild(tasksButton);
                     // noteBox.appendChild(saveButton);
                     notesList.appendChild(noteBox);
