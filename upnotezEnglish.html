@@ -1067,10 +1067,13 @@
         const user = auth.currentUser;
         const notesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files`);
         
+        // Extract the path from the download URL
+        const filePath = downloadURL.split('/o/')[1].split('?')[0]; // Gets the path after /o/
+    
         notesRef.push({ 
             url: downloadURL, 
-            name: fileName, // Save the original file name
-            path: downloadURL // Save the full path for deletion
+            name: fileName, // Save the original file name for display
+            path: filePath // Save the unique path for deletion
         })
         .then(() => {
             console.log("File URL and name saved to database.");
@@ -1131,10 +1134,7 @@
     
         filesRef.once('value').then((snapshot) => {
             const fileData = snapshot.val();
-            const fileUrl = fileData.url; // Get the full download URL from the database
-    
-            // Extract the file path for deletion
-            const filePath = fileUrl.split('/o/')[1].split('?')[0]; // Extract the path correctly
+            const filePath = fileData.path; // Use the stored unique path
     
             const storageRef = firebase.storage().ref();
             const fileRef = storageRef.child(filePath); // Use the correct path for deletion
@@ -1145,7 +1145,7 @@
                 return filesRef.remove(); // Delete the reference from the database
             });
         }).then(() => {
-            console.log("File reference deleted successfully from database.");
+            console.log("File reference deleted successfully from the database.");
             loadFiles(noteId); // Refresh the file list after deletion
         }).catch((error) => {
             console.error("Error deleting file:", error);
