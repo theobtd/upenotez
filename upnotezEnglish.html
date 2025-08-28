@@ -7,7 +7,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-storage-compat.js"></script>
     <style>
         body { font-family: Segoe UI, sans-serif; text-align: center; margin: 0; background-color: #e4e7ed; }
 
@@ -613,7 +612,6 @@
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const database = firebase.database();
-    const storage = firebase.storage();
 
     let currentAction = null;
     let currentProcessId = null;
@@ -920,12 +918,6 @@
                         console.log("Current Process ID:", currentProcessId);
                         reSelectProcess(currentProcessId);
                     };
-
-                    // Add the file input here
-                    const fileInput = document.createElement('input');
-                    fileInput.type = "file"; // Specify input type
-                    fileInput.id = "file-input"; // Set the input ID
-                    fileInput.style.display = 'none'; // Hide the input initially
                 
                     // Append the title, date, text box, and save button to the note box
                     noteBox.appendChild(titleElement);
@@ -947,36 +939,6 @@
                     addFile.className = 'add-note'; // Add a class for styling
                     addFile.innerText = '+'; // Set text for the add button
                     addFile.style.marginTop = '10px'; // Add margin
-
-                    // Add event listener for the addFile button
-                    addFile.onclick = function() {
-                        // Trigger the file input click
-                        document.getElementById('file-input').click();
-                    };
-                    
-                    // Handle file selection
-                    document.getElementById('file-input').addEventListener('change', function(event) {
-                        const file = event.target.files[0]; // Get the selected file
-                        if (file) {
-                            const user = auth.currentUser; // Get the current user
-                            const storageRef = firebase.storage().ref(); // Get a reference to the storage
-                    
-                            // Create a storage reference for the file
-                            const fileRef = storageRef.child(`uploads/${user.uid}/${file.name}`); // Customize the path as needed
-                    
-                            // Upload the file
-                            fileRef.put(file).then((snapshot) => {
-                                console.log('File uploaded successfully', snapshot);
-                                // Optionally, you can get the download URL
-                                fileRef.getDownloadURL().then((url) => {
-                                    console.log('File available at', url);
-                                    // You can now store the URL in your database if needed
-                                });
-                            }).catch((error) => {
-                                console.error('Error uploading file:', error);
-                            });
-                        }
-                    });
         
                     // Delete button functionality
                     deleteButton.onclick = function() {
@@ -997,7 +959,6 @@
                     // Append the delete button to the note box
                     notesList.appendChild(noteBox);
                     noteBox.appendChild(saveButton);
-                    noteBox.appendChild(fileInput);
                     noteBox.appendChild(deleteButton);
                     noteBox.appendChild(addFile);
                 });
