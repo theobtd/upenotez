@@ -7,6 +7,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-storage-compat.js"></script>
     <style>
         body { font-family: Segoe UI, sans-serif; text-align: center; margin: 0; background-color: #e4e7ed; }
 
@@ -595,6 +596,7 @@
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const database = firebase.database();
+    const storage = firebase.storage();
 
     let currentAction = null;
     let currentProcessId = null;
@@ -797,6 +799,9 @@
         });
     }
 
+    <input type="file" id="file-upload" style="display: none;" />
+    <button id="upload-button" class="contact-button" style="display: none;">Upload File</button>
+
     function loadNotes(processId) {
         const user = auth.currentUser;
         const notesRef = database.ref(`users/${user.uid}/Processes/${processId}/Notes`);
@@ -909,6 +914,10 @@
                     noteBox.appendChild(textBox);
                     // noteBox.appendChild(tasksButton);
                     // noteBox.appendChild(saveButton);
+                    // Add the files list here
+                    const filesList = document.createElement('div');
+                    filesList.id = 'files-list'; // Set the ID for later reference
+                    noteBox.appendChild(filesList); // Append files list to note box
                     notesList.appendChild(noteBox);
         
                     // Create the delete button
@@ -938,6 +947,60 @@
                     noteBox.appendChild(saveButton);
                     noteBox.appendChild(deleteButton);
                 });
+            }
+        });
+        loadFiles(processId);
+    }
+
+    // Get references to the file upload input and button
+    const fileUploadInput = document.getElementById('file-upload');
+    const uploadButton = document.getElementById('upload-button');
+    
+    // Show the upload button when a file is selected
+    fileUploadInput.addEventListener('change', () => {
+        uploadButton.style.display = 'block';
+    });
+    
+    // Handle file upload
+    uploadButton.onclick = function() {
+        const file = fileUploadInput.files[0];
+        if (file) {
+            const user = auth.currentUser;
+            const notesRef = `users/${user.uid}/Processes/${currentProcessId}/Files/${file.name}`;
+            const storageRef = storage.ref(notesRef);
+    
+            // Upload the file
+            storageRef.put(file).then(() => {
+                console.log("File uploaded successfully");
+                alert("File uploaded successfully!");
+                fileUploadInput.value = ''; // Clear the input
+                uploadButton.style.display = 'none'; // Hide the upload button
+            }).catch((error) => {
+                console.error("Error uploading file:", error);
+            });
+        } else {
+            alert("Please select a file to upload.");
+        }
+    };
+
+    function loadFiles(processId) {
+        const user = auth.currentUser;
+        const filesRef = database.ref(`users/${user.uid}/Processes/${processId}/Files`);
+    
+        filesRef.on('value', (snapshot) => {
+            const files = snapshot.val();
+            const filesList = document.getElementById('files-list');
+            filesList.innerHTML = ''; // Clear previous files
+    
+            if (files) {
+                for (const fileName in files) {
+                    const fileLink = document.createElement('a');
+                    fileLink.href = `https://firebasestorage.googleapis.com/v0/b/${storage.bucket}/o/${encodeURIComponent(fileName)}?alt=media`; // Construct download URL
+                    fileLink.textContent = fileName; // Display file name
+                    fileLink.download = fileName; // Enable download
+                    filesList.appendChild(fileLink);
+                    filesList.appendChild(document.createElement('br')); // Line break
+                }
             }
         });
     }
