@@ -331,24 +331,7 @@
             align-items: center; /* Center vertically */
             justify-content: center; /* Center horizontally */
             margin-left: auto; /* Center the button horizontally */
-            align-self: flex-end;
-            width: 10px;
-            height: 10px;
-            font-weight: bold;
-        }
-
-        .add-note {
-            background-color: green; /* Green background */
-            color: #ebb178; /* White text */
-            border: none; /* No border */
-            border-radius: 5px; /* Rounded corners */
-            padding: 8px; /* Padding for spacing */
-            cursor: pointer; /* Pointer cursor on hover */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            align-self: flex-end;
-            margin-right: auto; /* Push the button to the left */
+            margin-top: auto; /* Push the button to the bottom */
             width: 10px;
             height: 10px;
             font-weight: bold;
@@ -474,17 +457,6 @@
             font-family: 'Segoe UI', sans-serif; /* Change to your desired font */
             font-size: 16px; /* Change to your desired font size */
         }
-        #add-file-modal {
-            display: none; /* Hidden by default */
-            position: fixed;
-            z-index: 10; /* Higher z-index for the modal */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
     </style>
 </head>
 <body>
@@ -533,15 +505,6 @@
         <input type="text" id="event-field5" placeholder="Secondary Phone Number" />
         <button class="confirm-button" id="confirm-yes">Confirm</button>
         <button class="close" id="confirm-no">Cancel</button>
-    </div>
-</div>
-
-<div id="add-file-modal" style="display: none;">
-    <div id="modal-content">
-        <span class="close" id="close-add-file-modal">&times;</span>
-        <h2>Add a File</h2>
-        <input type="text" id="file-name" placeholder="Enter file name" required />
-        <button id="confirm-add-file-button" class="contact-button">Add File</button>
     </div>
 </div>
 
@@ -679,14 +642,14 @@
     };
 
     const textInput = document.getElementById('text-input');
-    const addFile = document.getElementById('add-button');
+    const addButton = document.getElementById('add-button');
     
     // Initially disable the button
-    addFile.disabled = true;
+    addButton.disabled = true;
     
     // Add event listener to check for input
     textInput.addEventListener('input', () => {
-        addFile.disabled = !textInput.value.trim(); // Enable button if there is text
+        addButton.disabled = !textInput.value.trim(); // Enable button if there is text
     });
 
     document.getElementById('add-button').onclick = function() {
@@ -953,12 +916,6 @@
                     deleteButton.className = 'delete-note';
                     deleteButton.innerText = '-';
                     deleteButton.style.marginTop = '10px'; // Add margin
-
-                    // Create the add button
-                    const addFile = document.createElement('button');
-                    addFile.className = 'add-note'; // Add a class for styling
-                    addFile.innerText = '+'; // Set text for the add button
-                    addFile.style.marginTop = '10px'; // Add margin
         
                     // Delete button functionality
                     deleteButton.onclick = function() {
@@ -980,7 +937,6 @@
                     notesList.appendChild(noteBox);
                     noteBox.appendChild(saveButton);
                     noteBox.appendChild(deleteButton);
-                    noteBox.appendChild(addFile);
                 });
             }
         });
@@ -1052,25 +1008,6 @@
 
     document.getElementById('confirm-no').onclick = function() {
         document.getElementById('confirm-modal').style.display = "none";
-    };
-
-    // Open the add file modal when any addFile button is clicked
-    document.querySelectorAll('.add-note').forEach(button => {
-        button.onclick = function() {
-            document.getElementById('add-file-modal').style.display = "block";
-        };
-    });
-    
-    // Close the modal when the close button is clicked
-    document.getElementById('close-add-file-modal').onclick = function() {
-        document.getElementById('add-file-modal').style.display = "none";
-    };
-    
-    // Close the modal when clicking outside of it
-    window.onclick = function(event) {
-        if (event.target == document.getElementById('add-file-modal')) {
-            document.getElementById('add-file-modal').style.display = "none";
-        }
     };
 
     document.getElementById('add-field-button').onclick = function() {
