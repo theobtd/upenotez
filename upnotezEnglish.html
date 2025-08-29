@@ -945,6 +945,17 @@
                         console.log("Current Process ID:", currentProcessId);
                         reSelectProcess(currentProcessId);
                     };
+
+                    // Create the Bold button
+                    const boldButton = document.createElement('button');
+                    boldButton.innerText = 'Bold';
+                    boldButton.className = 'tasks-button'; // Use existing styling
+                    boldButton.style.width = '100%'; // Set width to 100% to match the text box
+                    
+                    // Add event listener for the Bold button
+                    boldButton.onclick = function() {
+                        document.execCommand('bold'); // This applies bold formatting to the selected text
+                    };
                 
                     // Append the title, date, text box, and save button to the note box
                     noteBox.appendChild(titleElement);
@@ -954,6 +965,7 @@
                     // noteBox.appendChild(tasksButton);
                     // noteBox.appendChild(saveButton);
                     notesList.appendChild(noteBox);
+                    noteBox.appendChild(boldButton);
         
                     // Create the delete button
                     const deleteButton = document.createElement('button');
