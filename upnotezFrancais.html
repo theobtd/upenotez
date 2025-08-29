@@ -7,6 +7,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.9.0/firebase-storage-compat.js"></script>
     <style>
         body { font-family: Segoe UI, sans-serif; text-align: center; margin: 0; background-color: #e4e7ed; }
 
@@ -448,6 +449,51 @@
             flex-direction: column; /* Stack buttons vertically */
             gap: 10px; /* Optional: space between buttons */
         }
+        .note-textarea {
+            width: 375px; /* Set width */
+            height: 70vh; /* Set height */
+            border: none; /* No border */
+            outline: none; /* Remove outline on focus */
+            background-color: transparent; /* Optional: make background transparent */
+            font-family: 'Segoe UI', sans-serif; /* Change to your desired font */
+            font-size: 16px; /* Change to your desired font size */
+        }
+        .note-box ul {
+            list-style-type: none; /* Remove bullet points */
+            padding: 0; /* Remove padding */
+        }
+        
+        .note-box li {
+            margin: 5px 0; /* Space between file links */
+        }
+
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            z-index: 1000; /* Ensure it's on top of everything */
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+        }
+        
+        #loading-spinner {
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 60px; /* Size of the spinner */
+            height: 60px; /* Size of the spinner */
+            animation: spin 2s linear infinite; /* Spinner animation */
+        }
+        
+        /* Spinner animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -455,6 +501,10 @@
 <button id="toggle-event-display", style="display: none;">
     View Details
 </button>
+
+<div id="loading-overlay" style="display: none;">
+    <div id="loading-spinner"></div>
+</div>
 
 <div id="main-container" style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
     <div id="info-box" style="margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
@@ -466,8 +516,8 @@
                 <ul id="processes-ul"></ul>
             </div>
         </div>
-        <input type="text" id="text-input" placeholder="Nom du nouveau contact" style="width: 90%; height: 40px; border: 1px solid #888; border-radius: 5px; margin-bottom: 5px; padding: 5px; box-sizing: border-box; display: block;">
-        <button id="add-button" class="info-box-button" style="display: block; z-index: 4; width: 90%; height: 40px; border-radius: 5px; background-color: #ebb178; color: black; border-color: transparent; font-size: 15px; cursor: pointer; margin: 5px;"disabled>Créer contact</button>
+        <input type="text" id="text-input" placeholder="Nouveau contact" style="width: 90%; height: 40px; border: 1px solid #888; border-radius: 5px; margin-bottom: 5px; padding: 5px; box-sizing: border-box; display: block;">
+        <button id="add-button" class="info-box-button" style="display: block; z-index: 4; width: 90%; height: 40px; border-radius: 5px; background-color: #ebb178; color: black; border-color: transparent; font-size: 15px; cursor: pointer; margin: 5px;"disabled>Ajouter Contact</button>
         <div id="resize-handle"></div>
     </div>
 </div>
@@ -475,12 +525,12 @@
 <div id="profile-modal">
     <div id="modal-content">
         <span class="close-task" id="close-modal">&times;</span>
-        <h2>Mon Profil</h2>
+        <h2>User Profile</h2>
         <p><strong>Email:</strong> <span id="user-email"></span></p>
         <p><strong>Ville:</strong> <span id="user-city"></span></p>
         <p><strong>Entreprise:</strong> <span id="user-company-name"></span></p>
         <p><strong>Langue:</strong> <span id="user-language"></span></p>
-        <button id="logout-button" class="contact-button">Se Deconnecter</button>
+        <button id="logout-button" class="contact-button">Me deconnecter</button>
     </div>
 </div>
 
@@ -489,11 +539,11 @@
         <p id="confirm-message">Are you sure you want to proceed?</p>
         <input type="text" id="event-name" placeholder="Nom" />
         <input type="text" id="event-company" placeholder="Entreprise" />
-        <input type="text" id="event-field1" placeholder="Titre" />
-        <input type="text" id="event-field2" placeholder="Email (primaire)" />
-        <input type="text" id="event-field3" placeholder="Email (secondaire" />
-        <input type="text" id="event-field4" placeholder="Num. Tel. (primaire)" />
-        <input type="text" id="event-field5" placeholder="Num. Tel. (secondaire)" />
+        <input type="text" id="event-field1" placeholder="Titre professionnel" />
+        <input type="text" id="event-field2" placeholder="Email" />
+        <input type="text" id="event-field3" placeholder="Email Secondaire" />
+        <input type="text" id="event-field4" placeholder="Num. Tel." />
+        <input type="text" id="event-field5" placeholder="Num. Tel. Secondaire" />
         <button class="confirm-button" id="confirm-yes">Confirmer</button>
         <button class="close" id="confirm-no">Annuler</button>
     </div>
@@ -502,30 +552,32 @@
 <!-- Event Name Display Box -->
 <div id="event-display">
     <span id="event-close" style="cursor: pointer; float: right; font-size: 20px;">&times;</span>
-    <h2 id="event-name-title">Name</h2>
+    <p><strong>Nom:</strong> <span id="event-name-title"></span></p>
+    <input type="text" id="event-name-title" style="display: none;" placeholder="Nom du contact" />
+    
     <p><strong>Entreprise:</strong> <span id="event-company-display"></span></p>
     <input type="text" id="event-company-input" style="display: none;" placeholder="Entreprise" />
     
     <p><strong>Titre:</strong> <span id="event-field1-display"></span></p>
     <input type="text" id="event-field1-input" style="display: none;" placeholder="Titre" />
     
-    <p><strong>Email (primaire):</strong> <span id="event-field2-display"></span></p>
-    <input type="text" id="event-field2-input" style="display: none;" placeholder="Email (primaire)" />
+    <p><strong>Email:</strong> <span id="event-field2-display"></span></p>
+    <input type="text" id="event-field2-input" style="display: none;" placeholder="Email" />
 
-    <p><strong>Email (secondaire):</strong> <span id="event-field3-display"></span></p>
-    <input type="text" id="event-field3-input" style="display: none;" placeholder="Email (secondaire)" />
+    <p><strong>Email secondaire:</strong> <span id="event-field3-display"></span></p>
+    <input type="text" id="event-field3-input" style="display: none;" placeholder="Email secondaire" />
 
-    <p><strong>Num. Tel. (primaire):</strong> <span id="event-field4-display"></span></p>
-    <input type="text" id="event-field4-input" style="display: none;" placeholder="Num. Tel. (primaire)" />
+    <p><strong>Num. Tel.:</strong> <span id="event-field4-display"></span></p>
+    <input type="text" id="event-field4-input" style="display: none;" placeholder="Num. Tel." />
 
-    <p><strong>Num. Tel. (secondaire):</strong> <span id="event-field5-display"></span></p>
-    <input type="text" id="event-field5-input" style="display: none;" placeholder="Num. Tel. (secondaire)" />
+    <p><strong>Num. Tel. Secondaire:</strong> <span id="event-field5-display"></span></p>
+    <input type="text" id="event-field5-input" style="display: none;" placeholder="Num. Tel. Secondaire" />
 
     <div id="button-container">
-        <button id="add-field-button" class="contact-button">Modifier</button>
+        <button id="add-field-button" class="contact-button">Modifier Informations</button>
         <button id="confirm-update-button" class="contact-button" style="display: none;">Confirmer</button>
-        <button id="delete-profile-button" class="delete-profile">Supprimer Contact</button>
-        <button id="close-event-display" class="contact-button" style="display: none;">Fermer</button>
+        <button id="delete-profile-button" class="delete-profile">Supprimer Profil</button>
+        <button id="close-event-display" class="contact-button" style="display: none;">Annuler</button>
     </div>
 </div>
 
@@ -533,9 +585,9 @@
     <div id="modal-content">
         <span class="close" id="close-note-modal">&times;</span>
         <h2>Nouvelle Note</h2>
-        <input type="text" id="note-title" placeholder="Titre" required />
+        <input type="text" id="note-title" placeholder="Titre note" required />
         <input type="date" id="note-date" required />
-        <button class="contact-button" id="confirm-note-button">Créer note</button>
+        <button class="contact-button" id="confirm-note-button">Créer Note</button>
     </div>
 </div>
 
@@ -556,11 +608,11 @@
 </div>
 
 <div id="no-process-message" style="display: block; text-align: center; position: absolute; top: 50%; left: 58%; transform: translate(-50%, -50%); z-index: 2;">
-    <h2>Selectionnez ou créez un nouveau contact</h2>
+    <h2>Selectionnez ou ajoutez un nouveau contact</h2>
 </div>
 
 <button id="create-note-button" disabled>
-    Create Note
+    Nouvelle Note
 </button>
     
 <div id="notes-container">
@@ -584,6 +636,7 @@
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const database = firebase.database();
+    const storage = firebase.storage();
 
     let currentAction = null;
     let currentProcessId = null;
@@ -663,7 +716,12 @@
             })
             .then(() => {
                 console.log("New process created successfully:", { eventId, name: eventName });
-                loadProcesses(); // Refresh the list of processes
+                currentProcessId = eventId; // Set currentProcessId to the new process ID
+                loadProcesses() // Refresh the list of processes
+                .then(() => {
+                    reSelectProcess(eventId); // Automatically select the new process
+                    loadNotes(eventId); // Load notes for the new process
+                });
                 document.getElementById('text-input').value = ""; // Clear input after adding
             })
             .catch((error) => {
@@ -826,6 +884,7 @@
                 notesArray.forEach(note => {
                     const noteBox = document.createElement('li');
                     noteBox.className = 'note-box';
+                    noteBox.setAttribute('data-note-id', note.id); // Set note ID for reference
         
                     // Create a title element
                     const titleElement = document.createElement('strong');
@@ -835,12 +894,12 @@
                     const dateElement = document.createElement('span');
                     dateElement.innerText = `${note.date}`;
         
-                    // Create a text box
-                    const textBox = document.createElement('textarea');
-                    textBox.style.width = '375px'; // Set width to 200px
-                    textBox.style.height = '70vh'; // Set height to 70vh
+                    // Create a contenteditable div
+                    const textBox = document.createElement('div');
+                    textBox.className = 'note-textarea'; // Apply the class
                     textBox.placeholder = 'Add your notes here...'; // Optional placeholder
-                    textBox.value = note.content; // Set existing content
+                    textBox.innerHTML = note.content; // Set existing content as innerHTML
+                    textBox.setAttribute('contenteditable', 'true'); // Make it editable
                     // Remove borders
                     textBox.style.border = 'none'; // No border
                     textBox.style.outline = 'none'; // Remove outline on focus
@@ -850,8 +909,8 @@
                     let hasUnsavedChanges = false; // Track unsaved changes
 
                     textBox.addEventListener('input', () => {
-                        hasUnsavedChanges = textBox.value !== lastSavedContent; // Check for changes
-                        saveButton.style.backgroundColor = hasUnsavedChanges ? '#ebb178' : white; // Change color
+                        hasUnsavedChanges = textBox.innerText !== lastSavedContent; // Check for changes
+                        saveButton.style.backgroundColor = hasUnsavedChanges ? '#ebb178' : 'white'; // Change color
                         saveButton.style.color = hasUnsavedChanges ? 'black' : 'white'; // Change font color
                         saveButton.style.cursor = 'pointer'; // Set cursor to pointer
                     });
@@ -878,9 +937,9 @@
                     saveButton.style.zIndex = '4'; // Set z-index to 5
 
                     saveButton.onclick = function() {
-                        const newContent = textBox.value; // Get new content
+                        const newContent = textBox.innerHTML; // Get new content as HTML
                         updateContent(newContent, note.id); // Save the current content using the note ID
-                        lastSavedContent = textBox.value; // Update last saved content
+                        lastSavedContent = textBox.innerHTML; // Update last saved content
                         hasUnsavedChanges = false; // Reset change tracking
                         saveButton.style.backgroundColor = 'white'; // Reset button color
                         saveButton.style.color = 'white'; // Reset button color
@@ -891,6 +950,54 @@
                         console.log("Current Process ID:", currentProcessId);
                         reSelectProcess(currentProcessId);
                     };
+
+                    // Create a container for the formatting buttons
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.style.display = 'flex'; // Use flexbox for horizontal alignment
+                    buttonContainer.style.justifyContent = 'space-between'; // Optional: space between buttons
+                    buttonContainer.style.width = '100%'; // Make the container full width
+                    buttonContainer.style.gap = '10px';
+                    buttonContainer.style.marginBottom = '10px';
+
+                    // Create the Bold button
+                    const boldButton = document.createElement('button');
+                    boldButton.innerText = 'Bold';
+                    boldButton.className = 'tasks-button';
+                    boldButton.style.flex = '1'; // Allow the button to grow equally
+                    boldButton.style.backgroundColor = '#87d687';
+                    
+                    // Add event listener for the Bold button
+                    boldButton.onclick = function() {
+                        document.execCommand('bold'); // This applies bold formatting to the selected text
+                    };
+
+                    // Create the Underline button
+                    const underlineButton = document.createElement('button');
+                    underlineButton.innerText = 'Underline';
+                    underlineButton.className = 'tasks-button';
+                    underlineButton.style.flex = '1'; // Allow the button to grow equally
+                    underlineButton.style.backgroundColor = '#87d687';
+                    
+                    // Add event listener for the Underline button
+                    underlineButton.onclick = function() {
+                        document.execCommand('underline'); // This applies underline formatting to the selected text
+                    };
+
+                    // Create the Italic button
+                    const italicButton = document.createElement('button');
+                    italicButton.innerText = 'Italic';
+                    italicButton.className = 'tasks-button';
+                    italicButton.style.flex = '1'; // Allow the button to grow equally
+                    italicButton.style.backgroundColor = '#87d687';
+                    
+                    // Add event listener for the Italic button
+                    italicButton.onclick = function() {
+                        document.execCommand('italic'); // This applies italic formatting to the selected text
+                    };
+
+                    buttonContainer.appendChild(boldButton);
+                    buttonContainer.appendChild(underlineButton);
+                    buttonContainer.appendChild(italicButton);
                 
                     // Append the title, date, text box, and save button to the note box
                     noteBox.appendChild(titleElement);
@@ -900,6 +1007,7 @@
                     // noteBox.appendChild(tasksButton);
                     // noteBox.appendChild(saveButton);
                     notesList.appendChild(noteBox);
+                    noteBox.appendChild(buttonContainer);
         
                     // Create the delete button
                     const deleteButton = document.createElement('button');
@@ -909,7 +1017,7 @@
         
                     // Delete button functionality
                     deleteButton.onclick = function() {
-                        const confirmDelete = confirm(`Etes-vous certain(e) de vouloir supprimer la note suivant: "${note.title}"?`);
+                        const confirmDelete = confirm(`Are you sure you want to delete the note titled "${note.title}"?`);
                         if (confirmDelete) {
                             notesRef.child(note.id).remove()
                                 .then(() => {
@@ -922,11 +1030,39 @@
                                 });
                         }
                     };
+
+                    // Create an upload button
+                    const uploadButton = document.createElement('button');
+                    uploadButton.className = 'upload-button';
+                    uploadButton.innerText = 'Upload File';
+                    uploadButton.style.marginTop = '10px'; // Add margin
+                    
+                    // Add event listener for the upload button
+                    uploadButton.onclick = function() {
+                        const fileInput = document.createElement('input');
+                        fileInput.type = 'file'; // Set type to file
+                    
+                        // Handle the file selection
+                        fileInput.onchange = (e) => {
+                            const file = e.target.files[0]; // Get the selected file
+                            if (file) {
+                                uploadFile(file, note.id); // Call the upload function
+                            }
+                        };
+                    
+                        fileInput.click(); // Programmatically click the file input
+                    };
         
                     // Append the delete button to the note box
                     notesList.appendChild(noteBox);
                     noteBox.appendChild(saveButton);
                     noteBox.appendChild(deleteButton);
+                    noteBox.appendChild(uploadButton);
+
+                    loadFiles(note.id); // Load files for this note
+
+                    // Append noteBox to the notesList
+                    notesList.appendChild(noteBox);
                 });
             }
         });
@@ -936,13 +1072,138 @@
         const user = auth.currentUser;
         const notesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}`);
         
-        notesRef.update({ content: content })
+        notesRef.update({ content: content }) // Save the HTML content
             .then(() => {
                 console.log("Note content saved successfully.");
             })
             .catch((error) => {
                 console.error("Error saving note content:", error);
             });
+    }
+
+    function uploadFile(file, noteId) {
+        const user = auth.currentUser;
+        if (!user) {
+            alert("You must be logged in to upload files.");
+            return;
+        }
+        
+        // Show loading overlay
+        document.getElementById('loading-overlay').style.display = 'flex';
+    
+        const storageRef = firebase.storage().ref();
+        const fileRef = storageRef.child(`users/${user.uid}/notes/${noteId}/${file.name}`);
+        
+        const uploadTask = fileRef.put(file);
+        
+        uploadTask.on('state_changed', 
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+            }, 
+            (error) => {
+                console.error("Upload failed:", error);
+                // Hide loading overlay on error
+                document.getElementById('loading-overlay').style.display = 'none';
+            }, 
+            () => {
+                uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                    console.log('File available at', downloadURL);
+                    saveFileUrlToDatabase(noteId, downloadURL, file.name); // Pass the file name
+                }).finally(() => {
+                    // Hide loading overlay after upload completes
+                    document.getElementById('loading-overlay').style.display = 'none';
+                });
+            }
+        );
+    }
+    
+    function saveFileUrlToDatabase(noteId, downloadURL, fileName) {
+        const user = auth.currentUser;
+        const notesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files`);
+        
+        notesRef.push({ 
+            url: downloadURL, 
+            name: fileName // Save the original file name
+        })
+        .then(() => {
+            console.log("File URL and name saved to database.");
+            loadFiles(noteId); // Load files after saving
+        })
+        .catch((error) => {
+            console.error("Error saving file URL:", error);
+        });
+    }
+
+    function loadFiles(noteId) {
+        const user = auth.currentUser;
+        const filesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}/Files`);
+    
+        filesRef.once('value', (snapshot) => {
+            const files = snapshot.val();
+            const filesList = document.createElement('ul'); // Create a new list for files
+    
+            // Clear the existing file list in the note box
+            const existingFilesList = document.querySelector(`li.note-box[data-note-id="${noteId}"] ul`);
+            if (existingFilesList) {
+                existingFilesList.remove(); // Remove the old list if it exists
+            }
+    
+            for (const key in files) {
+                if (files.hasOwnProperty(key)) {
+                    const fileItem = document.createElement('li');
+                    const fileLink = document.createElement('a');
+                    fileLink.href = files[key].url; // Set the file URL
+                    fileLink.textContent = files[key].name; // Use the original file name
+                    fileLink.target = "_blank"; // Open in new tab
+                    fileItem.appendChild(fileLink);
+                    
+                    // Create a delete button for the file
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.className = 'delete-file-button'; // Add a class for styling
+    
+                    // Add event listener for the delete button
+                    deleteButton.onclick = function() {
+                        const confirmDelete = confirm(`Are you sure you want to delete the file "${files[key].name}"?`);
+                        if (confirmDelete) {
+                            deleteFileFromStorage(user.uid, noteId, key, files[key].name);
+                        }
+                    };
+                    
+                    fileItem.appendChild(deleteButton); // Append the delete button to the file item
+                    filesList.appendChild(fileItem); // Append the file item to the files list
+                }
+            }
+    
+            // Append the new files list to the note box
+            const noteBox = document.querySelector(`li.note-box[data-note-id="${noteId}"]`);
+            if (noteBox) {
+                noteBox.appendChild(filesList); // Add the new list to the note box
+            }
+        });
+    }
+
+    function deleteFileFromStorage(userId, noteId, fileId, fileName) {
+        const storageRef = firebase.storage().ref();
+        const fileRef = storageRef.child(`users/${userId}/notes/${noteId}/${fileName}`);
+    
+        // Delete the file from storage
+        fileRef.delete().then(() => {
+            console.log("File deleted successfully from storage.");
+            // Remove the reference from the database
+            const fileRefInDatabase = database.ref(`users/${userId}/Processes/${currentProcessId}/Notes/${noteId}/Files/${fileId}`);
+            fileRefInDatabase.remove()
+                .then(() => {
+                    console.log("File reference deleted successfully from database.");
+                    loadFiles(noteId); // Reload files to reflect changes
+                })
+                .catch((error) => {
+                    console.error("Error deleting file reference from database:", error);
+                });
+        }).catch((error) => {
+            console.error("Error deleting file from storage:", error);
+        });
     }
 
     document.getElementById('confirm-yes').onclick = function() {
@@ -1184,6 +1445,12 @@
             document.getElementById('error-modal').style.display = "block"; // Show the error modal
             return; // Stop further execution
         }
+        
+        // Set the current date in YYYY-MM-DD format
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0]; // Get date in YYYY-MM-DD format
+        document.getElementById('note-date').value = formattedDate; // Set the date input value
+        
         document.getElementById('note-modal').style.display = "block"; // Show the note modal if a process is selected
     };
     
@@ -1225,7 +1492,7 @@
                     document.getElementById('note-modal').style.display = "none"; // Hide the modal
                     document.getElementById('note-title').value = ""; // Clear input
                     document.getElementById('note-date').value = ""; // Clear input
-
+    
                     // Re-select the process
                     reSelectProcess(currentProcessId);
                 })
@@ -1250,9 +1517,12 @@
             // Add selected class and set background color
             selectedItem.classList.add('selected');
             selectedItem.style.backgroundColor = "#ebb178"; // Set background color directly
-
+    
             // Enable the create-note-button
             document.getElementById('create-note-button').disabled = false; // Enable the button
+    
+            // Load notes for the selected process
+            loadNotes(processId); // Load notes for the newly selected process
         } else {
             console.error("Selected item not found for process ID:", processId);
         }
@@ -1315,7 +1585,7 @@
 
     document.getElementById('delete-profile-button').onclick = function() {
         // Confirm deletion
-        const confirmDelete = confirm("Etes-vous certain(e) de vouloir supprimer ce contact?");
+        const confirmDelete = confirm("Are you sure you want to delete this profile?");
         if (confirmDelete && currentProcessId) {
             const user = auth.currentUser;
             const processesRef = database.ref('users/' + user.uid + '/Processes');
