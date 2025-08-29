@@ -494,16 +494,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        .note-textarea ul {
-            list-style-type: disc; /* Ensure bullets are displayed */
-            padding-left: 20px; /* Indent list items */
-            margin: 0; /* Remove default margin */
-        }
-        
-        .note-textarea li {
-            margin: 5px 0; /* Space between list items */
-        }
     </style>
 </head>
 <body>
@@ -944,13 +934,13 @@
                     saveButton.onclick = function() {
                         const newContent = textBox.innerHTML; // Get new content as HTML
                         updateContent(newContent, note.id); // Save the current content using the note ID
-                        lastSavedContent = newContent; // Update last saved content
+                        lastSavedContent = textBox.innerHTML; // Update last saved content
                         hasUnsavedChanges = false; // Reset change tracking
                         saveButton.style.backgroundColor = 'white'; // Reset button color
                         saveButton.style.color = 'white'; // Reset button color
                         saveButton.style.width = '70px'; // Set width
                         saveButton.style.height = '30px'; // Set height
-                    
+
                         // Reselect the process to ensure it remains selected
                         console.log("Current Process ID:", currentProcessId);
                         reSelectProcess(currentProcessId);
@@ -988,17 +978,6 @@
                     italicButton.onclick = function() {
                         document.execCommand('italic'); // This applies italic formatting to the selected text
                     };
-
-                    // Create the Bullet Point button
-                    const bulletPointButton = document.createElement('button');
-                    bulletPointButton.innerText = 'Bullet Point';
-                    bulletPointButton.className = 'tasks-button'; // Use existing styling
-                    bulletPointButton.style.width = '100%'; // Set width to 100% to match the text box
-                    
-                    // Add event listener for the Bullet Point button
-                    bulletPointButton.onclick = function() {
-                        document.execCommand('insertUnorderedList'); // This creates a bullet point list
-                    };
                 
                     // Append the title, date, text box, and save button to the note box
                     noteBox.appendChild(titleElement);
@@ -1011,7 +990,6 @@
                     noteBox.appendChild(boldButton);
                     noteBox.appendChild(underlineButton);
                     noteBox.appendChild(italicButton);
-                    noteBox.appendChild(bulletPointButton);
         
                     // Create the delete button
                     const deleteButton = document.createElement('button');
