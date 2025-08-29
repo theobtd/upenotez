@@ -978,17 +978,6 @@
                     italicButton.onclick = function() {
                         document.execCommand('italic'); // This applies italic formatting to the selected text
                     };
-
-                    // Add this button inside your note-box
-                    const bulletButton = document.createElement('button');
-                    bulletButton.innerText = 'Bullet';
-                    bulletButton.className = 'tasks-button'; // Use existing styling
-                    bulletButton.style.width = '100%'; // Set width to match the text box
-                    
-                    // Add event listener for the Bullet button
-                    bulletButton.onclick = function() {
-                        document.execCommand('insertUnorderedList'); // This command creates the bullet point list
-                    };
                 
                     // Append the title, date, text box, and save button to the note box
                     noteBox.appendChild(titleElement);
@@ -1001,7 +990,6 @@
                     noteBox.appendChild(boldButton);
                     noteBox.appendChild(underlineButton);
                     noteBox.appendChild(italicButton);
-                    noteBox.appendChild(bulletButton);
         
                     // Create the delete button
                     const deleteButton = document.createElement('button');
