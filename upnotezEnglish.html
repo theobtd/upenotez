@@ -887,11 +887,8 @@
                     noteBox.setAttribute('data-note-id', note.id); // Set note ID for reference
         
                     // Create a title element
-                    const titleInput = document.createElement('input');
-                    titleInput.type = 'text';
-                    titleInput.value = note.title; // Set the current title
-                    titleInput.className = 'note-title-input'; // Add a class for styling
-                    titleInput.style.width = '100%'; // Ensure it takes full width
+                    const titleElement = document.createElement('strong');
+                    titleElement.innerText = note.title;
         
                     // Create a date element
                     const dateElement = document.createElement('span');
@@ -941,8 +938,7 @@
 
                     saveButton.onclick = function() {
                         const newContent = textBox.innerHTML; // Get new content as HTML
-                        const newTitle = titleInput.value; // Get the new title
-                        updateContent(newContent, note.id, newTitle);
+                        updateContent(newContent, note.id); // Save the current content using the note ID
                         lastSavedContent = textBox.innerHTML; // Update last saved content
                         hasUnsavedChanges = false; // Reset change tracking
                         saveButton.style.backgroundColor = 'white'; // Reset button color
@@ -1004,7 +1000,7 @@
                     buttonContainer.appendChild(italicButton);
                 
                     // Append the title, date, text box, and save button to the note box
-                    noteBox.appendChild(titleInput);
+                    noteBox.appendChild(titleElement);
                     noteBox.appendChild(dateElement);
                     textBox.style.marginTop = '5%';
                     noteBox.appendChild(textBox);
@@ -1072,20 +1068,17 @@
         });
     }
 
-    function updateContent(content, noteId, newTitle) {
+    function updateContent(content, noteId) {
         const user = auth.currentUser;
         const notesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}`);
         
-        notesRef.update({ 
-            content: content, // Save the HTML content
-            title: newTitle // Save the new title
-        })
-        .then(() => {
-            console.log("Note content and title saved successfully.");
-        })
-        .catch((error) => {
-            console.error("Error saving note content:", error);
-        });
+        notesRef.update({ content: content }) // Save the HTML content
+            .then(() => {
+                console.log("Note content saved successfully.");
+            })
+            .catch((error) => {
+                console.error("Error saving note content:", error);
+            });
     }
 
     function uploadFile(file, noteId) {
