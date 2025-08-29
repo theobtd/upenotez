@@ -944,13 +944,13 @@
                     saveButton.onclick = function() {
                         const newContent = textBox.innerHTML; // Get new content as HTML
                         updateContent(newContent, note.id); // Save the current content using the note ID
-                        lastSavedContent = textBox.innerHTML; // Update last saved content
+                        lastSavedContent = newContent; // Update last saved content
                         hasUnsavedChanges = false; // Reset change tracking
                         saveButton.style.backgroundColor = 'white'; // Reset button color
                         saveButton.style.color = 'white'; // Reset button color
                         saveButton.style.width = '70px'; // Set width
                         saveButton.style.height = '30px'; // Set height
-
+                    
                         // Reselect the process to ensure it remains selected
                         console.log("Current Process ID:", currentProcessId);
                         reSelectProcess(currentProcessId);
