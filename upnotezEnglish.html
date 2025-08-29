@@ -893,7 +893,7 @@
                     const textBox = document.createElement('div');
                     textBox.className = 'note-textarea'; // Apply the class
                     textBox.placeholder = 'Add your notes here...'; // Optional placeholder
-                    textBox.innerText = note.content; // Set existing content
+                    textBox.innerHTML = note.content; // Set existing content as innerHTML
                     textBox.setAttribute('contenteditable', 'true'); // Make it editable
                     // Remove borders
                     textBox.style.border = 'none'; // No border
@@ -932,9 +932,9 @@
                     saveButton.style.zIndex = '4'; // Set z-index to 5
 
                     saveButton.onclick = function() {
-                        const newContent = textBox.innerText; // Get new content
+                        const newContent = textBox.innerHTML; // Get new content as HTML
                         updateContent(newContent, note.id); // Save the current content using the note ID
-                        lastSavedContent = textBox.value; // Update last saved content
+                        lastSavedContent = textBox.innerHTML; // Update last saved content
                         hasUnsavedChanges = false; // Reset change tracking
                         saveButton.style.backgroundColor = 'white'; // Reset button color
                         saveButton.style.color = 'white'; // Reset button color
@@ -1030,7 +1030,7 @@
         const user = auth.currentUser;
         const notesRef = database.ref(`users/${user.uid}/Processes/${currentProcessId}/Notes/${noteId}`);
         
-        notesRef.update({ content: content })
+        notesRef.update({ content: content }) // Save the HTML content
             .then(() => {
                 console.log("Note content saved successfully.");
             })
