@@ -716,12 +716,10 @@
             })
             .then(() => {
                 console.log("New process created successfully:", { eventId, name: eventName });
-                currentProcessId = eventId; // Set currentProcessId to the new process ID
                 loadProcesses() // Refresh the list of processes
-                .then(() => {
-                    reSelectProcess(eventId); // Automatically select the new process
-                    loadNotes(eventId); // Load notes for the new process
-                });
+                    .then(() => {
+                        reSelectProcess(eventId); // Automatically select the new process
+                    });
                 document.getElementById('text-input').value = ""; // Clear input after adding
             })
             .catch((error) => {
@@ -1486,7 +1484,7 @@
                     document.getElementById('note-modal').style.display = "none"; // Hide the modal
                     document.getElementById('note-title').value = ""; // Clear input
                     document.getElementById('note-date').value = ""; // Clear input
-    
+
                     // Re-select the process
                     reSelectProcess(currentProcessId);
                 })
@@ -1511,12 +1509,9 @@
             // Add selected class and set background color
             selectedItem.classList.add('selected');
             selectedItem.style.backgroundColor = "#ebb178"; // Set background color directly
-    
+
             // Enable the create-note-button
             document.getElementById('create-note-button').disabled = false; // Enable the button
-    
-            // Load notes for the selected process
-            loadNotes(processId); // Load notes for the newly selected process
         } else {
             console.error("Selected item not found for process ID:", processId);
         }
