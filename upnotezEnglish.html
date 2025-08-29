@@ -1102,7 +1102,22 @@
                     fileLink.textContent = files[key].name; // Use the original file name
                     fileLink.target = "_blank"; // Open in new tab
                     fileItem.appendChild(fileLink);
-                    filesList.appendChild(fileItem);
+                    
+                    // Create a delete button for the file
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.className = 'delete-file-button'; // Add a class for styling
+    
+                    // Add event listener for the delete button
+                    deleteButton.onclick = function() {
+                        const confirmDelete = confirm(`Are you sure you want to delete the file "${files[key].name}"?`);
+                        if (confirmDelete) {
+                            deleteFileFromStorage(user.uid, noteId, key, files[key].name);
+                        }
+                    };
+                    
+                    fileItem.appendChild(deleteButton); // Append the delete button to the file item
+                    filesList.appendChild(fileItem); // Append the file item to the files list
                 }
             }
     
@@ -1111,6 +1126,28 @@
             if (noteBox) {
                 noteBox.appendChild(filesList); // Add the new list to the note box
             }
+        });
+    }
+
+    function deleteFileFromStorage(userId, noteId, fileId, fileName) {
+        const storageRef = firebase.storage().ref();
+        const fileRef = storageRef.child(`users/${userId}/notes/${noteId}/${fileName}`);
+    
+        // Delete the file from storage
+        fileRef.delete().then(() => {
+            console.log("File deleted successfully from storage.");
+            // Remove the reference from the database
+            const fileRefInDatabase = database.ref(`users/${userId}/Processes/${currentProcessId}/Notes/${noteId}/Files/${fileId}`);
+            fileRefInDatabase.remove()
+                .then(() => {
+                    console.log("File reference deleted successfully from database.");
+                    loadFiles(noteId); // Reload files to reflect changes
+                })
+                .catch((error) => {
+                    console.error("Error deleting file reference from database:", error);
+                });
+        }).catch((error) => {
+            console.error("Error deleting file from storage:", error);
         });
     }
 
