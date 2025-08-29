@@ -716,10 +716,7 @@
             })
             .then(() => {
                 console.log("New process created successfully:", { eventId, name: eventName });
-                loadProcesses() // Refresh the list of processes
-                    .then(() => {
-                        reSelectProcess(eventId); // Automatically select the new process
-                    });
+                loadProcesses(); // Refresh the list of processes
                 document.getElementById('text-input').value = ""; // Clear input after adding
             })
             .catch((error) => {
