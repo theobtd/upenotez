@@ -952,12 +952,14 @@
                     buttonContainer.style.justifyContent = 'space-between'; // Optional: space between buttons
                     buttonContainer.style.width = '100%'; // Make the container full width
                     buttonContainer.style.gap = '10px';
+                    buttonContainer.style.marginBottom = '10px';
 
                     // Create the Bold button
                     const boldButton = document.createElement('button');
                     boldButton.innerText = 'Bold';
                     boldButton.className = 'tasks-button';
                     boldButton.style.flex = '1'; // Allow the button to grow equally
+                    boldButton.style.backgroundColor = '#90ee90';
                     
                     // Add event listener for the Bold button
                     boldButton.onclick = function() {
@@ -969,6 +971,7 @@
                     underlineButton.innerText = 'Underline';
                     underlineButton.className = 'tasks-button';
                     underlineButton.style.flex = '1'; // Allow the button to grow equally
+                    underlineButton.style.backgroundColor = '#90ee90';
                     
                     // Add event listener for the Underline button
                     underlineButton.onclick = function() {
@@ -980,6 +983,7 @@
                     italicButton.innerText = 'Italic';
                     italicButton.className = 'tasks-button';
                     italicButton.style.flex = '1'; // Allow the button to grow equally
+                    italicButton.style.backgroundColor = '#90ee90';
                     
                     // Add event listener for the Italic button
                     italicButton.onclick = function() {
