@@ -889,11 +889,12 @@
                     const dateElement = document.createElement('span');
                     dateElement.innerText = `${note.date}`;
         
-                    // Create a text box
-                    const textBox = document.createElement('textarea');
+                    // Create a contenteditable div
+                    const textBox = document.createElement('div');
                     textBox.className = 'note-textarea'; // Apply the class
                     textBox.placeholder = 'Add your notes here...'; // Optional placeholder
-                    textBox.value = note.content; // Set existing content
+                    textBox.innerText = note.content; // Set existing content
+                    textBox.setAttribute('contenteditable', 'true'); // Make it editable
                     // Remove borders
                     textBox.style.border = 'none'; // No border
                     textBox.style.outline = 'none'; // Remove outline on focus
