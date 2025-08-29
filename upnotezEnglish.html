@@ -616,6 +616,9 @@
 </button>
     
 <div id="notes-container">
+    <div id="first-note-message" style="display: none; text-align: center; margin: 20px;">
+        Create your first note for this contact!
+    </div>
     <ul id="notes-list"></ul>
     <div id="no-notes-message" style="display: none; text-align: center; margin: 20px;">
         Choose a contact to display meeting note
@@ -703,7 +706,6 @@
             const newEventRef = processesRef.push();
             const eventId = newEventRef.key;
     
-            // Set the new process with the name from text-input and empty strings for other fields
             newEventRef.set({
                 eventId: eventId,
                 name: eventName,
@@ -716,12 +718,14 @@
             })
             .then(() => {
                 console.log("New process created successfully:", { eventId, name: eventName });
-                currentProcessId = eventId; // Set currentProcessId to the new process ID
+                // Show the message after creating a new process
+                document.getElementById('first-note-message').style.display = 'block';
+    
                 loadProcesses() // Refresh the list of processes
-                .then(() => {
-                    reSelectProcess(eventId); // Automatically select the new process
-                    loadNotes(eventId); // Load notes for the new process
-                });
+                    .then(() => {
+                        reSelectProcess(eventId); // Automatically select the new process
+                        loadNotes(eventId); // Load notes for the new process
+                    });
                 document.getElementById('text-input').value = ""; // Clear input after adding
             })
             .catch((error) => {
@@ -855,6 +859,10 @@
         // Show the no-notes-message initially
         const noNotesMessage = document.getElementById('no-notes-message');
         noNotesMessage.style.display = 'none'; // Ensure it's visible
+
+        // Check if the first note message is displayed
+        const firstNoteMessage = document.getElementById('first-note-message');
+        firstNoteMessage.style.display = 'none'; // Hide the message initially
     
         notesRef.on('value', (snapshot) => {
             const notes = snapshot.val();
@@ -881,6 +889,7 @@
 
             if (notesArray.length > 0) {
                 noNotesMessage.style.display = 'none'; // Hide the message
+                firstNoteMessage.style.display = 'none';
                 notesArray.forEach(note => {
                     const noteBox = document.createElement('li');
                     noteBox.className = 'note-box';
@@ -1064,6 +1073,8 @@
                     // Append noteBox to the notesList
                     notesList.appendChild(noteBox);
                 });
+            } else {
+                firstNoteMessage.style.display = 'block'; // Show the first note message if no notes
             }
         });
     }
