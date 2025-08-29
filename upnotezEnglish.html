@@ -904,8 +904,8 @@
                     let hasUnsavedChanges = false; // Track unsaved changes
 
                     textBox.addEventListener('input', () => {
-                        hasUnsavedChanges = textBox.value !== lastSavedContent; // Check for changes
-                        saveButton.style.backgroundColor = hasUnsavedChanges ? '#ebb178' : white; // Change color
+                        hasUnsavedChanges = textBox.innerText !== lastSavedContent; // Check for changes
+                        saveButton.style.backgroundColor = hasUnsavedChanges ? '#ebb178' : 'white'; // Change color
                         saveButton.style.color = hasUnsavedChanges ? 'black' : 'white'; // Change font color
                         saveButton.style.cursor = 'pointer'; // Set cursor to pointer
                     });
@@ -932,7 +932,7 @@
                     saveButton.style.zIndex = '4'; // Set z-index to 5
 
                     saveButton.onclick = function() {
-                        const newContent = textBox.value; // Get new content
+                        const newContent = textBox.innerText; // Get new content
                         updateContent(newContent, note.id); // Save the current content using the note ID
                         lastSavedContent = textBox.value; // Update last saved content
                         hasUnsavedChanges = false; // Reset change tracking
