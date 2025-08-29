@@ -946,11 +946,17 @@
                         reSelectProcess(currentProcessId);
                     };
 
+                    // Create a container for the formatting buttons
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.style.display = 'flex'; // Use flexbox for horizontal alignment
+                    buttonContainer.style.justifyContent = 'space-between'; // Optional: space between buttons
+                    buttonContainer.style.width = '100%'; // Make the container full width
+
                     // Create the Bold button
                     const boldButton = document.createElement('button');
                     boldButton.innerText = 'Bold';
-                    boldButton.className = 'tasks-button'; // Use existing styling
-                    boldButton.style.width = '100%'; // Set width to 100% to match the text box
+                    boldButton.className = 'tasks-button';
+                    boldButton.style.flex = '1'; // Allow the button to grow equally
                     
                     // Add event listener for the Bold button
                     boldButton.onclick = function() {
@@ -960,8 +966,8 @@
                     // Create the Underline button
                     const underlineButton = document.createElement('button');
                     underlineButton.innerText = 'Underline';
-                    underlineButton.className = 'tasks-button'; // Use existing styling
-                    underlineButton.style.width = '100%'; // Set width to 100% to match the text box
+                    underlineButton.className = 'tasks-button';
+                    underlineButton.style.flex = '1'; // Allow the button to grow equally
                     
                     // Add event listener for the Underline button
                     underlineButton.onclick = function() {
@@ -971,13 +977,17 @@
                     // Create the Italic button
                     const italicButton = document.createElement('button');
                     italicButton.innerText = 'Italic';
-                    italicButton.className = 'tasks-button'; // Use existing styling
-                    italicButton.style.width = '100%'; // Set width to 100% to match the text box
+                    italicButton.className = 'tasks-button';
+                    italicButton.style.flex = '1'; // Allow the button to grow equally
                     
                     // Add event listener for the Italic button
                     italicButton.onclick = function() {
                         document.execCommand('italic'); // This applies italic formatting to the selected text
                     };
+
+                    buttonContainer.appendChild(boldButton);
+                    buttonContainer.appendChild(underlineButton);
+                    buttonContainer.appendChild(italicButton);
                 
                     // Append the title, date, text box, and save button to the note box
                     noteBox.appendChild(titleElement);
@@ -987,9 +997,7 @@
                     // noteBox.appendChild(tasksButton);
                     // noteBox.appendChild(saveButton);
                     notesList.appendChild(noteBox);
-                    noteBox.appendChild(boldButton);
-                    noteBox.appendChild(underlineButton);
-                    noteBox.appendChild(italicButton);
+                    noteBox.appendChild(buttonContainer);
         
                     // Create the delete button
                     const deleteButton = document.createElement('button');
