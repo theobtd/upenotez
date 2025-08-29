@@ -587,8 +587,6 @@
         <h2>Create a New Note</h2>
         <input type="text" id="note-title" placeholder="Enter note title" required />
         <input type="date" id="note-date" required />
-        <div contenteditable="true" id="note-content" class="note-textarea" placeholder="Add your notes here..."></div>
-        <button id="bold-button">Bold</button>
         <button class="contact-button" id="confirm-note-button">Create Note</button>
     </div>
 </div>
@@ -891,14 +889,12 @@
                     const dateElement = document.createElement('span');
                     dateElement.innerText = `${note.date}`;
         
-                    // Create a content-editable div instead of a text area
-                    const textBox = document.createElement('div');
+                    // Create a text box
+                    const textBox = document.createElement('textarea');
                     textBox.className = 'note-textarea'; // Apply the class
-                    textBox.setAttribute('contenteditable', 'true'); // Make it editable
                     textBox.placeholder = 'Add your notes here...'; // Optional placeholder
-                    textBox.innerText = note.content; // Set existing content as inner text
-                    
-                    // Style the content-editable div
+                    textBox.value = note.content; // Set existing content
+                    // Remove borders
                     textBox.style.border = 'none'; // No border
                     textBox.style.outline = 'none'; // Remove outline on focus
                     textBox.style.backgroundColor = 'transparent'; // Optional: make background transparent
@@ -908,7 +904,7 @@
 
                     textBox.addEventListener('input', () => {
                         hasUnsavedChanges = textBox.value !== lastSavedContent; // Check for changes
-                        saveButton.style.backgroundColor = hasUnsavedChanges ? '#ebb178' : 'white'; // Change color
+                        saveButton.style.backgroundColor = hasUnsavedChanges ? '#ebb178' : white; // Change color
                         saveButton.style.color = hasUnsavedChanges ? 'black' : 'white'; // Change font color
                         saveButton.style.cursor = 'pointer'; // Set cursor to pointer
                     });
@@ -1542,10 +1538,6 @@
                     console.error("Error deleting profile: ", error);
                 });
         }
-    };
-
-    document.getElementById('bold-button').onclick = function() {
-        document.execCommand('bold'); // Apply bold formatting to the selected text
     };
 
     const resizeHandle = document.getElementById('resize-handle');
