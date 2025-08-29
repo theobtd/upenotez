@@ -1445,6 +1445,12 @@
             document.getElementById('error-modal').style.display = "block"; // Show the error modal
             return; // Stop further execution
         }
+        
+        // Set the current date in YYYY-MM-DD format
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0]; // Get date in YYYY-MM-DD format
+        document.getElementById('note-date').value = formattedDate; // Set the date input value
+        
         document.getElementById('note-modal').style.display = "block"; // Show the note modal if a process is selected
     };
     
