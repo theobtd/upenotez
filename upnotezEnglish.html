@@ -967,6 +967,17 @@
                     underlineButton.onclick = function() {
                         document.execCommand('underline'); // This applies underline formatting to the selected text
                     };
+
+                    // Create the Italic button
+                    const italicButton = document.createElement('button');
+                    italicButton.innerText = 'Italic';
+                    italicButton.className = 'tasks-button'; // Use existing styling
+                    italicButton.style.width = '100%'; // Set width to 100% to match the text box
+                    
+                    // Add event listener for the Italic button
+                    italicButton.onclick = function() {
+                        document.execCommand('italic'); // This applies italic formatting to the selected text
+                    };
                 
                     // Append the title, date, text box, and save button to the note box
                     noteBox.appendChild(titleElement);
@@ -978,6 +989,7 @@
                     notesList.appendChild(noteBox);
                     noteBox.appendChild(boldButton);
                     noteBox.appendChild(underlineButton);
+                    noteBox.appendChild(italicButton);
         
                     // Create the delete button
                     const deleteButton = document.createElement('button');
