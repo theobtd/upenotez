@@ -253,6 +253,22 @@
                 }
             })
             .catch((error) => {
+                let errorMessage;
+
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                        errorMessage = 'The email address you entered is not valid.';
+                        break;
+                    case 'auth/user-not-found':
+                        errorMessage = 'No account found with that email address.';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = 'The password you entered is incorrect.';
+                        break;
+                    default:
+                        errorMessage = 'An unknown error occurred. Please try again.';
+                }
+                
                 document.getElementById('message').innerText = error.message;
                 document.getElementById('loading-animation').style.display = 'none';
             });
