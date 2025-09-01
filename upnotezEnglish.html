@@ -120,8 +120,15 @@
             display: flex;
             align-items: left;
             justify-content: flex-start;
+            overflow: hidden; /* Hide overflow */
+            white-space: nowrap; /* Prevent text wrapping */
+            text-overflow: ellipsis; /* Show ellipsis for overflow text */
         }
-
+        .process-item li {
+            overflow: hidden; /* Hide overflow for li */
+            white-space: nowrap; /* Prevent text wrapping */
+            text-overflow: ellipsis; /* Show ellipsis */
+        }
         .selected {
             background-color: #ebb178; /* Pale red background */
         }
