@@ -41,8 +41,15 @@
             50% { opacity: 1; }
         }
 
-        
-        
+        #footer-message {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 16px; /* Adjust as necessary */
+            color: black; /* Change color if desired */
+        }
     </style>
 </head>
 <body>
@@ -97,6 +104,8 @@
         <button id="logout-button">Log Out</button>
     </div>
 </div>
+
+<div id="footer-message">Organize your professional privately, securely, and permanently.</div>
 
 <script>
     // Your web app's Firebase configuration
