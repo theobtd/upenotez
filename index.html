@@ -220,12 +220,21 @@
                 });
             })
             .then(() => {
-                document.getElementById('message').innerText = 'Account created!';
-                // Show loading animation
-                document.getElementById('loading-animation').style.display = 'none';
+                // Sign in the user immediately after account creation
+                return auth.signInWithEmailAndPassword(email, password);
+            })
+            .then(() => {
+                // Redirect to the user's account page
+                const language = document.getElementById('language-select').value;
+                if (language === 'fr') {
+                    window.location.href = 'upnotezFrancais.html';
+                } else {
+                    window.location.href = 'upnotezEnglish.html';
+                }
             })
             .catch((error) => {
                 document.getElementById('message').innerText = error.message;
+                document.getElementById('loading-animation').style.display = 'none'; // Hide loading animation
             });
     });
 
