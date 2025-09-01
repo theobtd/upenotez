@@ -254,6 +254,7 @@
             })
             .catch((error) => {
                 document.getElementById('message').innerText = error.message;
+                document.getElementById('loading-animation').style.display = 'none';
             });
     });
 
