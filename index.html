@@ -143,6 +143,7 @@
             profile: 'User Profile',
             logOut: 'Log Out',
             loading: 'Loading...',
+            footerMessage: 'Organize your professional privately, securely, and permanently.',
         },
         fr: {
             title: 'Inscription & Connexion Utilisateur',
@@ -160,6 +161,7 @@
             profile: 'Profil Utilisateur',
             logOut: 'Déconnexion',
             loading: 'Chargement...',
+            footerMessage: 'Organisez votre monde professionnel de manière privée, sécurisée et permanente.',
         }
     };
 
@@ -188,6 +190,7 @@
         document.getElementById('company-name').placeholder = translations[lang].companyName;
         document.getElementById('city').placeholder = translations[lang].city;
         document.getElementById('loading-animation').innerText = translations[lang].loading;
+        document.getElementById('footer-message').innerText = translations[lang].footerMessage;
     }
 
     // Call updateLanguage on page load
