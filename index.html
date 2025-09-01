@@ -115,22 +115,69 @@
     const auth = firebase.auth();
     const database = firebase.database();
 
+    // Language Translations
+    const translations = {
+        en: {
+            title: 'User Signup & Sign In',
+            signIn: 'Sign In',
+            createAccount: 'Create Account',
+            email: 'Email',
+            password: 'Password',
+            name: 'Name',
+            confirmEmail: 'Confirm Email',
+            confirmPassword: 'Confirm Password',
+            companyName: 'Company Name',
+            city: 'Location',
+            accountCreated: 'Account created!',
+            emailPasswordMismatch: 'Emails or passwords do not match.',
+            profile: 'User Profile',
+            logOut: 'Log Out',
+            loading: 'Loading...',
+        },
+        fr: {
+            title: 'Inscription & Connexion Utilisateur',
+            signIn: 'Se connecter',
+            createAccount: 'Créer un compte',
+            email: 'Email',
+            password: 'Mot de passe',
+            name: 'Nom',
+            confirmEmail: 'Confirmer l\'email',
+            confirmPassword: 'Confirmer le mot de passe',
+            companyName: 'Nom de l\'entreprise',
+            city: 'Lieu',
+            accountCreated: 'Compte créé !',
+            emailPasswordMismatch: 'Les emails ou les mots de passe ne correspondent pas.',
+            profile: 'Profil Utilisateur',
+            logOut: 'Déconnexion',
+            loading: 'Chargement...',
+        }
+    };
+
     // Language change handler
     document.getElementById('language-select').addEventListener('change', function() {
         const language = this.value;
         localStorage.setItem('language', language);
-        location.reload();
+        updateLanguage(); // Update language immediately
     });
 
     // Default language
     const savedLanguage = localStorage.getItem('language') || 'en';
     document.getElementById('language-select').value = savedLanguage;
 
+    // Update Language Function
     function updateLanguage() {
-        if (savedLanguage === 'fr') {
-            document.getElementById('title').innerText = 'Créer un compte';
-            // Other translations...
-        }
+        const lang = localStorage.getItem('language') || 'en';
+        document.title = translations[lang].title;
+        document.getElementById('signin-button').innerText = translations[lang].signIn;
+        document.getElementById('create-account-button').innerText = translations[lang].createAccount;
+        document.getElementById('signin-email').placeholder = translations[lang].email;
+        document.getElementById('signin-password').placeholder = translations[lang].password;
+        document.getElementById('name').placeholder = translations[lang].name;
+        document.getElementById('confirm-email').placeholder = translations[lang].confirmEmail;
+        document.getElementById('confirm-password').placeholder = translations[lang].confirmPassword;
+        document.getElementById('company-name').placeholder = translations[lang].companyName;
+        document.getElementById('city').placeholder = translations[lang].city;
+        document.getElementById('loading-animation').innerText = translations[lang].loading;
     }
 
     // Call updateLanguage on page load
@@ -152,9 +199,12 @@
         const city = document.getElementById('city').value;
 
         if (email !== confirmEmail || password !== confirmPassword) {
-            document.getElementById('message').innerText = 'Emails or passwords do not match.';
+            document.getElementById('message').innerText = translations[savedLanguage].emailPasswordMismatch;
             return;
         }
+        
+        // After account creation
+        document.getElementById('message').innerText = translations[savedLanguage].accountCreated;
 
         const language = document.getElementById('language-select').value;
 
