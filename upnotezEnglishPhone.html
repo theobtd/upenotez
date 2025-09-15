@@ -621,7 +621,7 @@
 </div>
     
 <div id="notes-container">
-    <ul id="notes-list" style="display: none;"></ul>
+    <ul id="notes-list"></ul>
     <div id="no-notes-message" style="display: none; text-align: center; margin: 20px;">
         Choose a contact to display meeting note
     </div>
@@ -1611,20 +1611,12 @@
 
     document.getElementById('menu-button').onclick = function() {
         const mainContainer = document.getElementById('main-container');
-        const notesList = document.getElementById('notes-list');
         
-        // Toggle visibility of main-container
+        // Toggle visibility
         if (mainContainer.style.display === "none" || mainContainer.style.display === "") {
             mainContainer.style.display = "flex"; // Show the main container
         } else {
             mainContainer.style.display = "none"; // Hide the main container
-        }
-    
-        // Toggle visibility of notes-list
-        if (notesList.style.display === "none" || notesList.style.display === "") {
-            notesList.style.display = "block"; // Show the notes list
-        } else {
-            notesList.style.display = "none"; // Hide the notes list
         }
     };
 
