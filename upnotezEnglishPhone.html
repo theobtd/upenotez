@@ -515,6 +515,10 @@
     <div id="loading-spinner"></div>
 </div>
 
+<button id="menu-button" style="position: fixed; top: 10px; left: 10px; z-index: 1000; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    Menu
+</button>
+    
 <div id="main-container" style="display: flex; flex-direction: column; align-items: center; margin: 20px; width: 900px;">
     <div id="info-box" style="margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
         <button id="profile-button" style="width: 90%; text-align: left; border-color: transparent; border-radius: 5px; font-weight: bold; font-size: 30px; cursor: pointer; margin: 30px 30px 40px 30px;">
@@ -1610,6 +1614,15 @@
                 .catch((error) => {
                     console.error("Error deleting profile: ", error);
                 });
+        }
+    };
+
+    document.getElementById('menu-button').onclick = function() {
+        const mainContainer = document.getElementById('main-container');
+        if (mainContainer.style.display === "none" || mainContainer.style.display === "") {
+            mainContainer.style.display = "flex"; // Show the main-container
+        } else {
+            mainContainer.style.display = "none"; // Hide the main-container
         }
     };
 
