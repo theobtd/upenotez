@@ -742,6 +742,22 @@
                     processesUl.innerHTML = '';
     
                     processesArray.forEach(process => {
+                        // Create the Menu button
+                        const menuButton = document.createElement('button');
+                        menuButton.innerText = 'Menu';
+                        menuButton.style.width = '15%';
+                        menuButton.style.height = '5%';
+                        menuButton.style.margin = '20px auto';
+                        menuButton.style.backgroundColor = '#ebb178';
+                        menuButton.style.color = 'black';
+                        menuButton.style.border = 'none';
+                        menuButton.style.borderRadius = '5px';
+                        menuButton.style.fontSize = '20px';
+                        menuButton.style.cursor = 'pointer';
+                    
+                        // Append the menu button to the processes list
+                        processesUl.appendChild(menuButton);
+                        
                         const containerDiv = document.createElement('div');
                         containerDiv.className = 'process-item-container';
                         containerDiv.setAttribute('data-id', process.id);
