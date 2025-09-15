@@ -400,8 +400,6 @@
         }
 
         #create-note-button {
-            width: 15%;
-            height: 5%;
             color: black; /* Text color */
             border: none; /* Remove border */
             border-radius: 5px; /* Rounded corners */
@@ -409,20 +407,35 @@
             background-color: #ebb178;
         }
 
-        #menu-button {
-            width: 15%;
-            height: 5%;
-            color: black; /* Text color */
-            border: none; /* Remove border */
-            border-radius: 5px; /* Rounded corners */
-            z-index: 4;
-            background-color: #ebb178;
-        }
-
+        
         #create-note-button:disabled {
             background-color: #ccc; /* Light gray color */
             color: #666; /* Dark gray text color */
             cursor: not-allowed; /* Change cursor style */
+        }
+
+        #menu-button {
+            color: black; /* Text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            z-index: 4;
+            background-color: #ebb178;
+        }
+
+        #button-container-phone {
+            display: flex; /* Use flex to align the contents */
+            justify-content: center; /* Align the contents to the left */
+            gap: 10px; /* Space between buttons */
+        }
+        
+        #button-container-phone button {
+            width: 33%; /* Set a fixed width */
+            height: 33%; /* Set a fixed height */
+            border-radius: 5px; /* Rounded corners */
+            background-color: #ebb178; /* Background color */
+            color: black; /* Text color */
+            border: none; /* Remove border */
+            cursor: pointer; /* Pointer cursor on hover */
         }
 
         #button-container {
@@ -475,22 +488,6 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-
-        #button-container-phone {
-            display: flex; /* Use flex to align the contents */
-            justify-content: center; /* Align the contents to the left */
-            gap: 10px; /* Space between buttons */
-        }
-        
-        #button-container-phone button {
-            width: 15%; /* Set a fixed width */
-            height: 5%; /* Set a fixed height */
-            border-radius: 5px; /* Rounded corners */
-            background-color: #ebb178; /* Background color */
-            color: black; /* Text color */
-            border: none; /* Remove border */
-            cursor: pointer; /* Pointer cursor on hover */
         }
     </style>
 </head>
