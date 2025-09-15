@@ -423,9 +423,14 @@
         }
 
         #button-container-phone {
+            position: fixed; /* Fix the position */
+            top: 2%; /* Position 2% from the top */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Adjust for centering */
             display: flex; /* Use flex to align the contents */
             justify-content: center; /* Align the contents to the left */
             gap: 10px; /* Space between buttons */
+            z-index: 10;
         }
         
         #button-container-phone button {
