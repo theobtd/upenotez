@@ -1607,6 +1607,17 @@
         }
     };
 
+    document.getElementById('menu-button').onclick = function() {
+        const mainContainer = document.getElementById('main-container');
+        
+        // Toggle visibility
+        if (mainContainer.style.display === "none" || mainContainer.style.display === "") {
+            mainContainer.style.display = "flex"; // Show the main container
+        } else {
+            mainContainer.style.display = "none"; // Hide the main container
+        }
+    };
+
     const resizeHandle = document.getElementById('resize-handle');
     let isResizing = false;
 
