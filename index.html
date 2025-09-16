@@ -337,10 +337,14 @@
 
     document.getElementById('create-account-button').addEventListener('click', function() {
         const signupContainer = document.getElementById('signup-container');
+        const signinForm = document.getElementById('signin-form');
+        
         if (signupContainer.style.display === 'none' || signupContainer.style.display === '') {
-            signupContainer.style.display = 'block'; // Show the form
+            signupContainer.style.display = 'block'; // Show the signup form
+            signinForm.style.display = 'none'; // Hide the signin form
         } else {
-            signupContainer.style.display = 'none'; // Hide the form
+            signupContainer.style.display = 'none'; // Hide the signup form
+            signinForm.style.display = 'block'; // Show the signin form
         }
     });
 </script>
