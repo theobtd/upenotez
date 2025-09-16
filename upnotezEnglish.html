@@ -1003,9 +1003,36 @@
                         document.execCommand('italic'); // This applies italic formatting to the selected text
                     };
 
+                    // Create the Align button
+                    const alignButton = document.createElement('button');
+                    alignButton.innerText = 'Align Left'; // Initial state
+                    alignButton.className = 'tasks-button';
+                    alignButton.style.flex = '1'; // Allow the button to grow equally
+                    alignButton.style.backgroundColor = '#87d687';
+
+                    let currentAlignment = 'left'; // Track current alignment
+
+                    alignButton.onclick = function() {
+                        // Cycle through alignment states
+                        if (currentAlignment === 'left') {
+                            currentAlignment = 'center';
+                            alignButton.innerText = 'Align Center';
+                            document.execCommand('justifyLeft'); // Apply left alignment
+                        } else if (currentAlignment === 'center') {
+                            currentAlignment = 'right';
+                            alignButton.innerText = 'Align Right';
+                            document.execCommand('justifyCenter'); // Apply center alignment
+                        } else {
+                            currentAlignment = 'left';
+                            alignButton.innerText = 'Align Left';
+                            document.execCommand('justifyRight'); // Apply right alignment
+                        }
+                    };
+
                     buttonContainer.appendChild(boldButton);
                     buttonContainer.appendChild(underlineButton);
                     buttonContainer.appendChild(italicButton);
+                    buttonContainer.appendChild(alignButton);
                 
                     // Append the title, date, text box, and save button to the note box
                     noteBox.appendChild(titleElement);
