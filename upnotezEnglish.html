@@ -913,6 +913,28 @@
                     textBox.style.outline = 'none'; // Remove outline on focus
                     textBox.style.backgroundColor = 'transparent'; // Optional: make background transparent
 
+                    // Add a placeholder functionality
+                    textBox.addEventListener('focus', function() {
+                        if (textBox.innerHTML.trim() === '') {
+                            textBox.innerHTML = '';
+                        }
+                    });
+
+                    textBox.addEventListener('blur', function() {
+                        if (textBox.innerHTML.trim() === '') {
+                            textBox.innerHTML = 'Type your notes here...'; // Reset to placeholder
+                            textBox.style.color = '#aaa'; // Change the color to indicate placeholder
+                        } else {
+                            textBox.style.color = '#000'; // Reset color for user input
+                        }
+                    });
+
+                    // Initialize the text area with the placeholder
+                    if (textBox.innerHTML.trim() === '') {
+                        textBox.innerHTML = 'Type your notes here...'; // Set placeholder text
+                        textBox.style.color = '#aaa'; // Placeholder color
+                    }
+
                     let lastSavedContent = textBox.value;
                     let hasUnsavedChanges = false; // Track unsaved changes
 
