@@ -905,13 +905,34 @@
                     // Create a contenteditable div
                     const textBox = document.createElement('div');
                     textBox.className = 'note-textarea'; // Apply the class
-                    textBox.placeholder = 'Add your notes here...'; // Optional placeholder
                     textBox.innerHTML = note.content; // Set existing content as innerHTML
                     textBox.setAttribute('contenteditable', 'true'); // Make it editable
                     // Remove borders
                     textBox.style.border = 'none'; // No border
                     textBox.style.outline = 'none'; // Remove outline on focus
                     textBox.style.backgroundColor = 'transparent'; // Optional: make background transparent
+
+                    // Set initial placeholder
+                    if (!textBox.innerHTML.trim()) {
+                        textBox.innerHTML = 'Type your notes here...'; // Set placeholder text
+                        textBox.style.color = '#aaa'; // Placeholder color
+                    }
+                    
+                    // Focus event to clear placeholder
+                    textBox.addEventListener('focus', function() {
+                        if (textBox.innerHTML.trim() === 'Type your notes here...') {
+                            textBox.innerHTML = ''; // Clear placeholder text
+                            textBox.style.color = '#000'; // Reset text color
+                        }
+                    });
+                    
+                    // Blur event to restore placeholder if empty
+                    textBox.addEventListener('blur', function() {
+                        if (textBox.innerHTML.trim() === '') {
+                            textBox.innerHTML = 'Type your notes here...'; // Reset to placeholder
+                            textBox.style.color = '#aaa'; // Change the color to indicate placeholder
+                        }
+                    });
 
                     let lastSavedContent = textBox.value;
                     let hasUnsavedChanges = false; // Track unsaved changes
