@@ -1527,6 +1527,9 @@
                     document.getElementById('note-modal').style.display = "none"; // Hide the modal
                     document.getElementById('note-title').value = ""; // Clear input
                     document.getElementById('note-date').value = ""; // Clear input
+
+                    // Hide the no-notes-message since a new note is created
+                    document.getElementById('no-notes-message').style.display = 'none';
     
                     // Re-select the process
                     reSelectProcess(currentProcessId);
