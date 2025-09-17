@@ -728,6 +728,8 @@
                 loadProcesses() // Refresh the list of processes
                 .then(() => {
                     reSelectProcess(eventId); // Automatically select the new process
+                    document.getElementById('no-process-message').style.display = 'none';
+                    document.getElementById('no-notes-message').style.display = 'block';
                     loadNotes(eventId); // Load notes for the new process
                 });
                 document.getElementById('text-input').value = ""; // Clear input after adding
@@ -1550,7 +1552,7 @@
                     document.getElementById('note-date').value = ""; // Clear input
 
                     // Hide the no-process-message since a new note is created
-                    document.getElementById('no-process-message').style.display = 'none';
+                    document.getElementById('no-notes-message').style.display = 'none';
     
                     // Re-select the process
                     reSelectProcess(currentProcessId);
